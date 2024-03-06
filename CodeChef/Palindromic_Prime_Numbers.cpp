@@ -17,7 +17,20 @@ int main()
     while(t--)
     {
         int n ; cin >> n ;
-        cout << n << " " << n-1;
+        int odd = 0;
+        int even = 0;
+
+        if(n<=4)
+        {
+            odd = n;
+            even = 0;
+        }
+        else
+        {
+            odd = n-1;
+            even = 1;
+        }
+        cout << even << " " << odd << endl;
     }
 
     return 0;
