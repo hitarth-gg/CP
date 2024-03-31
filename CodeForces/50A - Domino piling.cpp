@@ -9,126 +9,9 @@ using namespace std;
 #define ll long long int
 #define sortv(v) sort(v.begin(), v.end()),
 #define sortrv(v) sort(v.rbegin(),v.rend())
-#define INF 1e18+9
 
-/* ------------------------------------------------------ */
-ll binpow(ll a, ll b);
-ll binpow(ll a, ll b, ll m);
-ll maxvec(vector<ll> &v);
-ll minvec(vector<ll> &v);
-ll sumvec(vector<ll> &v);
-ll kadane( vector<ll> arr,ll n);
-ll ncr(ll n, ll r);
-ll factorial(ll n);
-ll lcm(ll a, ll b);
-bool is_prime(ll n);
-vector<int> applyPermutation(vector<int> sequence, vector<int> permutation);
-vector<int> permute(vector<int> sequence, vector<int> permutation, long long k);
-/* ------------------------------------------------------ */
-ll b,s,c;
-ll nb, ns, nc;
-ll pb, ps, pc;
-ll z ;
+// typedef long long ll;
 
-ll moneyReq(ll x)
-{
-    return max(0ll, x*b-nb)*pb + max(0ll, x*s-ns)*ps + max(0ll, x*c-nc)*pc;
-}
-
-// ll lowerBound(ll l, ll r)
-// {
-//     while(l<r)
-//     {
-//         ll mid = (l+r+1)/2;
-//         if(moneyReq(mid) > z)
-//             r=mid-1;
-//         else
-//             l=mid;
-//     }
-//     return r;
-//     // if (moneyReq(r) <= z) return r;
-//     // else return l;
-// }
-// ll lowerBound(ll l, ll r)
-// {
-//     ll ans = -1;
-//     while (l<=r)
-//     {
-//         ll mid=(l+r)/2;
-//         ll price=moneyReq(mid);
- 
-//         if (price<=z)
-//         {
-//             // cout<<"mid= "<<mid<<" price= "<<price<<nl;
-//             ans=mid;
-//             l=mid+1;
-//         }
-//         else r=mid-1;
-//     }
-//     return ans;
-
-// }
-// ll lowerBound(ll l, ll r)
-// {
-//     while(l+1<r)
-//     {
-//         ll mid = (l+r)/2;
-//         if(moneyReq(mid) > z)
-//             r=mid;
-//         else
-//             l=mid;
-//     }
-//     return l;
-// }
-
-
-int main()
-{
-    fastio();
-
-    string str ; cin >> str;
-    cin >> nb >> ns >> nc;
-    cin >> pb >> ps >> pc;
-    cin >> z ;
-
-    b=s=c=0;
-
-    loop(str.size())
-    {
-        if(str[i] == 'B') b++;
-        else if (str[i] == 'S') s++;
-        else if (str[i] == 'C') c++;
-    }
-
-    ll ans = lowerBound(0, INF);
-    cout << ans << endl;
-
-    return 0;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ------------------------------------------------------ */
-/* ------------------------------------------------------ */
 /* ------------------------------------------------------ */
 ll binpow(ll a, ll b) {
     ll res = 1;
@@ -219,5 +102,16 @@ vector<int> permute(vector<int> sequence, vector<int> permutation, long long k) 
     }
     return sequence;
 }
-
 /* ------------------------------------------------------ */
+
+int main()
+{
+    fastio();
+
+    int m, n ; cin >> m >> n ;
+
+    int ans = n*((int)m/2) + (m%2)*n/2;
+    cout << ans << endl;     
+
+    return 0;
+}

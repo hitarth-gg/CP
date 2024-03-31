@@ -66,8 +66,8 @@ ll moneyReq(ll x)
 //         else r=mid-1;
 //     }
 //     return ans;
-
 // }
+
 // ll lowerBound(ll l, ll r)
 // {
 //     while(l+1<r)

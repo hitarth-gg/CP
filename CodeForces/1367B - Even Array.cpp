@@ -17,19 +17,24 @@ int main()
     while(t--)
     {
         int n ; cin >> n ;
-        string str ; cin >> str;
+        vector<int> v(n);
+        // loop(n) cin >> v[i];
+        int x=0, y=0;
 
-        set<string> st;
-        st.insert(str);
-     
-        for(int i=0; i<n-2; i++)
+        loop(n)
         {
-            string temp = str;
-            swap(temp[i], temp[i+2]);
-            swap(temp[i], temp[i+1]);
-            st.insert(temp);
+            int temp;
+            cin >> temp;
+            if(i%2==0 && temp%2!=0)
+                x++;
+            else if (temp%2==0 && i%2 != 0)
+                y++;
         }
-        cout << st.size()-1 << endl;
+        if(x==y)
+            cout << x << endl;
+        else
+            cout << -1 << endl;
+
     }
 
     return 0;

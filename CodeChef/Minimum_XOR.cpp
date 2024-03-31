@@ -3,20 +3,38 @@
 using namespace std;
 
 #define fastio() ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
+
 #define MOD 1000000007
+#define INF 1e18+9
+
 #define fr(i, x, n) for (ll i = x; i < n; i ++)
 #define loop(n) for(ll i=0;i<n;i++)
+
 #define ll long long int
-#define sortv(v) sort(v.begin(), v.end()),
-#define sortrv(v) sort(v.rbegin(),v.rend())
-#define INF 1e18+9
+#define ull unsigned long long int
+#define pb push_back
+#define mp make_pair
+#define fi first
+#define se second
+
+#define vll vector<ll>
+#define vp vector<pair<ll,ll>>
+
+#define coutv(v) for(auto it:v)cout<<it<<' '; cout<<endl;
+#define cinv(v) for(auto &it:v) cin>>it;
+
+#define vsort(v) sort(v.begin(), v.end())
+#define vsortrev(v) sort(v.rbegin(),v.rend())
+#define vrev(v) reverse(v.rbegin(),v.rend())
+#define v_sum(v) accumulate(v.begin(),v.end(),0LL)
+#define v_min(v) *min_element (v.begin(),v.end())
+#define v_max(v) *max_element (v.begin(),v.end())
+
+#define bitcount __builtin_popcountll
 
 /* ------------------------------------------------------ */
 ll binpow(ll a, ll b);
 ll binpow(ll a, ll b, ll m);
-ll maxvec(vector<ll> &v);
-ll minvec(vector<ll> &v);
-ll sumvec(vector<ll> &v);
 ll kadane( vector<ll> arr,ll n);
 ll ncr(ll n, ll r);
 ll factorial(ll n);
@@ -25,83 +43,36 @@ bool is_prime(ll n);
 vector<int> applyPermutation(vector<int> sequence, vector<int> permutation);
 vector<int> permute(vector<int> sequence, vector<int> permutation, long long k);
 /* ------------------------------------------------------ */
-ll b,s,c;
-ll nb, ns, nc;
-ll pb, ps, pc;
-ll z ;
-
-ll moneyReq(ll x)
-{
-    return max(0ll, x*b-nb)*pb + max(0ll, x*s-ns)*ps + max(0ll, x*c-nc)*pc;
-}
-
-// ll lowerBound(ll l, ll r)
-// {
-//     while(l<r)
-//     {
-//         ll mid = (l+r+1)/2;
-//         if(moneyReq(mid) > z)
-//             r=mid-1;
-//         else
-//             l=mid;
-//     }
-//     return r;
-//     // if (moneyReq(r) <= z) return r;
-//     // else return l;
-// }
-// ll lowerBound(ll l, ll r)
-// {
-//     ll ans = -1;
-//     while (l<=r)
-//     {
-//         ll mid=(l+r)/2;
-//         ll price=moneyReq(mid);
- 
-//         if (price<=z)
-//         {
-//             // cout<<"mid= "<<mid<<" price= "<<price<<nl;
-//             ans=mid;
-//             l=mid+1;
-//         }
-//         else r=mid-1;
-//     }
-//     return ans;
-
-// }
-// ll lowerBound(ll l, ll r)
-// {
-//     while(l+1<r)
-//     {
-//         ll mid = (l+r)/2;
-//         if(moneyReq(mid) > z)
-//             r=mid;
-//         else
-//             l=mid;
-//     }
-//     return l;
-// }
-
 
 int main()
 {
     fastio();
 
-    string str ; cin >> str;
-    cin >> nb >> ns >> nc;
-    cin >> pb >> ps >> pc;
-    cin >> z ;
-
-    b=s=c=0;
-
-    loop(str.size())
+    int t; cin >> t;
+    while(t--)
     {
-        if(str[i] == 'B') b++;
-        else if (str[i] == 'S') s++;
-        else if (str[i] == 'C') c++;
-    }
+        ll n; cin >> n;
+        vll v(n);
+        cinv(v);
 
-    ll ans = lowerBound(0, INF);
-    cout << ans << endl;
+        ll x = 0;
+
+        loop(n)
+            x = x^v[i];
+        
+        ll min = x;
+
+        loop(n)
+        {
+            ll currentXor = x^v[i];
+            if(currentXor < min)
+            {
+                min = currentXor;
+
+            }
+        }
+        cout << (x ? min : 0) << "\n";
+    }
 
     return 0;
 }
@@ -151,21 +122,6 @@ ll binpow(ll a, ll b, ll m) {
         b >>= 1;
     }
     return res;
-}
-ll maxvec(vector<ll> &v) {
-    ll mx  = LLONG_MIN;
-    for(ll i=0;i<v.size();i++) mx = max(v[i], mx);
-    return mx;
-}
-ll minvec(vector<ll> &v) {
-    ll mn  = LLONG_MAX;
-    for(ll i=0;i<v.size();i++) mn = min(v[i], mn);
-    return mn;
-}
-ll sumvec(vector<ll> &v) {
-    ll sum = 0;
-    for(ll i=0;i<v.size();i++) sum += v[i];
-    return sum;
 }
 ll kadane( vector<ll> arr,ll n) {
     ll max_end = 0;
