@@ -59,8 +59,50 @@ int main()
 {
     fastio();
 
-    vll v = {1,2,3,45,5};
-    cout << v_count(v, 12) << nl;
+    ll n, k ; cin >> n >> k ;
+    vll v(k+1);
+    v[0] = -1;
+
+    fr(i, 1, n+1)
+    {
+        ll temp ; cin >> temp ;
+        v[temp]++;
+    }
+    int sets = ceil((double)n/2);
+    vsortrev(v);
+    v.pop_back();
+    ll ans = 0;
+    // printVec(v);
+
+    int totalSets = 0;
+    int num1 = 0;
+    for(auto it : v)
+    {
+        if(it%2 == 0)
+            totalSets+=it/2;
+        else
+        {
+            totalSets += it/2;
+            num1++;
+        }
+    }
+
+    if(totalSets >= sets)
+    {
+        ans = sets*2;
+    }
+    else
+    {
+        ans = totalSets*2;
+        if((sets - totalSets) > num1)
+            ans += num1;
+        else
+            ans += sets - totalSets;
+    }
+    cout << ans << nl;
+
+
+    
 
     return 0;
 }

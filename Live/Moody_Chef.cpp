@@ -59,8 +59,36 @@ int main()
 {
     fastio();
 
-    vll v = {1,2,3,45,5};
-    cout << v_count(v, 12) << nl;
+    int t; cin >> t;
+    while(t--)
+    {
+        ll n, l, r ; cin >> n >> l >> r ;
+        vll v(n);
+        cinv(v);
+
+        ll min = LONG_LONG_MAX;
+        ll max = LONG_LONG_MIN;
+        ll ans = 0;
+
+        for(auto x : v)
+        {
+            if(ans > max)
+                max = ans;
+            if(ans < min)
+                min = ans;
+
+            if (x>=l && x<=r)
+                ans++;
+            else
+                ans--;
+            
+        }
+        if(ans > max)
+                max = ans;
+            if(ans < min)
+                min = ans;
+        cout << max << " " << min << nl;
+    }
 
     return 0;
 }

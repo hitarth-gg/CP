@@ -59,8 +59,23 @@ int main()
 {
     fastio();
 
-    vll v = {1,2,3,45,5};
-    cout << v_count(v, 12) << nl;
+    int t; cin >> t;
+    while(t--)
+    {
+        ll c, sum ; cin >> c >> sum ;
+
+        ll i = sum/c;
+        ll ni = c;
+        ll k = sum%c;
+
+        ll j = i+1;
+        ll nj = k;
+        ni = ni-nj;
+
+
+        cout << ni*binpow(i, 2) + nj*binpow(j, 2) << nl;
+
+    }
 
     return 0;
 }

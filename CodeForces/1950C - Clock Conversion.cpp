@@ -53,14 +53,33 @@ vector<int> permute(vector<int> sequence, vector<int> permutation, long long k);
 vector<bool> sieve(ll n); // vector<bool> isPrime = sieve(1000002);
 /* ------------------------------------------------------ */
 
-
-
 int main()
 {
     fastio();
 
-    vll v = {1,2,3,45,5};
-    cout << v_count(v, 12) << nl;
+    int t; cin >> t;
+    while(t--)
+    {
+        int h ; cin >> h;
+        char temp ; cin >> temp;
+        int m ; cin >> m;
+
+        int newH = h%12;
+        if(newH == 0)
+            newH=12;
+        if(newH<10)
+            cout << 0;
+        cout << newH;
+        cout << ":";
+        if(m<10)
+            cout << 0;
+        cout << m;
+        if(h>=12)
+            cout << " PM";
+        else
+            cout << " AM";
+        cout << nl;
+    }
 
     return 0;
 }

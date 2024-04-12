@@ -62,25 +62,8 @@ int main()
     int t; cin >> t;
     while(t--)
     {
-        int h ; cin >> h;
-        char temp ; cin >> temp;
-        int m ; cin >> m;
-
-        int newH = h%12;
-        if(newH == 0)
-            newH=12;
-        if(newH<10)
-            cout << 0;
-        cout << newH;
-        cout << ":";
-        if(m<10)
-            cout << 0;
-        cout << m;
-        if(h>=12)
-            cout << " PM";
-        else
-            cout << " AM";
-        cout << nl;
+        ll k, x ; cin >> k >> x;
+        cout << (k-1)*9 + x << nl;
     }
 
     return 0;

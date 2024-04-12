@@ -13,7 +13,7 @@ using namespace std;
 
 #define ll long long int
 #define ull unsigned long long int
-#define pb push_back
+// #define pb push_back
 #define mp make_pair
 #define fi first
 #define se second
@@ -52,6 +52,31 @@ vector<int> applyPermutation(vector<int> sequence, vector<int> permutation);
 vector<int> permute(vector<int> sequence, vector<int> permutation, long long k);
 vector<bool> sieve(ll n); // vector<bool> isPrime = sieve(1000002);
 /* ------------------------------------------------------ */
+ll b, s, c ; 
+ll nb, ns, nc ; 
+ll pb, ps, pc ;
+ll z;
+map <char, ll> m;
+
+
+ll priceCheck(ll x) {
+    ll totalPrice = max(0ll, x * m['B'] - nb) * pb + max(0ll, x * m['S'] - ns) * ps + max(0ll, x * m['C'] - nc) * pc;
+    return totalPrice;
+}
+
+
+ll findNum (ll l, ll r)
+{
+    while(l<r)
+    {
+        ll mid = (l+r+1)/2;
+        if(priceCheck(mid) > z)
+            r=mid-1;
+        else
+            l=mid;
+    }
+    return r;
+}
 
 
 
@@ -59,8 +84,20 @@ int main()
 {
     fastio();
 
-    vll v = {1,2,3,45,5};
-    cout << v_count(v, 12) << nl;
+    string str;
+    cin >> str;
+    
+    for(ll i = 0; i<str.size(); i++)
+        m[str[i]]++;
+
+    cin >> nb >> ns >> nc;
+    cin >> pb >> ps >> pc ;
+    cin >> z;
+
+
+    ll ans = findNum(0ll, 1e13);
+    cout << ans << nl;
+
 
     return 0;
 }

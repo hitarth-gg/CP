@@ -68,18 +68,18 @@ ll moneyReq(ll x)
 //     return ans;
 // }
 
-// ll lowerBound(ll l, ll r)
-// {
-//     while(l+1<r)
-//     {
-//         ll mid = (l+r)/2;
-//         if(moneyReq(mid) > z)
-//             r=mid;
-//         else
-//             l=mid;
-//     }
-//     return l;
-// }
+ll lowerBound(ll l, ll r)
+{
+    while(l+1<r)
+    {
+        ll mid = (l+r)/2;
+        if(moneyReq(mid) > z)
+            r=mid;
+        else
+            l=mid;
+    }
+    return l;
+}
 
 
 int main()

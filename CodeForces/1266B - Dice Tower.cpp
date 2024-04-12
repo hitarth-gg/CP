@@ -59,22 +59,19 @@ int main()
 {
     fastio();
 
-    int n,k ; cin >> n >> k ;
-    map<int, int> m;
-    
-    fr(i, 0, n)
+    ll n ; cin >> n ;
+    vll v(n);
+    cinv(v);
+
+    for(auto it : v)
     {
-        int temp;
-        cin >> temp;
-        m[temp]++;
+        if(it%14 <=6 && it%14 >0 && it>7)
+            cout << "YES" << nl;
+        else
+            cout << "NO" << nl;
+
     }
-    // int ans = 0;
-    for(auto it : m)
-        cout << it.first << " " << it.second << endl;
-    // for(auto it : m)
-    // {
-        // ans += ceil((double)it.second/2);
-    // }
+    
 
     return 0;
 }

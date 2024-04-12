@@ -59,8 +59,20 @@ int main()
 {
     fastio();
 
-    vll v = {1,2,3,45,5};
-    cout << v_count(v, 12) << nl;
+    int t; cin >> t;
+    while(t--)
+    {
+        ll n ; cin >> n ;
+        vll v(n);
+        cinv(v);
+        ll moves = 0;
+        vsort(v);
+        for(ll i=0; i<n; i++)
+        {
+            moves += abs(v[i]-i);
+        }
+        cout << moves << nl;
+    }
 
     return 0;
 }
