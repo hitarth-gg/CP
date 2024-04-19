@@ -67,62 +67,35 @@ int main()
     cin >> t;
     while (t--)
     {
-        ll n;
-        cin >> n;
-        vll v(n);
-        cinv(v);
-        if (n <= 2)
-            cout << "Yes\n";
-        else
+        string n1;
+        cin >> n1;
+        string n2;
+        cin >> n2;
+        int n = n1.size();
+
+        for (int i = 0; i < n; i++)
         {
-
-            vll index;
-            if (v[1] < v[0])
-                index.push_back(1);
-            for (ll i = 1; i < n-1; i++)
+            if (n1[i] > n2[i])
             {
-                if ((v[i] < v[i - 1] && v[i] < v[i + 1]) || (v[i] <= v[i - 1] && v[i] < v[i + 1]) || v[i] < v[i - 1] && v[i] <= v[i + 1])
-                    index.push_back(i);
-            }
-            if (v[n-2] < v[n-1])
-                index.push_back(n-2);
-
-            // cout << t << nl;
-            // printVec(index);
-                vll checker;
-            
-            ll x = 0;
-            for(ll i = 0; i<index.size(); i++)
-            {
-                if(v[index[i]-1]-v[index[i]] <=  v[index[i]+1]-v[index[i]])
+                for (int j = i + 1; j < n; j++)
                 {
-                    ll temp = max(v[index[i]-1]-v[index[i]], v[index[i]+1]-v[index[i]]);
-                    checker.push_back(temp);
+                    if (n1[j] > n2[j])
+                        swap(n1[j], n2[j]);
                 }
-                else
-                    checker.push_back(-1);
-                // if(temp>x)
-                    // x=0
-                
+                break;
             }
-            if(v[n-1]<v[n])
-
-            // bool sorted = 1;
-            // for (ll i = 0; i < n - 1; i++)
-            // {
-            //     if (v[i] > v[i + 1])
-            //     {
-            //         sorted = 0;
-            //         break;
-            //     }
-            // }
-            // if (sorted)
-            //     cout << "Yes\n";
-            // else
-            //     cout << "No\n";
-            checker.push_back(-999);
-            // printVec(checker);
+            else if (n1[i] < n2[i])
+            {
+                for (int j = i + 1; j < n; j++)
+                {
+                    if (n1[j] < n2[j])
+                        swap(n1[j], n2[j]);
+                }
+                break;
+            }
         }
+
+        cout << n1 << nl << n2 << nl;
     }
 
     return 0;

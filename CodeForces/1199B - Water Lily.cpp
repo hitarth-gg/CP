@@ -59,11 +59,9 @@ int main()
 {
     fastio();
 
-    int t; cin >> t;
-    while(t--)
-    {
-        
-    }
+    ll h, l ; cin >> h >> l ;
+
+    cout << fixed << setprecision(13) << max((double)0, ((double)binpow(l,2)-binpow(h, 2))/(2*h)) << nl;
 
     return 0;
 }

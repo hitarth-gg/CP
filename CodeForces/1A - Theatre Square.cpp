@@ -59,11 +59,10 @@ int main()
 {
     fastio();
 
-    int t; cin >> t;
-    while(t--)
-    {
-        
-    }
+    ll n,m,a ; cin >> n >> m>> a ;
+    
+    ll ans = ceil((double)n/a)*ceil((double)m/a);;
+    cout << ans << nl; 
 
     return 0;
 }

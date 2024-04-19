@@ -62,7 +62,21 @@ int main()
     int t; cin >> t;
     while(t--)
     {
-        
+        ll x, y ; cin >> x >> y ;
+        string ans = "NO";
+        if(x>y)
+            ans = "YES";
+        else
+        {
+            ans = "YES";
+            if(x==1 && y>1)
+                ans = "NO";
+            if(x==2 && y>3)
+                ans = "NO";
+            if(x==3 && y>3)
+                ans = "NO";
+        }
+        cout << ans << nl;
     }
 
     return 0;

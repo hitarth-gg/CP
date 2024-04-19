@@ -62,32 +62,12 @@ int main()
     int t; cin >> t;
     while(t--)
     {
-        ll n, l, r ; cin >> n >> l >> r ;
-        vll v(n);
-        cinv(v);
-
-        ll min = LONG_LONG_MAX;
-        ll max = LONG_LONG_MIN;
-        ll ans = 0;
-
-        for(auto x : v)
-        {
-            if(ans > max)
-                max = ans;
-            if(ans < min)
-                min = ans;
-
-            if (x>=l && x<=r)
-                ans++;
-            else
-                ans--;
-            
-        }
-        if(ans > max)
-                max = ans;
-            if(ans < min)
-                min = ans;
-        cout << max << " " << min << nl;
+        ll n,m,k ; cin >> n >>m >>k ;
+        int n1 = ceil((double)n/m);
+        if(n-n1 > k)
+            cout << "YES" << nl;
+        else
+            cout << "NO" << nl;
     }
 
     return 0;

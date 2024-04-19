@@ -62,17 +62,23 @@ int main()
     int t; cin >> t;
     while(t--)
     {
-        ll n ; cin >> n ;
-        vll v(n);
-        cinv(v);
-        ll moves = 0;
-        vsort(v);
-        for(ll i=0; i<n; i++)
+        map<int, int> m;
+        int n ; cin >> n ;
+
+        for(int i = 0; i<n ;i++)
         {
-            moves += abs(v[i]-i);
+            int temp ; cin >> temp ;
+            m[temp]++;
         }
-        cout << moves << nl;
-    }
+        int ans = 0;
+        for(auto it : m)
+        {
+            if(it.second == 2)
+                ans++;
+        }
+        cout << ans << nl;
+        
+    }    
 
     return 0;
 }
