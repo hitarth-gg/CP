@@ -1,3 +1,4 @@
+// clang-format off
 #include <bits/stdc++.h>
 #include <ext/pb_ds/tree_policy.hpp>
 #include <ext/pb_ds/assoc_container.hpp>
@@ -5,6 +6,47 @@
 using namespace std;
 using namespace chrono;
 using namespace __gnu_pbds;
+
+/* ------------------------ debug ----------------------- */
+#define trace1(x)                cerr<<#x<<": "<<x<<endl
+#define trace2(x, y)             cerr<<#x<<": "<<x<<" | "<<#y<<": "<<y<<endl
+#define trace3(x, y, z)          cerr<<#x<<":" <<x<<" | "<<#y<<": "<<y<<" |\
+                                     "<<#z<<": "<<z<<endl
+#define trace4(a, b, c, d)       cerr<<#a<<": "<<a<<" | "<<#b<<": "<<b<<" |\
+                                     "<<#c<<": "<<c<<" | "<<#d<<": "<<d<<endl
+#define trace5(a, b, c, d, e)    cerr<<#a<<": "<<a<<" | "<<#b<<": "<<b<<" |\
+                                     "<<#c<<": "<<c<<" | "<<#d<<": "<<d<<" | "<<#e<< ": "<<e<<endl
+#define trace6(a, b, c, d, e, f) cerr<<#a<<": "<<a<<" | "<<#b<<": "<<b<<" | "<<#c<<": "<< c<<" |\
+                                 "<<#d<<": "<<d<<" | "<<#e<< ": "<<e<<" | "<<#f<<": "<<f<<endl
+
+
+                                 void __print(int x) {cerr << x;}
+void __print(long x) {cerr << x;}
+void __print(long long x) {cerr << x;}
+void __print(unsigned x) {cerr << x;}
+void __print(unsigned long x) {cerr << x;}
+void __print(unsigned long long x) {cerr << x;}
+void __print(float x) {cerr << x;}
+void __print(double x) {cerr << x;}
+void __print(long double x) {cerr << x;}
+void __print(char x) {cerr << '\'' << x << '\'';}
+void __print(const char *x) {cerr << '\"' << x << '\"';}
+void __print(const string &x) {cerr << '\"' << x << '\"';}
+void __print(bool x) {cerr << (x ? "true" : "false");}
+
+template<typename T, typename V>
+void __print(const pair<T, V> &x) {cerr << '{'; __print(x.first); cerr << ','; __print(x.second); cerr << '}';}
+template<typename T>
+void __print(const T &x) {int f = 0; cerr << '{'; for (auto &i: x) cerr << (f++ ? "," : ""), __print(i); cerr << "}";}
+void _print() {cerr << "]\n";}
+template <typename T, typename... V>
+void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v...);}
+#ifndef ONLINE_JUDGE
+#define debug(x...) cerr << "[" << #x << "] = ["; _print(x)
+#else
+#define debug(x...)
+#endif
+/* ------------------------------------------------------ */
 
 #define fastio() ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
 
@@ -62,79 +104,44 @@ vector<bool> sieve(ll n); // vector<bool> isPrime = sieve(1000002);
 int extEuclid(int a, int b, int& x, int& y); // int x, y; int gcd = extEuclid(a, b, x, y); // ax + by = gcd(a, b)
 /* ------------------------------------------------------ */
 
-/* ------------------------ debug ----------------------- */
-#define trace1(x)                cerr<<#x<<": "<<x<<endl
-#define trace2(x, y)             cerr<<#x<<": "<<x<<" | "<<#y<<": "<<y<<endl
-#define trace3(x, y, z)          cerr<<#x<<":" <<x<<" | "<<#y<<": "<<y<<" |\
-                                     "<<#z<<": "<<z<<endl
-#define trace4(a, b, c, d)       cerr<<#a<<": "<<a<<" | "<<#b<<": "<<b<<" |\
-                                     "<<#c<<": "<<c<<" | "<<#d<<": "<<d<<endl
-#define trace5(a, b, c, d, e)    cerr<<#a<<": "<<a<<" | "<<#b<<": "<<b<<" |\
-                                     "<<#c<<": "<<c<<" | "<<#d<<": "<<d<<" | "<<#e<< ": "<<e<<endl
-#define trace6(a, b, c, d, e, f) cerr<<#a<<": "<<a<<" | "<<#b<<": "<<b<<" | "<<#c<<": "<< c<<" |\
-                                 "<<#d<<": "<<d<<" | "<<#e<< ": "<<e<<" | "<<#f<<": "<<f<<endl
-
-
-                                 void __print(int x) {cerr << x;}
-void __print(long x) {cerr << x;}
-void __print(long long x) {cerr << x;}
-void __print(unsigned x) {cerr << x;}
-void __print(unsigned long x) {cerr << x;}
-void __print(unsigned long long x) {cerr << x;}
-void __print(float x) {cerr << x;}
-void __print(double x) {cerr << x;}
-void __print(long double x) {cerr << x;}
-void __print(char x) {cerr << '\'' << x << '\'';}
-void __print(const char *x) {cerr << '\"' << x << '\"';}
-void __print(const string &x) {cerr << '\"' << x << '\"';}
-void __print(bool x) {cerr << (x ? "true" : "false");}
-
-template<typename T, typename V>
-void __print(const pair<T, V> &x) {cerr << '{'; __print(x.first); cerr << ','; __print(x.second); cerr << '}';}
-template<typename T>
-void __print(const T &x) {int f = 0; cerr << '{'; for (auto &i: x) cerr << (f++ ? "," : ""), __print(i); cerr << "}";}
-void _print() {cerr << "]\n";}
-template <typename T, typename... V>
-void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v...);}
-#ifndef ONLINE_JUDGE
-#define debug(x...) cerr << "[" << #x << "] = ["; _print(x)
-#else
-#define debug(x...)
-#endif
-/* ------------------------------------------------------ */
-
-void solve() 
+// clang-format on
+// ctrl + shift + O : @Solve
+void solve()
 {
-    ll n, x;
-        cin >> n >> x;
-        vector<ll> v(n);
-        loop(n) cin >> v[i];
-
-        ll l = 0, r = INT_MAX;
-        
-        while(l+1 < r)
+    string n;
+    cin >> n;
+    if (n.size() == 1)
+    {
+        cout << n << nl;
+        return;
+    }
+    ll other = binpow(9, n.size() - 1) * (n[0] == '1' ? 1 : n[0] - '0' - 1);
+    for (ll i = n.size() - 1; i > 0; i--)
+    {
+        if ((n[i] - '0') * (n[i - 1] - '0') < 9 * (n[i - 1] - '0' - 1))
         {
-            ll mid = (l+r)/2;
-            ll total = 0;
-            fr(i, 0, n)
-                total += max(mid-v[i], 0LL);
-            if(total>x)
-                r=mid;
-            else
-                l=mid;
+            n[i - 1] = (n[i - 1] - 1);
+            for (int j = i; j < n.size(); j++)
+                n[j] = '9';
         }
-
-        cout << l << endl;
+    }
+    ll ans = 1;
+    for (auto it : n)
+    {
+        ans *= (it - '0');
+    }
+    ans = ans < other ? other : ans;
+    cout << ans << nl;
 }
 
-
+// clang-format off
 int main()
 {
     fastio();
 
     clock_t begin = clock();
     int t=1; 
-    cin >> t;
+    // cin >> t;
     while(t--)
     {
         solve();
