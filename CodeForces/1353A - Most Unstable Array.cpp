@@ -24,6 +24,6 @@ int main()
         else
             cout << m*2 << endl;
     }
-
+    string str;
     return 0;
 }
