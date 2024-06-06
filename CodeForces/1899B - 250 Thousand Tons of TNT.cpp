@@ -127,36 +127,37 @@ ll first_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp fun
 // ctrl + shift + O : @Solve
 void solve()
 {
-    re(n);
+    ll n;
+    cin >> n;
+    vll v(n);
+    cinv(v);
+    ll ans = 0;
 
-    vector<pair<ll,ll>> v(n);
-    for(int i = 0; i<n; i++)
+    for (int i = 1; i < n; i++)
     {
-        ll temp ; cin >> temp;
-        v[i] = {temp, i};
-    }    
-    vsort(v);
-    vll ans(n);
-
-    for(int i = 0; i<n; i++)
-    {
-        ll count = 1;
-        ll temp = v[i].second;
-        queue<ll> q;
-        while(v[temp] != v[i])
+        if (n % i == 0)
         {
-            count++;
-            temp = v[temp].second;
-            q.push(v[temp].second);
+            ll maxi = LONG_LONG_MIN;
+            ll mini = LONG_LONG_MAX;
+
+            for (int j = 0; j < n; j += i)
+            {
+                ll sum = 0;
+                for (int k = j; k < j + i; k++)
+                {
+                    sum += v[k];
+                }
+                maxi = max(maxi, sum);
+                mini = min(mini, sum);
+            }
+            ans = max((maxi - mini), ans);
         }
-        ans[v[i].second] = count;
-        
     }
-    printVec(ans);
+    cout << ans << nl;
 }
 
 // clang-format off
-int main()
+int32_t main()
 {
     fastio();
 

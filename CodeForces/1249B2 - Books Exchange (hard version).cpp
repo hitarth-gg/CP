@@ -129,28 +129,39 @@ void solve()
 {
     re(n);
 
-    vector<pair<ll,ll>> v(n);
-    for(int i = 0; i<n; i++)
+    vector<pair<ll, ll>> v(n);
+    for (int i = 0; i < n; i++)
     {
-        ll temp ; cin >> temp;
+        ll temp;
+        cin >> temp;
         v[i] = {temp, i};
-    }    
+    }
     vsort(v);
     vll ans(n);
 
-    for(int i = 0; i<n; i++)
+    for (int i = 0; i < n; i++)
     {
         ll count = 1;
         ll temp = v[i].second;
         queue<ll> q;
-        while(v[temp] != v[i])
+        if (v[i].first != -1)
         {
-            count++;
-            temp = v[temp].second;
-            q.push(v[temp].second);
+            while (v[temp] != v[i])
+            {
+                count++;
+                temp = v[temp].second;
+                q.push(v[temp].second);
+                v[temp].first = -1;
+            }
+            ans[v[i].second] = count;
+            while (!(q.empty()))
+            {
+                ll index = q.front();
+                ans[index] = count;
+                q.pop();
+                // debug(temp);
+            }
         }
-        ans[v[i].second] = count;
-        
     }
     printVec(ans);
 }

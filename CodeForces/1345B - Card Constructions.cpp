@@ -118,41 +118,34 @@ vector<int> permute(vector<int> sequence, vector<int> permutation, long long k);
 int extEuclid(int a, int b, int& x, int& y); // int x, y; int gcd = extEuclid(a, b, x, y); // ax + by = gcd(a, b)
 vector<long long> trial_division1(long long n);
 
-ll last_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp function should return true if v[mid] <= target
+ll last_index(ll l, ll r, bool (&comp)(ll, ll), ll target); // comp function should return true if v[mid] <= target
 ll first_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp function should return true if v[mid] < target
 
 /* ------------------------------------------------------ */
 
 // clang-format on
 // ctrl + shift + O : @Solve
+
+bool comp(ll mid, ll target)
+{
+    ll cards_req = (3 * mid + 1) * mid / 2;
+    if (cards_req <= target)
+        return true;
+    else
+        return false;
+}
+
 void solve()
 {
     re(n);
-
-    vector<pair<ll,ll>> v(n);
-    for(int i = 0; i<n; i++)
+    ll count = 0;
+    while (n > 1)
     {
-        ll temp ; cin >> temp;
-        v[i] = {temp, i};
-    }    
-    vsort(v);
-    vll ans(n);
-
-    for(int i = 0; i<n; i++)
-    {
-        ll count = 1;
-        ll temp = v[i].second;
-        queue<ll> q;
-        while(v[temp] != v[i])
-        {
-            count++;
-            temp = v[temp].second;
-            q.push(v[temp].second);
-        }
-        ans[v[i].second] = count;
-        
+        ll num = last_index(0, n + 1, comp, n);
+        n = n - (3 * num + 1) * num / 2;
+        count++;
     }
-    printVec(ans);
+    cout << count << nl;
 }
 
 // clang-format off
@@ -162,7 +155,7 @@ int main()
 
     clock_t begin = clock();
     int t=1; 
-    cin >> t;
+    cin >> t; 
     while(t--)
     {
         solve();
@@ -336,12 +329,12 @@ vector<long long> trial_division1(long long n) {
 // }
 // Calling : cout << first_index(l, r, v, find, target) << nl;
 
-ll last_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target)
+ll last_index(ll l, ll r, bool (&comp)(ll, ll), ll target)
 {
     while (l < r)
     {
         ll mid = (l + r + 1) / 2; // ceil
-        if (comp(v[mid], target)) // if v[mid] <= target
+        if (comp(mid, target)) // if v[mid] <= target
             l = mid;
         else                      // if v[mid] > target
             r = mid - 1;

@@ -125,32 +125,45 @@ ll first_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp fun
 
 // clang-format on
 // ctrl + shift + O : @Solve
+
+ll bs(ll l, ll r, ll target)
+{
+}
+
 void solve()
 {
-    re(n);
+    ll n;
+    cin >> n;
+    vector<pair<ll, ll>> v(n);
 
-    vector<pair<ll,ll>> v(n);
-    for(int i = 0; i<n; i++)
+    loop(n)
     {
-        ll temp ; cin >> temp;
-        v[i] = {temp, i};
-    }    
+        ll t;
+        cin >> t;
+        v[i] = {t, i};
+    }
+
     vsort(v);
+
     vll ans(n);
 
-    for(int i = 0; i<n; i++)
+    ll sum = 0;
+    ll j = 0;
+    for (int i = 0; i < n; i++)
     {
-        ll count = 1;
-        ll temp = v[i].second;
-        queue<ll> q;
-        while(v[temp] != v[i])
+        if (i < j)
+            ans[v[i].second] = j-1;
+        else if (i == j)
         {
-            count++;
-            temp = v[temp].second;
-            q.push(v[temp].second);
+            sum += v[i].first;
+            j = i+1;
+            while(sum >= v[j].first && j<n)
+            {
+                sum += v[j].first;
+                j++;
+            }
+            ans[v[i].second] = j-1;
         }
-        ans[v[i].second] = count;
-        
     }
     printVec(ans);
 }

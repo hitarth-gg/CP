@@ -128,31 +128,25 @@ ll first_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp fun
 void solve()
 {
     re(n);
-
-    vector<pair<ll,ll>> v(n);
-    for(int i = 0; i<n; i++)
+    vector<pair<ll, ll>> v(n);
+    for(int i = 0; i< n; i++)
     {
-        ll temp ; cin >> temp;
-        v[i] = {temp, i};
-    }    
-    vsort(v);
-    vll ans(n);
+        ll temp;
+        cin >> temp;
 
-    for(int i = 0; i<n; i++)
-    {
-        ll count = 1;
-        ll temp = v[i].second;
-        queue<ll> q;
-        while(v[temp] != v[i])
-        {
-            count++;
-            temp = v[temp].second;
-            q.push(v[temp].second);
-        }
-        ans[v[i].second] = count;
-        
+        v[i] = {temp, i+1}; 
     }
-    printVec(ans);
+    vsortrev(v);
+    ll sum = 0;
+    for(int i = 0; i< n; i++)
+    {
+        sum += v[i].first*i + 1;
+    }
+    // debug(v);
+    cout << sum << nl;
+    for(auto it : v)
+        cout << it.second << " ";
+    cout <<  nl;
 }
 
 // clang-format off
@@ -162,7 +156,7 @@ int main()
 
     clock_t begin = clock();
     int t=1; 
-    cin >> t;
+    // cin >> t;
     while(t--)
     {
         solve();

@@ -125,34 +125,33 @@ ll first_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp fun
 
 // clang-format on
 // ctrl + shift + O : @Solve
+
+ll get(ll x)
+{
+    ll min_ = LONG_LONG_MAX, max_ = -1;
+    while(x)
+    {
+        ll last = x%10;
+        x=x/10;
+        min_ = min(min_, last);
+        max_ = max(max_, last);
+    }
+    return min_*max_;
+}
+
 void solve()
 {
-    re(n);
-
-    vector<pair<ll,ll>> v(n);
-    for(int i = 0; i<n; i++)
+    re(a1, k);
+    k--;
+    ll an = a1;
+    while(k--)
     {
-        ll temp ; cin >> temp;
-        v[i] = {temp, i};
-    }    
-    vsort(v);
-    vll ans(n);
-
-    for(int i = 0; i<n; i++)
-    {
-        ll count = 1;
-        ll temp = v[i].second;
-        queue<ll> q;
-        while(v[temp] != v[i])
-        {
-            count++;
-            temp = v[temp].second;
-            q.push(v[temp].second);
-        }
-        ans[v[i].second] = count;
-        
-    }
-    printVec(ans);
+        ll t = get(an);
+        if(t==0)
+            break;
+        an += t;
+    }        
+    cout << an << nl;
 }
 
 // clang-format off
@@ -362,4 +361,5 @@ ll first_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target)
 }
 
 /* ----------------- BINARY SEARCH ENDS ----------------- */
+
 

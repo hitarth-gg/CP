@@ -1,5 +1,6 @@
 // NOT SAVED
 // clang-format off
+#pragma GCC optimize("O3,unroll-loops")
 #include <bits/stdc++.h>
 #include <ext/pb_ds/tree_policy.hpp>
 #include <ext/pb_ds/assoc_container.hpp>
@@ -99,6 +100,8 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #define bitClear(n,k) (n&(~(1<<k)))
 #define bitFlip(n,k) (n^(1<<k))
 
+typedef tree<pair<int, int>, null_type, less<pair<int, int>>, rb_tree_tag,tree_order_statistics_node_update> ordered_set; // find_by_order, order_of_key
+
 /* ------------------------------------------------------ */
 ll mod_add(ll a, ll b, ll m);
 ll mod_mul(ll a, ll b, ll m);
@@ -127,32 +130,31 @@ ll first_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp fun
 // ctrl + shift + O : @Solve
 void solve()
 {
-    re(n);
+    re(n, k);
+    vll v(n);
+    cinv(v);
 
-    vector<pair<ll,ll>> v(n);
-    for(int i = 0; i<n; i++)
-    {
-        ll temp ; cin >> temp;
-        v[i] = {temp, i};
-    }    
-    vsort(v);
-    vll ans(n);
+    ordered_set s;
 
-    for(int i = 0; i<n; i++)
+    ll t = 0;
+
+    for (int i = 0; i < k; i++)
+        s.insert({v[i], t++});
+
+    // __print(*(s.find_by_order(1)));
+
+    ll mid = k & 1 ? (k + 1) / 2 : k / 2;
+    cout << (*s.find_by_order(mid - 1)).first << " ";
+
+    debug(s);
+    for (int i = k; i < n; i++)
     {
-        ll count = 1;
-        ll temp = v[i].second;
-        queue<ll> q;
-        while(v[temp] != v[i])
-        {
-            count++;
-            temp = v[temp].second;
-            q.push(v[temp].second);
-        }
-        ans[v[i].second] = count;
-        
+        s.erase(s.lower_bound({v[i-k], 0}));
+        s.insert({v[i], t++});
+        mid = k & 1 ? (k + 1) / 2 : k / 2;
+        cout <<  (*s.find_by_order(mid - 1)).first << " ";
     }
-    printVec(ans);
+    cout << nl;
 }
 
 // clang-format off
@@ -162,7 +164,7 @@ int main()
 
     clock_t begin = clock();
     int t=1; 
-    cin >> t;
+    // cin >> t;
     while(t--)
     {
         solve();

@@ -127,32 +127,36 @@ ll first_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp fun
 // ctrl + shift + O : @Solve
 void solve()
 {
-    re(n);
-
-    vector<pair<ll,ll>> v(n);
-    for(int i = 0; i<n; i++)
+    re(n,f,k);
+    // vll v(n);
+    // cinv(v);
+    vector<pair<ll, ll>> v(n);
+    for(int i = 0; i< n; i++)
     {
-        ll temp ; cin >> temp;
-        v[i] = {temp, i};
-    }    
-    vsort(v);
-    vll ans(n);
-
-    for(int i = 0; i<n; i++)
-    {
-        ll count = 1;
-        ll temp = v[i].second;
-        queue<ll> q;
-        while(v[temp] != v[i])
-        {
-            count++;
-            temp = v[temp].second;
-            q.push(v[temp].second);
-        }
-        ans[v[i].second] = count;
-        
+        ll temp ; cin >> temp ;
+        v[i] = {temp, i+1};
     }
-    printVec(ans);
+    ll value = v[f-1].first;
+
+    vsortrev(v);
+    ll indexFirst = LONG_LONG_MAX;
+    ll indexLast = LONG_LONG_MIN;
+    for(ll i = 0; i<n; i++)
+    {
+        if(v[i].first == value)
+        {
+            indexFirst = min(indexFirst, i+1);
+            indexLast = max(indexFirst, i+1);
+        }
+    }
+
+    if(indexFirst <= k && indexLast >k)
+        cout << "MAYBE\n";
+    else if( k >= indexLast)
+        cout << "YES\n";
+    else
+        cout << "NO\n";
+
 }
 
 // clang-format off

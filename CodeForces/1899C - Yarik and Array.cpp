@@ -129,30 +129,27 @@ void solve()
 {
     re(n);
 
-    vector<pair<ll,ll>> v(n);
-    for(int i = 0; i<n; i++)
-    {
-        ll temp ; cin >> temp;
-        v[i] = {temp, i};
-    }    
-    vsort(v);
-    vll ans(n);
+    vll v(n);
+    cinv(v);
 
-    for(int i = 0; i<n; i++)
+    ll mx = v[0];
+    ll max_end = v[0];
+
+    for (int i = 1; i < n; i++)
     {
-        ll count = 1;
-        ll temp = v[i].second;
-        queue<ll> q;
-        while(v[temp] != v[i])
+        if (max_end < 0)
+            max_end = 0;
+        if (v[i] != v[i - 1] &&
+            !((v[i] % 2 == 0 && v[i - 1] % 2 == 0) || (v[i] % 2 != 0 && v[i - 1] % 2 != 0)))
         {
-            count++;
-            temp = v[temp].second;
-            q.push(v[temp].second);
+            max_end += v[i];
         }
-        ans[v[i].second] = count;
-        
+        else
+            max_end = v[i];
+
+        mx = max(max_end, mx);
     }
-    printVec(ans);
+    cout << mx << nl;
 }
 
 // clang-format off
@@ -362,4 +359,5 @@ ll first_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target)
 }
 
 /* ----------------- BINARY SEARCH ENDS ----------------- */
+
 
