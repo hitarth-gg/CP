@@ -92,8 +92,7 @@ ll factorial(ll n);
 ll lcm(ll a, ll b);
 
 bool is_prime(ll n);
-vector<bool> sieve(ll n); 
-vector<bool> isPrime = sieve(1000002);
+vector<bool> sieve(ll n); // vector<bool> isPrime = sieve(1000002);
 
 vector<ll> applyPermutation(vector<ll> sequence, vector<ll> permutation);
 vector<ll> permute(vector<ll> sequence, vector<ll> permutation, long long k);
@@ -109,47 +108,51 @@ void genPrefix(vll &v);
 
 // clang-format on
 // ctrl + shift + O : @Solve
-vll spf;
-vll primes;
-
-void pre()
-{
-    ll n = 1e6 + 100;
-    spf.assign(n, -1);
-    for (ll i = 2; i < n; i++)
-        if (spf[i] == -1)
-            for (ll j = i; j < n; j += i)
-                if (spf[j] == -1)
-                    spf[j] = i;
-    for (ll i = 0; i < 1000002; i++)
-    {
-        if (isPrime[i])
-            primes.push_back(i);
-    }
-}
-
 void solve()
 {
     re(n);
-    ll t = 1;
-    ll ans = 0;
-    debug(spf[n]);
-    if (spf[n] > 2)
-    {
-        ll t = spf[n];
-        for (auto it : primes)
-        {
-            if (it <= t)
-            {
-                ans += n * it;
-            }
-            else
-                break;
-        }
-    }
-    else
-        ans = n * spf[n];
+    reS(s);
 
+    set<char> tf;
+    set<char> tb;
+
+    vll pf(n);
+    vll pb(n);
+    pf[0]++;
+    pb[n - 1]++;
+
+    tf.insert(s[0]);
+    tb.insert(s[n - 1]);
+
+    for (int i = 1; i < n; i++)
+    {
+        int j = n - 1 - i;
+        if (!tf.contains(s[i]))
+        {
+            tf.insert(s[i]);
+            pf[i] = pf[i - 1] + 1;
+        }
+        else
+            pf[i] = pf[i - 1];
+
+        if (!tb.contains(s[j]))
+        {
+            tb.insert(s[j]);
+            pb[j] = pb[j + 1] + 1;
+        }
+        else
+            pb[j] = pb[j + 1];
+    }
+
+    debug(pf);
+    debug(pb);
+
+    ll ans = 0;
+
+    for (int i = 0; i < n-1; i++)
+    {
+        ans = max(pf[i] + pb[i+1], ans);
+    }
     cout << ans << nl;
 }
 
@@ -161,8 +164,6 @@ int32_t main()
     clock_t begin = clock();
     int t=1; 
     cin >> t;
-pre();
-
     while(t--)
     {
         solve();

@@ -110,14 +110,35 @@ void genPrefix(vll &v);
 // ctrl + shift + O : @Solve
 void solve()
 {
-    vp v = {{6, 2}, {7, 9}, {13, 2}, {7, 3}, {1, 9}};
-    sort(v.begin(), v.end(), [&](pair<ll, ll> a, pair<ll, ll> b)
-         {
-        if(a.first == b.first)
-            return a.second < b.second;
-        else
-            return a.first > b.first; });
-    debug(v); // → [v = {(13,2),(7,3),(7,9),(6,2),(1,9)}]
+    re(n, k, q);
+    reV(v, n);
+
+    ll ans = 0;
+
+    ll i = 0, j = 0;
+    while (i < n)
+    {
+        while (i < n && v[i] > q)
+            i++;
+        j = i;
+        while (j < n && v[j] <= q)
+            j++;
+
+        ll possibleConsDays = j - i;
+
+        if (possibleConsDays >= k)
+        {
+
+            ll a = 1;
+            ll l = possibleConsDays - k + 1;
+
+            ll t = l*(a+l)/2;
+            
+            ans += t;
+        }
+        i = j;
+    }
+    cout << ans << nl;
 }
 
 // clang-format off
@@ -127,7 +148,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

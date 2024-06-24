@@ -6,10 +6,16 @@
 using namespace std;
 using namespace chrono;
 using namespace __gnu_pbds;
+
+/* ----------------------- int128 ----------------------- */
+// typedef __int128 lll;
+// istream &operator>>(istream &cin, lll &x) { x=0; static string s; cin>>s; for (char c:s) x=x*10+(c-'0'); return cin; }
+// ostream &operator<<(ostream &cout, lll x) { static char s[60]; int tp=1; s[0]='0'+(x%10); while (x/=10) s[tp++]='0'+(x%10); while (tp--) cout<<s[tp]; return cout; }
+/* ------------------------------------------------------ */
 /* ------------------------ INPUT ----------------------- */
 // 1
 #define G(x) ll x; cin >> x;
-#define GS(x) string x; cin >> x;
+#define reS(x) string x; cin >> x;
 // 2
 #define re(...) ll __VA_ARGS__; read(__VA_ARGS__)
 void read() {}
@@ -22,43 +28,11 @@ void read(T& first, Args&... args) {
 #define reV(v, n) vll v(n); cinv(v);
 /* ------------------------------------------------------ */
 /* ------------------------ debug ----------------------- */
-#define trace1(x)                cerr<<#x<<": "<<x<<endl
-#define trace2(x, y)             cerr<<#x<<": "<<x<<" | "<<#y<<": "<<y<<endl
-#define trace3(x, y, z)          cerr<<#x<<":" <<x<<" | "<<#y<<": "<<y<<" |\
-                                     "<<#z<<": "<<z<<endl
-#define trace4(a, b, c, d)       cerr<<#a<<": "<<a<<" | "<<#b<<": "<<b<<" |\
-                                     "<<#c<<": "<<c<<" | "<<#d<<": "<<d<<endl
-#define trace5(a, b, c, d, e)    cerr<<#a<<": "<<a<<" | "<<#b<<": "<<b<<" |\
-                                     "<<#c<<": "<<c<<" | "<<#d<<": "<<d<<" | "<<#e<< ": "<<e<<endl
-#define trace6(a, b, c, d, e, f) cerr<<#a<<": "<<a<<" | "<<#b<<": "<<b<<" | "<<#c<<": "<< c<<" |\
-                                 "<<#d<<": "<<d<<" | "<<#e<< ": "<<e<<" | "<<#f<<": "<<f<<endl
-
-
-                                 void __print(int x) {cerr << x;}
-void __print(long x) {cerr << x;}
-void __print(long long x) {cerr << x;}
-void __print(unsigned x) {cerr << x;}
-void __print(unsigned long x) {cerr << x;}
-void __print(unsigned long long x) {cerr << x;}
-void __print(float x) {cerr << x;}
-void __print(double x) {cerr << x;}
-void __print(long double x) {cerr << x;}
-void __print(char x) {cerr << '\'' << x << '\'';}
-void __print(const char *x) {cerr << '\"' << x << '\"';}
-void __print(const string &x) {cerr << '\"' << x << '\"';}
-void __print(bool x) {cerr << (x ? "true" : "false");}
-
-template<typename T, typename V>
-void __print(const pair<T, V> &x) {cerr << '{'; __print(x.first); cerr << ','; __print(x.second); cerr << '}';}
-template<typename T>
-void __print(const T &x) {int f = 0; cerr << '{'; for (auto &i: x) cerr << (f++ ? "," : ""), __print(i); cerr << "}";}
-void _print() {cerr << "]\n";}
-template <typename T, typename... V>
-void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v...);}
 #ifndef ONLINE_JUDGE
-#define debug(x...) cerr << "[" << #x << "] = ["; _print(x)
+#include "D:\Compi\Headers\debug3.h"
 #else
-#define debug(x...)
+#define debug(...)
+#define debugArr(...)
 #endif
 /* ------------------------------------------------------ */
 
@@ -92,6 +66,9 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #define v_min(v) *min_element (v.begin(),v.end())
 #define v_max(v) *max_element (v.begin(),v.end())
 #define v_count(v, target) count(v.begin(), v.end(), target)
+#define UB(v, x) distance(v.begin(), upper_bound(v.begin(), v.end(), x));
+#define LB(v, x) distance(v.begin(), lower_bound(v.begin(), v.end(), x));
+#define UNIQUE(v) vsort(v), v.erase(unique(v.begin(), v.end()), v.end());
 
 #define bitcount __builtin_popcountll
 #define bitCheck(n,k) ((n>>k)&1)
@@ -99,25 +76,29 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #define bitClear(n,k) (n&(~(1<<k)))
 #define bitFlip(n,k) (n^(1<<k))
 
-typedef tree<pair<int, int>, null_type, less<pair<int, int>>, rb_tree_tag,tree_order_statistics_node_update> ordered_set; // find_by_order, order_of_key
+typedef tree<pair<ll, ll>, null_type, less<pair<ll, ll>>, rb_tree_tag,tree_order_statistics_node_update> ordered_set; // find_by_order, order_of_key
 /* ------------------------------------------------------ */
 ll mod_add(ll a, ll b, ll m);
 ll mod_mul(ll a, ll b, ll m);
 ll mod_sub(ll a, ll b, ll m);
+ll mod_div(ll a, ll b, ll m); // only for prime m
 ll binpow(ll a, ll b);
 ll binpow(ll a, ll b, ll m);
+ll mod_inverse(ll a, ll b);
 ll kadane( vector<ll> arr,ll n);
 ll ncr(ll n, ll r);
+ll ncr2(ll n, ll r);
 ll factorial(ll n);
 ll lcm(ll a, ll b);
 
 bool is_prime(ll n);
 vector<bool> sieve(ll n); // vector<bool> isPrime = sieve(1000002);
 
-vector<int> applyPermutation(vector<int> sequence, vector<int> permutation);
-vector<int> permute(vector<int> sequence, vector<int> permutation, long long k);
-int extEuclid(int a, int b, int& x, int& y); // int x, y; int gcd = extEuclid(a, b, x, y); // ax + by = gcd(a, b)
+vector<ll> applyPermutation(vector<ll> sequence, vector<ll> permutation);
+vector<ll> permute(vector<ll> sequence, vector<ll> permutation, long long k);
+ll extEuclid(ll a, ll b, ll& x, ll& y); // ll x, y; ll gcd = extEuclid(a, b, x, y); // ax + by = gcd(a, b)
 vector<long long> trial_division1(long long n);
+vll get_factors(ll num, ll upper_limit = 1000000, bool reset = false);
 
 ll last_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp function should return true if v[mid] <= target
 ll first_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp function should return true if v[mid] < target
@@ -129,39 +110,34 @@ void genPrefix(vll &v);
 // ctrl + shift + O : @Solve
 void solve()
 {
-    re(h, n);
-    reV(a, n);
-    reV(c, n);
+    re(n, m);
 
-    vll cds(n, 0);
-    ll offset = 0;
-    ll ans = 0;
-    while (h > 0)
+    vp v;
+    for (int i = 0; i < n; i++)
     {
-        ll atk = 0;
-
-        loop(n)
-        {
-            if ((cds[i] - offset) <= 0)
-            {
-                atk += a[i];
-                cds[i] = c[i];
-            }
-        }
-        h -= atk;
-        if (atk == 0)
-        {
-            ll bruh = v_min(cds);
-            ans += bruh;
-            offset += bruh;
-        }
-        if (atk > 0)
-        {
-            offset++;
-        }
-        ans++;
+        re(t);
+        t = t % m;
+        if (t == 0)
+            t = m;
+        v.pb({t, i + 1});
     }
-    cout << ans << nl;
+    auto comp = [&](pair<ll, ll> &a, pair<ll, ll> &b)
+    {
+        if (a.first == b.first)
+        {
+            return a.second < b.second;
+        }
+        else
+        {
+            return a.first > b.first;
+        }
+    };
+
+    sort(v.begin(), v.end(), comp);
+    debug(v);
+    for (int i = 0; i < n; i++)
+        cout << v[i].second << " ";
+    cout << nl;
 }
 
 // clang-format off
@@ -213,6 +189,8 @@ int32_t main()
 ll mod_add(ll a, ll b, ll m) {a = a % m; b = b % m; return (((a + b) % m) + m) % m;}
 ll mod_mul(ll a, ll b, ll m) {a = a % m; b = b % m; return (((a * b) % m) + m) % m;}
 ll mod_sub(ll a, ll b, ll m) {a = a % m; b = b % m; return (((a - b) % m) + m) % m;}
+ll mod_inverse(ll a, ll b) { return binpow(a, b - 2, b); }
+ll mod_div(ll a, ll b, ll m) {a = a % m;b = b % m; return (mod_mul(a, mod_inverse(b, m), m) + m) % m;} // only for prime m
 
 ll binpow(ll a, ll b) {
     ll res = 1;
@@ -253,6 +231,23 @@ ll ncr(ll n, ll r) {
     if(r==1) return n;
     return ncr(n-1, r-1) + ncr(n-1, r);
 }
+
+ll ncr2(ll n, ll r)
+{
+    static vll fact;
+    static bool initialized = false;
+    if (!initialized)
+    {
+        ll sz = 100LL;
+        fact.resize(sz, 1);
+        for (ll i = 2; i < sz; i++)
+            fact[i] = mod_mul(fact[i - 1], i, MOD);
+        initialized = true;
+        // cout << "initialized" << nl;
+    }
+    ll ans = mod_div(fact[n], mod_mul(fact[n - r], fact[r], MOD), MOD);
+    return ans;
+}
 ll factorial(ll n) {
     return tgamma(n+1);
 }
@@ -270,15 +265,15 @@ bool is_prime(ll n) {
     }
     return true;
 }
-vector<int> applyPermutation(vector<int> sequence, vector<int> permutation) {
-    vector<int> newSequence(sequence.size());
-    for(int i = 0; i < sequence.size(); i++) {
+vector<ll> applyPermutation(vector<ll> sequence, vector<ll> permutation) {
+    vector<ll> newSequence(sequence.size());
+    for(ll i = 0; i < sequence.size(); i++) {
         newSequence[i] = sequence[permutation[i]];
     }
     return newSequence;
 }
 
-vector<int> permute(vector<int> sequence, vector<int> permutation, long long k) {
+vector<ll> permute(vector<ll> sequence, vector<ll> permutation, long long k) {
     while (k > 0) {
         if (k & 1) {
             sequence = applyPermutation(sequence, permutation);
@@ -305,14 +300,14 @@ vector<bool> sieve(ll n)
 }
 
 // extended euclidean algorithm
-int extEuclid(int a, int b, int& x, int& y) {
+ll extEuclid(ll a, ll b, ll& x, ll& y) {
     if (b == 0) {
         x = 1;
         y = 0;
         return a;
     }
-    int x1, y1;
-    int d = extEuclid(b, a % b, x1, y1);
+    ll x1, y1;
+    ll d = extEuclid(b, a % b, x1, y1);
     x = y1;
     y = x1 - y1 * (a / b);
     return d;
@@ -331,6 +326,33 @@ vector<long long> trial_division1(long long n) {
     return factorization;
 }
 
+vll get_factors(ll num, ll upper_limit, bool reset)
+{
+    vll factors;
+    static ll n;
+    static vll spf;
+    static bool initialized = false;
+    if (!initialized || reset)
+    {
+        n = upper_limit;
+        initialized = true;
+        spf.assign(n, -1);
+        for (ll i = 2; i < n; i++)
+            if (spf[i] == -1)
+                for (ll j = i; j < n; j += i)
+                    if (spf[j] == -1)
+                        spf[j] = i;
+    }
+
+    if (num <= 1)
+        return factors;
+    while (num > 1)
+    {
+        factors.push_back(spf[num]);
+        num /= spf[num];
+    }
+    return factors;
+}
 /* ------------------------------------------------------ */
 
 /* -------------------- BINARY SEARCH ------------------- */

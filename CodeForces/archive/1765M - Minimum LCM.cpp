@@ -15,7 +15,7 @@ using namespace __gnu_pbds;
 /* ------------------------ INPUT ----------------------- */
 // 1
 #define G(x) ll x; cin >> x;
-#define GS(x) string x; cin >> x;
+#define reS(x) string x; cin >> x;
 // 2
 #define re(...) ll __VA_ARGS__; read(__VA_ARGS__)
 void read() {}
@@ -28,43 +28,11 @@ void read(T& first, Args&... args) {
 #define reV(v, n) vll v(n); cinv(v);
 /* ------------------------------------------------------ */
 /* ------------------------ debug ----------------------- */
-#define trace1(x)                cerr<<#x<<": "<<x<<endl
-#define trace2(x, y)             cerr<<#x<<": "<<x<<" | "<<#y<<": "<<y<<endl
-#define trace3(x, y, z)          cerr<<#x<<":" <<x<<" | "<<#y<<": "<<y<<" |\
-                                     "<<#z<<": "<<z<<endl
-#define trace4(a, b, c, d)       cerr<<#a<<": "<<a<<" | "<<#b<<": "<<b<<" |\
-                                     "<<#c<<": "<<c<<" | "<<#d<<": "<<d<<endl
-#define trace5(a, b, c, d, e)    cerr<<#a<<": "<<a<<" | "<<#b<<": "<<b<<" |\
-                                     "<<#c<<": "<<c<<" | "<<#d<<": "<<d<<" | "<<#e<< ": "<<e<<endl
-#define trace6(a, b, c, d, e, f) cerr<<#a<<": "<<a<<" | "<<#b<<": "<<b<<" | "<<#c<<": "<< c<<" |\
-                                 "<<#d<<": "<<d<<" | "<<#e<< ": "<<e<<" | "<<#f<<": "<<f<<endl
-
-
-                                 void __print(int x) {cerr << x;}
-void __print(long x) {cerr << x;}
-void __print(long long x) {cerr << x;}
-void __print(unsigned x) {cerr << x;}
-void __print(unsigned long x) {cerr << x;}
-void __print(unsigned long long x) {cerr << x;}
-void __print(float x) {cerr << x;}
-void __print(double x) {cerr << x;}
-void __print(long double x) {cerr << x;}
-void __print(char x) {cerr << '\'' << x << '\'';}
-void __print(const char *x) {cerr << '\"' << x << '\"';}
-void __print(const string &x) {cerr << '\"' << x << '\"';}
-void __print(bool x) {cerr << (x ? "true" : "false");}
-
-template<typename T, typename V>
-void __print(const pair<T, V> &x) {cerr << '{'; __print(x.first); cerr << ','; __print(x.second); cerr << '}';}
-template<typename T>
-void __print(const T &x) {int f = 0; cerr << '{'; for (auto &i: x) cerr << (f++ ? "," : ""), __print(i); cerr << "}";}
-void _print() {cerr << "]\n";}
-template <typename T, typename... V>
-void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v...);}
 #ifndef ONLINE_JUDGE
-#define debug(x...) cerr << "[" << #x << "] = ["; _print(x)
+#include "D:\Compi\Headers\debug3.h"
 #else
-#define debug(x...)
+#define debug(...)
+#define debugArr(...)
 #endif
 /* ------------------------------------------------------ */
 
@@ -98,6 +66,9 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #define v_min(v) *min_element (v.begin(),v.end())
 #define v_max(v) *max_element (v.begin(),v.end())
 #define v_count(v, target) count(v.begin(), v.end(), target)
+#define UB(v, x) distance(v.begin(), upper_bound(v.begin(), v.end(), x));
+#define LB(v, x) distance(v.begin(), lower_bound(v.begin(), v.end(), x));
+#define UNIQUE(v) vsort(v), v.erase(unique(v.begin(), v.end()), v.end());
 
 #define bitcount __builtin_popcountll
 #define bitCheck(n,k) ((n>>k)&1)
@@ -127,7 +98,7 @@ vector<ll> applyPermutation(vector<ll> sequence, vector<ll> permutation);
 vector<ll> permute(vector<ll> sequence, vector<ll> permutation, long long k);
 ll extEuclid(ll a, ll b, ll& x, ll& y); // ll x, y; ll gcd = extEuclid(a, b, x, y); // ax + by = gcd(a, b)
 vector<long long> trial_division1(long long n);
-vll get_factors(ll num, ll upper_limit = 1000002, bool reset = false);
+vll get_factors(ll num, ll upper_limit = 1000000, bool reset = false);
 
 ll last_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp function should return true if v[mid] <= target
 ll first_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp function should return true if v[mid] < target
@@ -137,143 +108,29 @@ void genPrefix(vll &v);
 
 // clang-format on
 // ctrl + shift + O : @Solve
-// void solve()
-// {
-//     re(a, b);
-//     if ((a - 1) * 2 < b)
-//         cout << "No" << nl;
-//     else if (b % 2 != 0)
-//         cout << "No" << nl;
-//     else
-//     {
-//         ll t1 = b / 2;
-//         vll ans;
-//         for (ll i = 1; i <= a; i++)
-//         {
-//             ll poss1 = i + t1;
-//             ll poss2 = i - t1;
-//             ll x1 = -1;
-//             ll bruh = -1;
-//             if (poss1 >= 1 && poss1 <= a)
-//             {
-//                 bruh = i;
-//                 x1 = poss1;
-//             }
-//             else if (poss2 >= 1 && poss2 <= a)
-//             {
-//                 x1 = poss2;
-//                 bruh = i;
-//             }
-
-//             if (x1 != -1)
-//             {
-//                 ans.push_back(x1);
-//                 for (int j = i + 1; j <= a; j++)
-//                 {
-//                     if (j == x1)
-//                         ans.push_back(bruh);
-//                     else
-//                         ans.push_back(j);
-//                 }
-//                 goto end_loop;
-//             }
-//             else
-//                 ans.push_back(i);
-//         }
-//     end_loop:;
-//         cout << "Yes" << nl;
-//         printVec(ans);
-//     }
-// }
-// void solve()
-// {
-//     re(a, b);
-
-//     vll ans(a, 0);
-//     deque<ll> p;
-//     for (ll i = a - 1; i >= 1; i--)
-//     {
-//         if (2 * i <= b && b > 0)
-//         {
-//             p.pb(i);
-//             b -= 2 * i;
-//         }
-//     }
-//     for (ll i = 1; i <= a; i++)
-//     {
-//         debug(p);
-
-//         if (p.empty() && ans[i - 1] == 0)
-//             ans[i - 1] = i;
-//         else if (ans[i - 1] == 0)
-//         {
-//             ll poss1 = i + p[0];
-//             if (poss1 >= 1 && poss1 <= a)
-//             {
-//                 ans[i - 1] = poss1;
-//                 ans[poss1 - 1] = i;
-//             }
-//             p.pop_front();
-//         }
-//     }
-//     if (b == 0)
-//     {
-//         cout << "Yes" << nl;
-//         printVec(ans);
-//     }
-//     else
-//         cout << "No" << nl;
-// }
-
 
 void solve()
 {
-    ll a, b;
-    cin >> a >> b;
+    re(n);
 
-    vector<ll> ans(a, 0);
-    deque<ll> p;
-    for (ll i = a - 1; i >= 1; i--)
+    ll fax = 1;
+    for (ll i = 2; i * i <= n; i++)
     {
-        if (2 * i <= b && b > 0)
+        if (n % i == 0)
         {
-            p.push_back(i);
-            b -= 2 * i;
+            fax = i;
+            break;
         }
     }
-
-    for (ll i = 1; i <= a; i++)
+    pair<ll, ll> ans = make_pair(1, n - 1);
+    if (fax != 1)
     {
-        if (p.empty() && ans[i - 1] == 0)
-        {
-            ans[i - 1] = i;
-        }
-        else if (!p.empty() && ans[i - 1] == 0)
-        {
-            ll poss1 = i + p.front();
-            if (poss1 >= 1 && poss1 <= a && ans[poss1 - 1] == 0)
-            {
-                ans[i - 1] = poss1;
-                ans[poss1 - 1] = i;
-            }
-            p.pop_front();
-        }
+        ans.first = n / fax;
+        ans.second = n - ans.first;
     }
-
-    if (b == 0)
-    {
-        cout << "Yes" << endl;
-        for (ll i = 0; i < a; i++)
-        {
-            cout << ans[i] << " ";
-        }
-        cout << endl;
-    }
-    else
-    {
-        cout << "No" << endl;
-    }
+    cout << ans.first << " " << ans.second << nl;
 }
+
 // clang-format off
 int32_t main()
 {

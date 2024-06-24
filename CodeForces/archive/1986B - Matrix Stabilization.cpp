@@ -111,13 +111,65 @@ void genPrefix(vll &v);
 void solve()
 {
     re(n, m);
-    ll rem = m % n;
-    ll ans = 0;
-    if (m - rem >= 1)
-        ans = min(rem, n - rem);
-    else
-        ans = n - rem;
-    cout << ans << nl;
+    vector<vector<ll>> v(n, vector<ll>(m, 0));
+    fr(i, 0, n)
+    {
+        fr(j, 0, m)
+        {
+            cin >> v[i][j];
+        }
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < m; j++)
+        {
+            ll maxi = 0;
+            bool possible = true;
+            if (i - 1 >= 0)
+            {
+                if (v[i][j] <= v[i - 1][j])
+                    possible = false;
+
+                if (v[i][j] > v[i - 1][j])
+                    maxi = max(maxi, v[i - 1][j]);
+            }
+
+            if (j - 1 >= 0)
+            {
+                if (v[i][j] <= v[i][j - 1])
+                    possible = false;
+
+                if (v[i][j] > v[i][j - 1])
+                    maxi = max(maxi, v[i][j - 1]);
+            }
+            if(j+1 < m)
+            {
+                if(v[i][j] <= v[i][j+1])
+                    possible = false;
+                if(v[i][j] > v[i][j+1])
+                    maxi = max(maxi, v[i][j+1]);
+            }
+
+            if(i+1 < n)
+            {
+                if(v[i][j] <= v[i+1][j])
+                    possible = false;
+                if(v[i][j] > v[i+1][j])
+                    maxi = max(maxi, v[i+1][j]);
+            }
+            if(possible)
+                v[i][j] = maxi;
+            
+        }
+    }
+
+    for(auto it:v)
+    {
+        for(auto i:it)
+            cout << i << " ";
+        cout << endl;
+    }
 }
 
 // clang-format off

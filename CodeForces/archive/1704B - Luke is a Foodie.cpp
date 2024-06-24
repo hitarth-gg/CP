@@ -110,24 +110,26 @@ void genPrefix(vll &v);
 // ctrl + shift + O : @Solve
 void solve()
 {
-    re(n);
-    ll t1 = n / 2;
-    ll k1 = n / 2 + 1;
+    re(n, x);
+    reV(v, n);
 
-    ll t = ceil((double)n / 2);
-
-    debug(t);
-
-    for (ll i = 1; i <= n; i++)
-        cout << i << " ";
-    cout << nl;
-    
-    for (ll i = 0; i < t; i++)
-        cout << k1++ << " ";
-    k1 = 1;
-    for (ll i = t; i < n; i++)
-        cout << k1++ << " ";
-    cout << nl;
+    ll ans = 0;
+    ll l = (v[0] - x), r = v[0] + x;
+    ll i = 0;
+    while (i < n)
+    {
+        l = v[i] - x;
+        r = v[i] + x;
+        while (l <= r && i < n)
+        {
+            i++;
+            l = max(l, v[i] - x);
+            r = min(r, v[i] + x);
+        }
+        if (i < n)
+            ans++;
+    }
+    cout << ans << nl;
 }
 
 // clang-format off

@@ -54,6 +54,7 @@ void read(T& first, Args&... args) {
 #define se second
 
 #define vll vector<ll>
+#define dll deque<ll>
 #define vp vector<pair<ll,ll>>
 
 #define printVec(v) for(auto it:v)cout<<it<<' '; cout<<endl;
@@ -98,7 +99,7 @@ vector<ll> applyPermutation(vector<ll> sequence, vector<ll> permutation);
 vector<ll> permute(vector<ll> sequence, vector<ll> permutation, long long k);
 ll extEuclid(ll a, ll b, ll& x, ll& y); // ll x, y; ll gcd = extEuclid(a, b, x, y); // ax + by = gcd(a, b)
 vector<long long> trial_division1(long long n);
-vll get_factors(ll num, ll upper_limit = 1000000, bool reset = false);
+dll get_factors(ll num, ll upper_limit = 1000000, bool reset = false);
 
 ll last_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp function should return true if v[mid] <= target
 ll first_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp function should return true if v[mid] < target
@@ -108,16 +109,45 @@ void genPrefix(vll &v);
 
 // clang-format on
 // ctrl + shift + O : @Solve
+set<ll> primes = {2, 3, 5};
 void solve()
 {
-    vp v = {{6, 2}, {7, 9}, {13, 2}, {7, 3}, {1, 9}};
-    sort(v.begin(), v.end(), [&](pair<ll, ll> a, pair<ll, ll> b)
-         {
-        if(a.first == b.first)
-            return a.second < b.second;
-        else
-            return a.first > b.first; });
-    debug(v); // → [v = {(13,2),(7,3),(7,9),(6,2),(1,9)}]
+    re(n, m);
+    reV(v, n);
+    ll ans = LONG_LONG_MAX;
+    if (primes.contains(m))
+    {
+        for (int i = 0; i < n; i++)
+        {
+            ll rem = v[i] % m;
+            if (rem == 0)
+                ans = 0;
+            else
+                ans = min(ans, m - rem);
+        }
+    }
+    else
+    {
+        ll countEvens = 0;
+        for (int i = 0; i < n; i++)
+        {
+            if (v[i] % 2 == 0)
+                countEvens++;
+            ll rem = v[i] % m;
+            if (rem == 0)
+                ans = 0;
+            else
+                ans = min(ans, 4 - v[i] % 4);
+        }
+
+        if (ans == 3)
+            ans--;
+        if (countEvens == 1 && ans == 2)
+            ans--;
+        if (countEvens > 1)
+            ans = 0;
+    }
+    cout << ans << nl;
 }
 
 // clang-format off
@@ -127,7 +157,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();
@@ -306,9 +336,9 @@ vector<long long> trial_division1(long long n) {
     return factorization;
 }
 
-vll get_factors(ll num, ll upper_limit, bool reset)
+dll get_factors(ll num, ll upper_limit, bool reset)
 {
-    vll factors;
+    dll factors;
     static ll n;
     static vll spf;
     static bool initialized = false;

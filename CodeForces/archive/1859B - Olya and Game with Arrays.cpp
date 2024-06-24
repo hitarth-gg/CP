@@ -110,14 +110,33 @@ void genPrefix(vll &v);
 // ctrl + shift + O : @Solve
 void solve()
 {
-    vp v = {{6, 2}, {7, 9}, {13, 2}, {7, 3}, {1, 9}};
-    sort(v.begin(), v.end(), [&](pair<ll, ll> a, pair<ll, ll> b)
-         {
-        if(a.first == b.first)
-            return a.second < b.second;
-        else
-            return a.first > b.first; });
-    debug(v); // → [v = {(13,2),(7,3),(7,9),(6,2),(1,9)}]
+    re(n);
+    vector<vll> v;
+
+    for (int i = 0; i < n; i++)
+    {
+        re(m);
+        reV(z, m);
+        v.push_back(z);
+    }
+
+    for (ll i = 0; i < n; i++)
+    {
+        vsort(v[i]);
+    }
+    ll sum = 0;
+    debug(v);
+    ll min1=LONG_LONG_MAX;
+    ll min2=LONG_LONG_MAX;
+    for (int i = 0; i < n; i++)
+    {
+        sum += v[i][1];
+        min1 = min(v[i][0], min1);
+        min2 = min(v[i][1], min2);
+    }
+    ll ans = sum - min2 + min1;
+
+    cout << ans << nl;
 }
 
 // clang-format off
@@ -127,7 +146,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();
