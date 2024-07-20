@@ -78,12 +78,14 @@ void read(T& first, Args&... args) {
 
 typedef tree<pair<ll, ll>, null_type, less<pair<ll, ll>>, rb_tree_tag,tree_order_statistics_node_update> ordered_set; // find_by_order, order_of_key
 /* ------------------------------------------------------ */
-ll mod_add(ll a, ll b, ll m);
-ll mod_mul(ll a, ll b, ll m);
-ll mod_sub(ll a, ll b, ll m);
-ll mod_div(ll a, ll b, ll m); // only for prime m
+ll mod_add(ll a, ll b, ll m=MOD);
+ll mod_mul(ll a, ll b, ll m=MOD);
+ll mod_sub(ll a, ll b, ll m=MOD);
+ll mod_div(ll a, ll b, ll m=MOD); // only for prime m
 ll binpow(ll a, ll b);
 ll binpow(ll a, ll b, ll m);
+ll expo(ll a, ll b, ll mod) {ll res = 1; while (b > 0) {if (b & 1)res = (res * a) % mod; a = (a * a) % mod; b = b >> 1;} return res;}
+ll mminvprime(ll a, ll b) {return expo(a, b - 2, b);}
 ll mod_inverse(ll a, ll b);
 ll kadane( vector<ll> arr,ll n);
 ll ncr(ll n, ll r);
@@ -106,50 +108,60 @@ ll first_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp fun
 void genPrefix(vll &v);
 /* ------------------------------------------------------ */
 
-// clang-format on
-// ctrl + shift + O : @Solve
+struct Hashing{
+    string s;
+    int n;
+    int primes; // number of different primes used for hashing
+    vector<ll> hashPrimes = {1000000009, 100000007}; // prime numbers used as moduli for hashing
+    const ll base = 31; // base value used for the rolling hash
+    vector<vector<ll>> hashValues; // vector to store hash values of prefixes of the string for each prime
+    vector<vector<ll>> powersOfBase; // a 2D vector to store powers of the base for each prime
+    vector<vector<ll>> inversePowersOfBase; // a 2D vector to store inverse powers of the base for each prime.
+    Hashing(string a){
+        primes = hashPrimes.size();
+        hashValues.resize(primes);
+        powersOfBase.resize(primes);
+        inversePowersOfBase.resize(primes);
+        s = a;
+        n = s.length(); 
+        for(int i = 0; i < hashPrimes.size(); i++) {
+            powersOfBase[i].resize(n + 1);
+            inversePowersOfBase[i].resize(n + 1);
+            powersOfBase[i][0] = 1;
+            for(int j = 1; j <= n; j++){
+                powersOfBase[i][j] = (base * powersOfBase[i][j - 1]) % hashPrimes[i];
+            }
+            inversePowersOfBase[i][n] = mminvprime(powersOfBase[i][n], hashPrimes[i]);
+            for(int j = n - 1; j >= 0; j--){
+                inversePowersOfBase[i][j] = mod_mul(inversePowersOfBase[i][j + 1], base, hashPrimes[i]);
+            } 
+        }
+        for(int i = 0; i < hashPrimes.size(); i++) {
+            hashValues[i].resize(n);
+            for(int j = 0; j < n; j++){
+                hashValues[i][j] = ((s[j] - 'a' + 1LL) * powersOfBase[i][j]) % hashPrimes[i];
+                hashValues[i][j] = (hashValues[i][j] + (j > 0 ? hashValues[i][j - 1] : 0LL)) % hashPrimes[i];
+            }
+        }
+    }
+    vector<ll> substringHash(int l, int r){
+        vector<ll> hash(primes);
+        for(int i = 0; i < primes; i++){
+            ll val1 = hashValues[i][r];
+            ll val2 = l > 0 ? hashValues[i][l - 1] : 0LL;
+            hash[i] = mod_mul(mod_sub(val1, val2, hashPrimes[i]), inversePowersOfBase[i][l], hashPrimes[i]);
+        }
+        return hash;
+    }
+};
+
 void solve()
 {
-    re(n, k);
-    reV(v, n);
-    map<ll, ll> m;
-    vector<vector<ll>> occ(n + 1); // used for storing all the occurences of a number present in the array
-
-    vector<vector<ll>> perfectColors(n + 1);
-    vll imperfectColors;
-
-    for (ll i = 0; i < n; i++)
-    {
-        m[v[i]]++;              // Counting the number of times each element occurs in the array
-        occ[v[i]].push_back(i); // storing the occurences, for e.g. : value "1" kon konse index pe present hai
-    }
-
-    for (auto it : m)
-    {
-        if (it.second >= k)
-            perfectColors.push_back(occ[it.first]); // if number of occurences of an element >= k then we can easily colour "k" of them with "different" colours, this is necessary to ensure that all the colours have equal number of elements in them.
-
-        else // otherwise we'll store them in another array
-            for (auto it2 : occ[it.first])
-                imperfectColors.push_back(it2); // we'll simply store the indices alone and there is no need to store the value whose indices they are. Basically we will color all of them in groups of k
-    }
-
-    vll ans(n, 0);
-
-    for (auto it : perfectColors) // assigning colours to the 'perfectColors' elements
-    {
-        ll shine = k; // since these each number in 'perfectColors' element has >= k occurences, therefore we'll colour the first k occurences of a unique number/colour (other than 0) and all the remaining indices will be assigned with the number/colour 0.
-        for (auto it2 : it)
-            ans[it2] = max(shine--, 0LL); // ensuring that the first 'k' indices are numbered like "k, k-1, k-2, ..., 1" and the remaining as "0".
-    }
-
-    ll shine = 0;
-    ll tz = imperfectColors.size() / k; // sirf utne indices ko colour karenge jinke "k" size ke group ban sakte hai, jo elements bach jayenge unko "0" se colour karenge. // Note: the value will be floored here.
-
-    //  k*tz is used to count the total no. of indices such that that total no. is perfectly divisible by "k".
-    for (ll i = 0; i < k * tz; i++)
-        ans[imperfectColors[i]] = shine++ % k + 1; // colouring them like "1, 2, 3, ..., k"
-    printVec(ans); // Printing the array
+    string s = "dbcasdfsdf";
+    struct Hashing hs(s);
+    printVec(hs.hashValues[1]); // 4 66 2949 32740 17579639 32096236 57117951 96749471 60660423 82519810 
+    printVec(hs.hashValues[0]); // 4 66 2949 32740 17579639 132096243 457118284 196781686 760900751 492437035 
+    cout << hs.substringHash(0, 2)[0]; // 2949
 }
 
 // clang-format off
@@ -159,7 +171,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    cin >> t;
+    // cin >> t;
     while(t--)
     {
         solve();
@@ -411,4 +423,3 @@ void genPrefix(vll &v)
     for (int i = 1; i < v.size(); i++)
         v[i] = v[i - 1] + v[i];
 }
-

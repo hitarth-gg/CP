@@ -78,12 +78,14 @@ void read(T& first, Args&... args) {
 
 typedef tree<pair<ll, ll>, null_type, less<pair<ll, ll>>, rb_tree_tag,tree_order_statistics_node_update> ordered_set; // find_by_order, order_of_key
 /* ------------------------------------------------------ */
-ll mod_add(ll a, ll b, ll m);
-ll mod_mul(ll a, ll b, ll m);
-ll mod_sub(ll a, ll b, ll m);
-ll mod_div(ll a, ll b, ll m); // only for prime m
+ll mod_add(ll a, ll b, ll m=MOD);
+ll mod_mul(ll a, ll b, ll m=MOD);
+ll mod_sub(ll a, ll b, ll m=MOD);
+ll mod_div(ll a, ll b, ll m=MOD); // only for prime m
 ll binpow(ll a, ll b);
 ll binpow(ll a, ll b, ll m);
+ll expo(ll a, ll b, ll mod) {ll res = 1; while (b > 0) {if (b & 1)res = (res * a) % mod; a = (a * a) % mod; b = b >> 1;} return res;}
+ll mminvprime(ll a, ll b) {return expo(a, b - 2, b);}
 ll mod_inverse(ll a, ll b);
 ll kadane( vector<ll> arr,ll n);
 ll ncr(ll n, ll r);
@@ -94,8 +96,6 @@ ll lcm(ll a, ll b);
 bool is_prime(ll n);
 vector<bool> sieve(ll n); // vector<bool> isPrime = sieve(1000002);
 
-vector<ll> applyPermutation(vector<ll> sequence, vector<ll> permutation);
-vector<ll> permute(vector<ll> sequence, vector<ll> permutation, long long k);
 ll extEuclid(ll a, ll b, ll& x, ll& y); // ll x, y; ll gcd = extEuclid(a, b, x, y); // ax + by = gcd(a, b)
 vector<long long> trial_division1(long long n);
 vll get_factors(ll num, ll upper_limit = 1000000, bool reset = false);
@@ -106,50 +106,147 @@ ll first_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp fun
 void genPrefix(vll &v);
 /* ------------------------------------------------------ */
 
+/* ---------------------- snippets ---------------------- */
+// STRING: string_hashing | rabin_karp | kmp | z_function
+// ARRAY: apply_permutation
+/* ------------------------------------------------------ */
+
+
+/* ---------------- Solutin 1 : Using KMP --------------- */
+// vector<ll> kmp_prefix_function(string s) {
+//     ll n = (ll)s.length();
+//     vector<ll> pi(n);
+//     for (ll i = 1; i < n; i++) {
+//         ll j = pi[i-1];
+//         while (j > 0 && s[i] != s[j])
+//             j = pi[j-1];
+//         if (s[i] == s[j])
+//             j++;
+//         pi[i] = j;
+//     }
+//     return pi;
+// }
+
+// // clang-format on
+// void solve()
+// {
+//     reS(s);
+//     vll p = kmp_prefix_function(s);
+//     ll n = s.size();
+//     set<ll> st;
+//     ll maxi = -1;
+
+//     ll r = n - 1;
+//     while (r >= 0 && p[r] != 0)
+//     {
+//         st.insert(p[r]);
+//         r = p[r - 1];
+//     }
+
+//     for (int i = 0; i < n - 1; i++)
+//     {
+//         if (st.contains(p[i]))
+//             maxi = max(maxi, p[i]);
+//     }
+
+//     for (int i = 0; i < n; i++)
+//     {
+//         if (p[i] == maxi)
+//         {
+//             debug("a");
+//             cout << s.substr(i - p[i] + 1, maxi);
+//             return;
+//         }
+//     }
+//     cout << "Just a legend" << nl;
+
+// }
+
+/* ---- Solution 2: String hashing with binary search --- */
+struct DoubleHashing {
+    string s;
+    ll base = 31;
+    vll primes = {1000000007};
+    ll n;
+    vector<vll> base_pow;
+    vector<vll> prefix;
+
+    DoubleHashing(string a) {
+        s = a;
+        n = s.size();
+        prefix.resize(primes.size());
+        base_pow.resize(primes.size());
+
+    for(ll i = 0; i<primes.size(); i++)
+    {
+        prefix[i].resize(n);
+        base_pow[i].resize(n);
+        base_pow[i][0] = 1;
+
+        for (ll j = 1; j < n; j++) {
+            base_pow[i][j] = (base_pow[i][j - 1] * base) % primes[i];
+        }
+        
+        prefix[i][0] = s[0];
+        for (ll j = 1; j < n; j++) {
+            prefix[i][j] = ((prefix[i][j - 1] * base) % primes[i] + s[j]) % primes[i];
+        }
+
+    }
+        
+    }
+
+    vll substringHash(ll l, ll r) const {
+        vll res;
+        for(int i = 0; i<primes.size(); i++)
+        {
+
+        ll val1 = prefix[i][r];
+        ll val2 = l > 0 ? prefix[i][l - 1] : 0LL;
+        ll h = ((val1 - ((val2 * base_pow[i][r - l + 1]) % primes[i]) % primes[i]) + primes[i])%primes[i];
+        res.push_back(h);
+        }
+        return res;
+    }
+};
+
 // clang-format on
-// ctrl + shift + O : @Solve
 void solve()
 {
-    re(n, k);
-    reV(v, n);
-    map<ll, ll> m;
-    vector<vector<ll>> occ(n + 1); // used for storing all the occurences of a number present in the array
+    reS(s);
+    vll possible;
 
-    vector<vector<ll>> perfectColors(n + 1);
-    vll imperfectColors;
+    int n = s.size();
+    DoubleHashing h(s);
 
-    for (ll i = 0; i < n; i++)
+    for (int i = 0; i < n - 1; i++)
     {
-        m[v[i]]++;              // Counting the number of times each element occurs in the array
-        occ[v[i]].push_back(i); // storing the occurences, for e.g. : value "1" kon konse index pe present hai
+        if (h.substringHash(0, i) == h.substringHash(n - 1 - i, n - 1))
+            possible.push_back(i + 1);
     }
+    vsort(possible);
 
-    for (auto it : m)
+    ll l = -1, r = possible.size();
+    debug(possible);
+    while (r - l > 1)
     {
-        if (it.second >= k)
-            perfectColors.push_back(occ[it.first]); // if number of occurences of an element >= k then we can easily colour "k" of them with "different" colours, this is necessary to ensure that all the colours have equal number of elements in them.
-
-        else // otherwise we'll store them in another array
-            for (auto it2 : occ[it.first])
-                imperfectColors.push_back(it2); // we'll simply store the indices alone and there is no need to store the value whose indices they are. Basically we will color all of them in groups of k
+        ll mid = (l + r) / 2;
+        bool ok = false;
+        ll length = possible[mid];
+        for (int i = 1; i <= n - length - 1; i++)
+        {
+            if (h.substringHash(0, length - 1) == h.substringHash(i, i + length - 1))
+            {
+                ok = true;
+                break;
+            }
+        }
+        if (ok)
+            l = mid;
+        else
+            r = mid;
     }
-
-    vll ans(n, 0);
-
-    for (auto it : perfectColors) // assigning colours to the 'perfectColors' elements
-    {
-        ll shine = k; // since these each number in 'perfectColors' element has >= k occurences, therefore we'll colour the first k occurences of a unique number/colour (other than 0) and all the remaining indices will be assigned with the number/colour 0.
-        for (auto it2 : it)
-            ans[it2] = max(shine--, 0LL); // ensuring that the first 'k' indices are numbered like "k, k-1, k-2, ..., 1" and the remaining as "0".
-    }
-
-    ll shine = 0;
-    ll tz = imperfectColors.size() / k; // sirf utne indices ko colour karenge jinke "k" size ke group ban sakte hai, jo elements bach jayenge unko "0" se colour karenge. // Note: the value will be floored here.
-
-    //  k*tz is used to count the total no. of indices such that that total no. is perfectly divisible by "k".
-    for (ll i = 0; i < k * tz; i++)
-        ans[imperfectColors[i]] = shine++ % k + 1; // colouring them like "1, 2, 3, ..., k"
-    printVec(ans); // Printing the array
+    cout << (l == -1 ? "Just a legend" : s.substr(0, possible[l])) << nl;
 }
 
 // clang-format off
@@ -159,7 +256,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    cin >> t;
+    // cin >> t;
     while(t--)
     {
         solve();
@@ -277,24 +374,7 @@ bool is_prime(ll n) {
     }
     return true;
 }
-vector<ll> applyPermutation(vector<ll> sequence, vector<ll> permutation) {
-    vector<ll> newSequence(sequence.size());
-    for(ll i = 0; i < sequence.size(); i++) {
-        newSequence[i] = sequence[permutation[i]];
-    }
-    return newSequence;
-}
 
-vector<ll> permute(vector<ll> sequence, vector<ll> permutation, long long k) {
-    while (k > 0) {
-        if (k & 1) {
-            sequence = applyPermutation(sequence, permutation);
-        }
-        permutation = applyPermutation(permutation, permutation);
-        k >>= 1;
-    }
-    return sequence;
-}
 // Sieve of Eratosthenes
 vector<bool> sieve(ll n)
 {
@@ -411,4 +491,3 @@ void genPrefix(vll &v)
     for (int i = 1; i < v.size(); i++)
         v[i] = v[i - 1] + v[i];
 }
-

@@ -1,5 +1,13 @@
 {
     "files.associations": {
-        "span": "cpp"
+        "span": "cpp",
+        "iostream": "cpp",
+        "array": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
+        "string": "cpp",
+        "vector": "cpp",
+        "string_view": "cpp",
+        "stacktrace": "cpp"
     }
 }

@@ -110,46 +110,64 @@ void genPrefix(vll &v);
 // ctrl + shift + O : @Solve
 void solve()
 {
-    re(n, k);
-    reV(v, n);
-    map<ll, ll> m;
-    vector<vector<ll>> occ(n + 1); // used for storing all the occurences of a number present in the array
-
-    vector<vector<ll>> perfectColors(n + 1);
-    vll imperfectColors;
-
-    for (ll i = 0; i < n; i++)
+    re(a, b);
+    ll ans = 0;
+    if (a > b)
     {
-        m[v[i]]++;              // Counting the number of times each element occurs in the array
-        occ[v[i]].push_back(i); // storing the occurences, for e.g. : value "1" kon konse index pe present hai
+        while (a > b)
+        {
+            if (a % 8 == 0 && a / 8 >= b)
+            {
+                a /= 8;
+                ans++;
+            }
+            else if (a % 4 == 0 && a / 4 >= b)
+            {
+                a /= 4;
+                ans++;
+            }
+            else if (a % 2 == 0 && a / 2 >= b)
+            {
+                a /= 2;
+                ans++;
+            }
+            else
+                break;
+        }
+        if (a == b)
+            cout << ans << nl;
+        else
+            cout << -1 << nl;
     }
-
-    for (auto it : m)
+    else if (a < b)
     {
-        if (it.second >= k)
-            perfectColors.push_back(occ[it.first]); // if number of occurences of an element >= k then we can easily colour "k" of them with "different" colours, this is necessary to ensure that all the colours have equal number of elements in them.
-
-        else // otherwise we'll store them in another array
-            for (auto it2 : occ[it.first])
-                imperfectColors.push_back(it2); // we'll simply store the indices alone and there is no need to store the value whose indices they are. Basically we will color all of them in groups of k
+        while (a < b)
+        {
+            if (a * 8 <= b)
+            {
+                a *= 8;
+                ans++;
+            }
+            else if (a * 4 <= b)
+            {
+                a *= 4;
+                ans++;
+            }
+            else if (a * 2 <= b)
+            {
+                a *= 2;
+                ans++;
+            }
+            else
+                break;
+        }
+        if (a == b)
+            cout << ans << nl;
+        else
+            cout << -1 << nl;
     }
-
-    vll ans(n, 0);
-
-    for (auto it : perfectColors) // assigning colours to the 'perfectColors' elements
-    {
-        ll shine = k; // since these each number in 'perfectColors' element has >= k occurences, therefore we'll colour the first k occurences of a unique number/colour (other than 0) and all the remaining indices will be assigned with the number/colour 0.
-        for (auto it2 : it)
-            ans[it2] = max(shine--, 0LL); // ensuring that the first 'k' indices are numbered like "k, k-1, k-2, ..., 1" and the remaining as "0".
-    }
-
-    ll shine = 0;
-    ll tz = imperfectColors.size() / k; // sirf utne indices ko colour karenge jinke "k" size ke group ban sakte hai, jo elements bach jayenge unko "0" se colour karenge. // Note: the value will be floored here.
-
-    //  k*tz is used to count the total no. of indices such that that total no. is perfectly divisible by "k".
-    for (ll i = 0; i < k * tz; i++)
-        ans[imperfectColors[i]] = shine++ % k + 1; // colouring them like "1, 2, 3, ..., k"
-    printVec(ans); // Printing the array
+    else
+        cout << 0 << nl;
 }
 
 // clang-format off
@@ -411,4 +429,3 @@ void genPrefix(vll &v)
     for (int i = 1; i < v.size(); i++)
         v[i] = v[i - 1] + v[i];
 }
-
