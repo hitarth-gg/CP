@@ -111,14 +111,42 @@ void genPrefix(vll &v);
 // ARRAY: apply_permutation
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
+
+ll plug(vll &v, ll i, ll j, ll k)
+{
+    ll sum = INF;
+    for (int i = 0; i <= j; i++)
+        sum = min(sum, abs(v[i] - k));
+    return sum;
+}
+
 void solve()
 {
-    map<ll, ll> m;
-    cout << min(20, (int)m.size()) << nl;
+    re(n);
+    reV(a, n);
+    reV(b, n);
+
+    ll a1 = plug(b, 1, n - 1, a[0]);
+    ll a2 = plug(b, 0, n - 2, a[n - 1]);
+    ll b1 = plug(a, 1, n - 1, b[0]);
+    ll b2 = plug(a, 0, n - 2, b[n - 1]);
+
+    ll a0b0 = abs(a[0] - b[0]);
+    ll a2b2 = abs(a[n - 1] - b[n - 1]);
+    ll a0b2 = abs(a[0] - b[n - 1]);
+    ll a2b0 = abs(a[n - 1] - b[0]);
+
+    ll t0 = a0b0 + a2b2;
+    ll t1 = a0b0 + a2 + b2;
+    ll t2 = a2b2 + a1 + b1;
+    ll t3 = a1 + a2 + b1 + b2;
+    ll t4 = a0b2 + b1 + a2;
+    ll t5 = a2b0 + b2 + a1;
+    ll t6 = a2b0 + a0b2;
+    ll ans = min({t0, t1, t2, t3, t4, t5, t6});
+
+    cout << ans << nl;
 }
 
 // clang-format off
@@ -128,7 +156,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

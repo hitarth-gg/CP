@@ -111,14 +111,38 @@ void genPrefix(vll &v);
 // ARRAY: apply_permutation
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
+
+void pstring(char c, ll n)
+{
+    loop(n)
+    {
+        cout << c;
+    }
+    cout << nl;
+}
+
 void solve()
 {
-    map<ll, ll> m;
-    cout << min(20, (int)m.size()) << nl;
+    reS(s);
+    ll n = s.size();
+    map<char, ll> m;
+    for (auto it : s)
+        m[it]++;
+    char c;
+    ll maxi = 0;
+    for (auto it : m)
+        if (it.second > maxi)
+        {
+            c = it.first;
+            maxi = it.second;
+        }
+    if (c == 'R')
+        pstring('P', n);
+    else if (c == 'P')
+        pstring('S', n);
+    else
+        pstring('R', n);
 }
 
 // clang-format off
@@ -128,7 +152,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

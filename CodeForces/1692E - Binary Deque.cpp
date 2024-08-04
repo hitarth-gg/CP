@@ -114,59 +114,38 @@ void genPrefix(vll &v);
 // clang-format on
 void solve()
 {
-    re(n, m);
+    re(n, s);
     reV(v, n);
+    ll sum = v_sum(v);
 
-    vll z(2001, 0);
-
-    fr(i, 0, n)
-        if (v[i] < 2001)
-            z[v[i] - 1]++;
-    ll eq = n / m;
-    ll reserve = n % m;
-
-    vll z2(2001, 0);
-
-    vll add;
-    vll remove(2001, 0);
-
-    fr(i, 0, m)
+    if (sum < s)
     {
-        z2[i] = eq;
-        if (z2[i] < z[i])
-        {
-            ll to_add = z[i] - z2[i];
-
-            z2[i] += min(to_add, reserve);
-            reserve -= min(to_add, reserve);
-        }
-        if (z2[i] > z[i])
-            fr(j, 0, z2[i] - z[i])
-                add.pb(i+1);
-        else if (z[i] > z2[i])
-            remove[i] = z[i] - z2[i];
+        cout << -1 << nl;
+        return;
     }
+    if (sum == s)
+    {
+        cout << 0 << nl;
+        return;
+    }
+
+    vll p(n, 0);
+    p[0] = v[0];
+    for (int i = 1; i < n; i++)
+        p[i] = p[i - 1] + v[i];
 
     ll ans = 0;
-    vll res = v;
-    fr(i, 0, n)
+    debug(p);
+    for (int i = 0; i < n; i++)
     {
-        if (res[i] > m && add.size() > 0)
-        {
-            res[i] = add.back();
-            add.pop_back();
-        }
-        else if (remove[res[i] - 1] > 0 && add.size() > 0)
-        {
-            remove[res[i] - 1]--;
-            res[i] = add.back();
-            add.pop_back();
-        }
-        if(res[i] != v[i])
-            ans++;
+        ll rem = s + p[i];
+        ll z = UB(p, rem);
+        z--;
+        debug(rem, z);
+        if (p[z] - (i>0 ? p[i-1] : 0LL) == s)
+            ans = max(ans, z - i + 1);
     }
-    cout << eq << " " << ans << nl;
-    printVec(res);
+    cout << n - ans << nl;
 }
 
 // clang-format off
@@ -176,7 +155,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();
@@ -411,4 +390,3 @@ void genPrefix(vll &v)
     for (int i = 1; i < v.size(); i++)
         v[i] = v[i - 1] + v[i];
 }
-

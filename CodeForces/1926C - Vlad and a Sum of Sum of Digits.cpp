@@ -110,15 +110,40 @@ void genPrefix(vll &v);
 // STRING: string_hashing | rabin_karp | kmp | z_function
 // ARRAY: apply_permutation
 /* ------------------------------------------------------ */
+ll MAXN = 1e5 * 2 + 10;
+vll dp(MAXN, 0);
+vll dp2(MAXN, 0);
 
-
-
+void precomp()
+{
+    for(ll i = 1; i<=9; i++)
+    {
+        dp[i] = i;
+        dp2[i] = dp[i] + dp2[i-1];
+    }
+    
+    ll prev = 2;
+    ll ten = 10;
+    for(ll i = 10; i<MAXN; i++)
+    {
+        ll digits = log10(i) + 1;
+        if(digits > prev)
+        {
+            prev = digits;
+            ten *= 10;
+        }
+        ll front = i/ten;
+        ll latter = i - front*ten;
+        dp[i] = dp[latter] + front;
+        dp2[i] = dp[i] + dp2[i-1];
+    }
+}
 
 // clang-format on
 void solve()
 {
-    map<ll, ll> m;
-    cout << min(20, (int)m.size()) << nl;
+    re(n);
+    cout << dp2[n] << nl;
 }
 
 // clang-format off
@@ -128,7 +153,8 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    precomp();
+    cin >> t;
     while(t--)
     {
         solve();

@@ -117,8 +117,27 @@ void genPrefix(vll &v);
 // clang-format on
 void solve()
 {
-    map<ll, ll> m;
-    cout << min(20, (int)m.size()) << nl;
+    re(n);
+    reV(v, n);
+
+    n = unique(v.begin(), v.end()) - v.begin();
+    debug(v);
+
+    ll ans = n;
+    
+    for(int i = 0; i+2 < n; i++)
+    {
+        ll a = v[i];
+        ll b = v[i+1];
+        ll c = v[i+2];
+        if((a>=b && b>=c) || (b>=a && c>=b))
+        {
+            ans-=1;
+            debug(b );
+        }
+    }
+    cout << ans << nl;    
+
 }
 
 // clang-format off
@@ -128,7 +147,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

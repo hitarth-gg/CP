@@ -111,14 +111,39 @@ void genPrefix(vll &v);
 // ARRAY: apply_permutation
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    map<ll, ll> m;
-    cout << min(20, (int)m.size()) << nl;
+    re(n, x, y);
+
+    vll v(n);
+    x--;
+    y--;
+    v[x] = 1;
+    v[y] = 1;
+
+    for (int i = y - 1; i >= 0; i--)
+    {
+        if (v[i + 1] == 1)
+            v[i] = -1;
+        else
+            v[i] = 1;
+    }
+
+    for (int i = y+1; i < x; i++)
+    {
+        v[i] = 1;
+    }
+
+    for (int i = x + 1; i < n; i++)
+    {
+        if (v[i - 1] == 1)
+            v[i] = -1;
+        else
+            v[i] = 1;
+    }
+
+    printVec(v);
 }
 
 // clang-format off
@@ -128,7 +153,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

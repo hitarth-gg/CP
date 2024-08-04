@@ -111,14 +111,42 @@ void genPrefix(vll &v);
 // ARRAY: apply_permutation
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    map<ll, ll> m;
-    cout << min(20, (int)m.size()) << nl;
+    re(n, m);
+    vector<vll> v(n, vll(3));
+
+    loop(n)
+        cinv(v[i]);
+
+    auto gyatt = [&](ll last)
+    {
+        ll ans = 0;
+        vector<vll> t = v;
+        ll h = m;
+        for (int i = 0; i < n; i++)
+        {
+            ll mx = 0, ix = -1;
+            for (int j = 0; j < n; j++)
+            {
+                if (last == t[j][0] && t[j][2] > mx && t[j][1] <= h)
+                {
+                    mx = t[j][2];
+                    ix = j;
+                }
+            }
+            if (ix == -1)
+                break;
+            last ^= 1;
+            h += mx;
+            t[ix][0] = -1;
+            ans += 1;
+        }
+        return ans;
+    };
+    ll gyattmaxxing = max(gyatt(0LL), gyatt(1LL));
+    cout << gyattmaxxing << nl;
 }
 
 // clang-format off

@@ -117,8 +117,10 @@ void genPrefix(vll &v);
 // clang-format on
 void solve()
 {
-    map<ll, ll> m;
-    cout << min(20, (int)m.size()) << nl;
+    re(n);
+    ll ans = n/4;
+    ans += (n%4)/2;
+    cout << ans << nl;
 }
 
 // clang-format off
@@ -128,7 +130,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

@@ -111,14 +111,56 @@ void genPrefix(vll &v);
 // ARRAY: apply_permutation
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    map<ll, ll> m;
-    cout << min(20, (int)m.size()) << nl;
+    re(n);
+
+    vp a;
+    vp b;
+    vp c;
+    loop(n)
+    {
+        ll t;
+        cin >> t;
+        a.push_back({t, i});
+    }
+    loop(n)
+    {
+        ll t;
+        cin >> t;
+        b.push_back({t, i});
+    }
+    loop(n)
+    {
+        ll t;
+        cin >> t;
+        c.push_back({t, i});
+    }
+
+    vsortrev(a);
+    vsortrev(b);
+    vsortrev(c);
+
+
+    vector<vp> v2;
+    v2.push_back(a);
+    v2.push_back(b);
+    v2.push_back(c);
+
+    ll sum = 0;
+    for (ll i = 0; i < 3; i++)
+    {
+        for (ll j = 0; j < 3; j++)
+        {
+            for (ll k = 0; k < n; k++)
+            {
+                if(v2[0][i].second != v2[1][j].second && v2[1][j].second != v2[2][k].second && v2[0][i].second != v2[2][k].second)
+                    sum = max(sum, v2[0][i].first + v2[1][j].first + v2[2][k].first);
+            }
+        }
+    }
+    cout << sum << nl;
 }
 
 // clang-format off
@@ -128,7 +170,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

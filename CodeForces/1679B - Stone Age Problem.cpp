@@ -111,14 +111,56 @@ void genPrefix(vll &v);
 // ARRAY: apply_permutation
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    map<ll, ll> m;
-    cout << min(20, (int)m.size()) << nl;
+    re(n, q);
+    reV(v, n);
+
+    ll sum = v_sum(v);
+
+    unordered_map<ll, ll> m;
+    ll z = -1;
+    debug(sum);
+    while (q--)
+    {
+        ll t;
+        cin >> t;
+        if (t == 1)
+        {
+            ll ix, num;
+            cin >> ix >> num;
+            if (z > -1)
+            {
+                if (m.contains(ix))
+                {
+                    sum -= m[ix];
+                    sum += num;
+                    m[ix] = num;
+                }
+                else
+                {
+                    sum -= z;
+                    sum += num;
+                    m[ix] = num;
+                }
+            }
+            else
+            {
+                sum += -v[ix - 1] + num;
+                v[ix - 1] = num;
+            }
+        }
+        else
+        {
+            ll num;
+            cin >> num;
+            z = num;
+            sum = n * num;
+            m.clear();
+        }
+        cout << sum << nl;
+    }
 }
 
 // clang-format off

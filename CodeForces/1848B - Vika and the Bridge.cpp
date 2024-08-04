@@ -111,14 +111,53 @@ void genPrefix(vll &v);
 // ARRAY: apply_permutation
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    map<ll, ll> m;
-    cout << min(20, (int)m.size()) << nl;
+    re(n, k);
+    reV(v, n);
+    // ll MAXN = 1e5 * 2 + 10;
+    ll MAXN = k;
+    vll d(MAXN + 1, -1);
+    vll ans(MAXN + 1, -1);
+    vll ans2(MAXN + 1, -1);
+    ll mx = LLONG_MAX;
+
+    for (ll i = 0; i < n; i++)
+    {
+        if (i - d[v[i]] - 1 > ans[v[i]])
+        {
+            ans2[v[i]] = ans[v[i]];
+            ans[v[i]] = max(ans[v[i]], i - d[v[i]] - 1);
+        }
+        else
+        {
+            ans2[v[i]] = max(ans2[v[i]], i - d[v[i]] - 1);
+        }
+
+        d[v[i]] = i;
+    }
+    for (int i = 1; i <= MAXN; i++)
+    {
+        if (ans[i] != -1 && n - d[i] - 1 > ans[i])
+        {
+            ans2[i] = ans[i];
+            ans[i] = max(ans[i], n - d[i] - 1);
+        }
+        else
+        {
+            ans2[i] = max(ans2[i], n - d[i] - 1);
+        }
+    }
+    for (int i = 1; i <= MAXN; i++)
+    {
+        if (ans[i] != -1)
+            mx = min(mx, max(ans[i] / 2,
+                             ans2[i]));
+    }
+    debug(ans);
+    debug(ans2);
+    cout << mx << nl;
 }
 
 // clang-format off
@@ -128,7 +167,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

@@ -111,14 +111,61 @@ void genPrefix(vll &v);
 // ARRAY: apply_permutation
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    map<ll, ll> m;
-    cout << min(20, (int)m.size()) << nl;
+    re(n, m);
+    reV(v, n);
+
+    vll z(2001, 0);
+
+    fr(i, 0, n) if (v[i] < 2001)
+        z[v[i] - 1]++;
+    ll eq = n / m;
+    ll reserve = n % m;
+
+    vll z2(2001, 0);
+
+    vll add;
+    vll remove(2001, 0);
+
+    fr(i, 0, m)
+    {
+        z2[i] = eq;
+        if (z2[i] < z[i])
+        {
+            ll to_add = z[i] - z2[i];
+
+            z2[i] += min(to_add, reserve);
+            reserve -= min(to_add, reserve);
+        }
+        if (z2[i] > z[i])
+            fr(j, 0, z2[i] - z[i])
+                add.pb(i + 1);
+        else if (z[i] > z2[i])
+            remove[i] = z[i] - z2[i];
+    }
+
+    ll ans = 0;
+    vll res = v;
+    fr(i, 0, n)
+    {
+        if (res[i] > m && add.size() > 0)
+        {
+            res[i] = add.back();
+            add.pop_back();
+        }
+        else if (remove[res[i] - 1] > 0 && add.size() > 0)
+        {
+            remove[res[i] - 1]--;
+            res[i] = add.back();
+            add.pop_back();
+        }
+        if (res[i] != v[i])
+            ans++;
+    }
+    cout << eq << " " << ans << nl;
+    printVec(res);
 }
 
 // clang-format off
@@ -363,3 +410,4 @@ void genPrefix(vll &v)
     for (int i = 1; i < v.size(); i++)
         v[i] = v[i - 1] + v[i];
 }
+

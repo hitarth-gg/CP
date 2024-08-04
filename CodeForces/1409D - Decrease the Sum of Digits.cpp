@@ -112,13 +112,39 @@ void genPrefix(vll &v);
 /* ------------------------------------------------------ */
 
 
-
+ll sumDigits(ll n)
+{
+    ll sum = 0;
+    while(n>0)
+    {
+        sum += n%10;
+        n/=10;
+    }
+    return sum;
+}
 
 // clang-format on
 void solve()
 {
-    map<ll, ll> m;
-    cout << min(20, (int)m.size()) << nl;
+    re(n, m);
+    ll ten = 1;
+    ll moves = 0;
+
+    ll sz = to_string(n).length();
+
+    for (int i = 0; i < sz; i++)
+    {
+        if (sumDigits(n) <= m)
+            break;
+        ll k = n;
+        k /= ten;
+        k %= 10;
+        ll to_add = ten * (10 - k);
+        n += to_add;
+        moves += to_add;
+        ten *= 10;
+    }
+    cout << moves << nl;
 }
 
 // clang-format off
@@ -128,7 +154,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

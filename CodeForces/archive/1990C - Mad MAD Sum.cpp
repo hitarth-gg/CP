@@ -110,15 +110,38 @@ void genPrefix(vll &v);
 // STRING: string_hashing | rabin_karp | kmp | z_function
 // ARRAY: apply_permutation
 /* ------------------------------------------------------ */
-
-
-
-
 // clang-format on
+
+void mane(vll &v)
+{
+    ll pusher = 0, n = v.size();
+    vll t(n, 0);
+    map<ll, ll> f;
+    for (int i = 0; i < n; i++)
+    {
+        f[v[i]]++;
+        if (f[v[i]] >= 2 && v[i] > pusher)
+            pusher = v[i];
+        v[i] = pusher;
+    }
+}
+
 void solve()
 {
-    map<ll, ll> m;
-    cout << min(20, (int)m.size()) << nl;
+    re(n);
+    reV(v, n);
+    ll sum = v_sum(v);
+    mane(v);
+    sum += v_sum(v);
+    mane(v);
+    ll t = v_sum(v);
+    sum += t;
+    for (int i = n - 1; i >= 0; i--)
+    {
+        t -= v[i];
+        sum += t;
+    }
+    cout << sum << nl;
 }
 
 // clang-format off
@@ -128,7 +151,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();
