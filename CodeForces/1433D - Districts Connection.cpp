@@ -116,25 +116,34 @@ void solve()
 {
     re(n);
     reV(v, n);
+    bool same = true;
+
+    for (int i = 0; i < n - 1; i++)
+        if (v[i] != v[i + 1])
+            same = false;
+
+    vp p;
+    for (int i = 0; i < n; i++)
+        p.push_back({v[i], i});
+    vsort(p);
+
+    if (same)
+    {
+        cout << "NO" << nl;
+        return;
+    }
+
+    vll ans(n, 0);
+    ll first = p[0].first;
     
-    map<ll, ll> m;
-    ll ans = 0;
+    cout << "YES" << nl;
 
     for (int i = 0; i < n; i++)
-        m[v[i]]++;
+        if (p[i].first != first)
+            cout << p[0].second + 1 << " " << p[i].second + 1 << nl;
 
-    ll prev = 0;
-    ll prev2 = 0;
-    for (auto it : m)
-    {
-        if (it.second - prev > 0 && it.first - 1 == prev2)
-            ans += it.second - prev;
-        else if (it.first - 1 != prev2)
-            ans += it.second;
-        prev = it.second;
-        prev2 = it.first;
-    }
-    cout << ans << nl;
+    for (int i = 1; i < n && p[i].first == first; i++)
+        cout << p[n - 1].second + 1 << " " << p[i].second + 1 << nl;
 }
 
 // clang-format off

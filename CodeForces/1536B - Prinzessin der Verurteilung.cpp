@@ -115,26 +115,74 @@ void genPrefix(vll &v);
 void solve()
 {
     re(n);
-    reV(v, n);
-    
-    map<ll, ll> m;
-    ll ans = 0;
+    reS(s);
+
+    set<string> st;
 
     for (int i = 0; i < n; i++)
-        m[v[i]]++;
-
-    ll prev = 0;
-    ll prev2 = 0;
-    for (auto it : m)
     {
-        if (it.second - prev > 0 && it.first - 1 == prev2)
-            ans += it.second - prev;
-        else if (it.first - 1 != prev2)
-            ans += it.second;
-        prev = it.second;
-        prev2 = it.first;
+        st.insert(s.substr(i, 1));
+        if (i + 1 < n)
+            st.insert(s.substr(i, 2));
+        if (i + 2 < n)
+            st.insert(s.substr(i, 3));
     }
-    cout << ans << nl;
+
+    
+    vector<string> ans;
+
+    for (char c = 'a'; c <= 'z'; c++)
+    {
+        string temp = "";
+        temp += c;
+        if (st.find(temp) == st.end())
+        {
+            ans.pb(temp);
+            break;
+        }
+    }
+
+    for (char c = 'a'; c <= 'z'; c++)
+    {
+        for (char d = 'a'; d <= 'z'; d++)
+        {
+            string temp = "";
+            temp += c;
+            temp += d;
+            if (st.find(temp) == st.end())
+            {
+                ans.pb(temp);
+                break;
+            }
+        }
+        if (ans.size() == 2)
+            break;
+    }
+
+    for (char c = 'a'; c <= 'z'; c++)
+    {
+        for (char d = 'a'; d <= 'z'; d++)
+        {
+            for (char e = 'a'; e <= 'z'; e++)
+            {
+                string temp = "";
+                temp += c;
+                temp += d;
+                temp += e;
+                if (st.find(temp) == st.end())
+                {
+                    ans.pb(temp);
+                    break;
+                }
+            }
+            if (ans.size() == 3)
+                break;
+        }
+        if (ans.size() == 3)
+            break;
+    }
+
+    cout << ans[0] << nl;
 }
 
 // clang-format off

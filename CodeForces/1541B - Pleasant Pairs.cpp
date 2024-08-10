@@ -116,23 +116,27 @@ void solve()
 {
     re(n);
     reV(v, n);
-    
-    map<ll, ll> m;
+
     ll ans = 0;
 
-    for (int i = 0; i < n; i++)
-        m[v[i]]++;
-
-    ll prev = 0;
-    ll prev2 = 0;
-    for (auto it : m)
+    for (ll i = 0; i < n; i++)
     {
-        if (it.second - prev > 0 && it.first - 1 == prev2)
-            ans += it.second - prev;
-        else if (it.first - 1 != prev2)
-            ans += it.second;
-        prev = it.second;
-        prev2 = it.first;
+        ll t = 0;
+        if ((i + 1) % v[i] == 0)
+            t = i + 1;
+        else
+            t = v[i] - (i + 1) % v[i];
+
+        for (ll j = t; j <= n; j += v[i])
+        {
+            if (v[i] * v[j - 1] == i + 1 + j && (i + 1) < j)
+            {
+
+                debug(i + 1, j);
+                ans++;
+            }
+        }
+        debug("----");
     }
     cout << ans << nl;
 }

@@ -111,29 +111,66 @@ void genPrefix(vll &v);
 // ARRAY: apply_permutation
 /* ------------------------------------------------------ */
 
+vector<ll> z_function(string &s) {
+    ll n = (ll) s.length();
+    vector<ll> z(n);
+    for (ll i = 1, l = 0, r = 0; i < n; ++i) {
+        if (i <= r)
+            z[i] = min (r - i + 1, z[i - l]);
+        while (i + z[i] < n && s[z[i]] == s[i + z[i]])
+            ++z[i];
+        if (i + z[i] - 1 > r)
+            l = i, r = i + z[i] - 1;
+            
+    }
+    return z;
+}
+
 // clang-format on
 void solve()
 {
-    re(n);
-    reV(v, n);
-    
-    map<ll, ll> m;
-    ll ans = 0;
+    re(n, w);
+    reV(v1, n);
+    reV(v2, w);
 
-    for (int i = 0; i < n; i++)
-        m[v[i]]++;
-
-    ll prev = 0;
-    ll prev2 = 0;
-    for (auto it : m)
+    if (w == 1)
     {
-        if (it.second - prev > 0 && it.first - 1 == prev2)
-            ans += it.second - prev;
-        else if (it.first - 1 != prev2)
-            ans += it.second;
-        prev = it.second;
-        prev2 = it.first;
+        cout << n << nl;
+        return;
     }
+
+    v1.push_back(0);
+    v2.push_back(0);
+
+    vll p(n, 0);
+    vll p2(w, 0);
+
+
+    string b = "";
+    for (int i = 0; i < n - 1; i++)
+    {
+        p[i] = v1[i + 1] - v1[i];
+        b.append(to_string(p[i]));
+        b.append(",");
+    }
+
+    string z = "";
+    for (int i = 0; i < w - 1; i++)
+    {
+        p2[i] = v2[i + 1] - v2[i];
+        z.append(to_string(p2[i]));
+        z.append(",");
+    }
+
+    string c = z + b;
+    ll ans = 0;
+    vll pr = z_function(c);
+    for (int i = z.size(); i < c.size(); i++)
+    {
+        if (pr[i] >= z.size())
+            ans++;
+    }
+
     cout << ans << nl;
 }
 
@@ -144,7 +181,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    cin >> t;
+    // cin >> t;
     while(t--)
     {
         solve();

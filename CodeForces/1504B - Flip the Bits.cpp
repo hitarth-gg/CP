@@ -112,29 +112,46 @@ void genPrefix(vll &v);
 /* ------------------------------------------------------ */
 
 // clang-format on
+struct Prefix
+{
+    ll n;
+    vll p;
+    Prefix(string s)
+    {
+        n = s.size();
+        p.resize(n + 1, 0);
+        for (int i = 0; i < n; i++)
+            p[i + 1] = p[i] + ((s[i] == '0') ? -1 : 1);
+        debug(p);
+    }
+
+    ll subfix(ll l, ll r)
+    {
+        ll t = p[r + 1] - p[l];
+        return t;
+    }
+};
+
 void solve()
 {
     re(n);
-    reV(v, n);
-    
-    map<ll, ll> m;
-    ll ans = 0;
+    reS(s1);
+    reS(s2);
+    s1.push_back('0');
+    s2.push_back('0');
+    n++;
+
+    Prefix p(s1);
 
     for (int i = 0; i < n; i++)
-        m[v[i]]++;
+        if (s1[i] == s2[i] && s1[i + 1] != s2[i + 1] || s1[i] != s2[i] && s1[i + 1] == s2[i + 1])
+            if (p.subfix(0, i) != 0)
+            {
+                cout << "NO" << nl;
+                return;
+            }
 
-    ll prev = 0;
-    ll prev2 = 0;
-    for (auto it : m)
-    {
-        if (it.second - prev > 0 && it.first - 1 == prev2)
-            ans += it.second - prev;
-        else if (it.first - 1 != prev2)
-            ans += it.second;
-        prev = it.second;
-        prev2 = it.first;
-    }
-    cout << ans << nl;
+    cout << "YES" << nl;
 }
 
 // clang-format off

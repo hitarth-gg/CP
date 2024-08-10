@@ -114,25 +114,34 @@ void genPrefix(vll &v);
 // clang-format on
 void solve()
 {
-    re(n);
+    re(n, k, x);
     reV(v, n);
+
+    vsort(v);
+    vll gaps;
+    ll ans = 1;
     
-    map<ll, ll> m;
-    ll ans = 0;
+    for (int i = 0; i < n - 1; i++)
+        if (v[i + 1] - v[i] > x)
+        {
+            ans++;
+            gaps.push_back(v[i + 1] - v[i]);
+        }
 
-    for (int i = 0; i < n; i++)
-        m[v[i]]++;
-
-    ll prev = 0;
-    ll prev2 = 0;
-    for (auto it : m)
+    vsort(gaps);
+    for (int i = 0; i < gaps.size(); i++)
     {
-        if (it.second - prev > 0 && it.first - 1 == prev2)
-            ans += it.second - prev;
-        else if (it.first - 1 != prev2)
-            ans += it.second;
-        prev = it.second;
-        prev2 = it.first;
+        ll t = gaps[i];
+        t = ceil((long double )(t - x) / x);
+        debug(t);
+        if (t > k)
+            break;
+        else
+        {
+            gaps[i] = -1;
+            ans --;
+            k -= t;
+        }
     }
     cout << ans << nl;
 }
@@ -144,7 +153,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    cin >> t;
+    // cin >> t;
     while(t--)
     {
         solve();

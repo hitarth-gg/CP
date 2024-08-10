@@ -111,30 +111,14 @@ void genPrefix(vll &v);
 // ARRAY: apply_permutation
 /* ------------------------------------------------------ */
 
+
 // clang-format on
 void solve()
 {
-    re(n);
-    reV(v, n);
-    
-    map<ll, ll> m;
-    ll ans = 0;
-
-    for (int i = 0; i < n; i++)
-        m[v[i]]++;
-
-    ll prev = 0;
-    ll prev2 = 0;
-    for (auto it : m)
-    {
-        if (it.second - prev > 0 && it.first - 1 == prev2)
-            ans += it.second - prev;
-        else if (it.first - 1 != prev2)
-            ans += it.second;
-        prev = it.second;
-        prev2 = it.first;
-    }
+    re(n, k);
+    ll ans = binpow(n, k, MOD);
     cout << ans << nl;
+
 }
 
 // clang-format off
@@ -145,6 +129,8 @@ int32_t main()
     clock_t begin = clock();
     int t=1; 
     cin >> t;
+    pre();
+    // debug(fax);
     while(t--)
     {
         solve();

@@ -111,30 +111,25 @@ void genPrefix(vll &v);
 // ARRAY: apply_permutation
 /* ------------------------------------------------------ */
 
+
+
+
 // clang-format on
 void solve()
 {
-    re(n);
-    reV(v, n);
-    
-    map<ll, ll> m;
-    ll ans = 0;
-
-    for (int i = 0; i < n; i++)
-        m[v[i]]++;
-
-    ll prev = 0;
-    ll prev2 = 0;
-    for (auto it : m)
+    re(n, k);
+    k--;
+    if(n%2 != 0)
     {
-        if (it.second - prev > 0 && it.first - 1 == prev2)
-            ans += it.second - prev;
-        else if (it.first - 1 != prev2)
-            ans += it.second;
-        prev = it.second;
-        prev2 = it.first;
+        ll skip_at = (n-1-1)/2;
+        ll t = k/(skip_at+1);
+        ll z = (k+t)%(n)+1;
+        cout << z << nl;
     }
-    cout << ans << nl;
+    else
+    {
+        cout << k%n + 1 << nl;
+    }
 }
 
 // clang-format off

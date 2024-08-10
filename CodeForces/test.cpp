@@ -112,13 +112,26 @@ void genPrefix(vll &v);
 /* ------------------------------------------------------ */
 
 
+// recursive binary search
 
+ll binary_search(vll &v, ll l, ll r, ll target)
+{
+    ll mid = (l+r)/2;
+    if((r-l)<=1)
+        return false;
+    if (v[mid] == target)
+        return mid;
+    else if(v[mid] < target)
+        return binary_search(v, mid, r, target);
+    else 
+        return binary_search(v, l, mid, target);
+}
 
 // clang-format on
 void solve()
 {
-    map<ll, ll> m;
-    cout << min(20, (int)m.size()) << nl;
+    vll v = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    cout << binary_search(v, -1, v.size(), 5) << nl;
 }
 
 // clang-format off
@@ -363,3 +376,4 @@ void genPrefix(vll &v)
     for (int i = 1; i < v.size(); i++)
         v[i] = v[i - 1] + v[i];
 }
+

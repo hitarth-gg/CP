@@ -1,5 +1,7 @@
 // clang-format off
 #include <bits/stdc++.h>
+#pragma GCC optimize("Ofast,inline,unroll-loops,fast-math")
+#pragma GCC target("avx2,bmi,bmi2,lzcnt,popcnt,sse,sse2,sse3,sse4,mmx")
 #include <ext/pb_ds/tree_policy.hpp>
 #include <ext/pb_ds/assoc_container.hpp>
 
@@ -114,25 +116,39 @@ void genPrefix(vll &v);
 // clang-format on
 void solve()
 {
-    re(n);
+    re(n, k);
     reV(v, n);
-    
+
     map<ll, ll> m;
+
+    for (auto it : v)
+        m[(it % k)]++;
+
     ll ans = 0;
-
-    for (int i = 0; i < n; i++)
-        m[v[i]]++;
-
-    ll prev = 0;
-    ll prev2 = 0;
     for (auto it : m)
     {
-        if (it.second - prev > 0 && it.first - 1 == prev2)
-            ans += it.second - prev;
-        else if (it.first - 1 != prev2)
-            ans += it.second;
-        prev = it.second;
-        prev2 = it.first;
+        if (it.first == 0)
+            ans++;
+        else if (it.second != 0)
+        {
+            ll t = k - it.first;
+            ll a = it.second;
+            ll b = 0;
+            if (m.contains(t))
+            {
+                b = m[t];
+                m[t] = 0;
+            }
+            m[it.first] = 0;
+            ans++;
+
+            if (a > b)
+                swap(a, b);
+            if (a == b)
+                ans += 0;
+            else if (b > a)
+                ans += b - (a + 1);
+        }
     }
     cout << ans << nl;
 }

@@ -115,26 +115,22 @@ void genPrefix(vll &v);
 void solve()
 {
     re(n);
-    reV(v, n);
-    
-    map<ll, ll> m;
+    reS(s);
+
+    ll z = v_count(s, '0');
     ll ans = 0;
 
-    for (int i = 0; i < n; i++)
-        m[v[i]]++;
-
-    ll prev = 0;
-    ll prev2 = 0;
-    for (auto it : m)
+    if(z%2==0)
+        cout << "BOB" << nl;
+    else
     {
-        if (it.second - prev > 0 && it.first - 1 == prev2)
-            ans += it.second - prev;
-        else if (it.first - 1 != prev2)
-            ans += it.second;
-        prev = it.second;
-        prev2 = it.first;
+        if(z==1)
+            cout << "BOB" << nl;
+        else if (z>1)
+            cout << "ALICE" << nl;
+
     }
-    cout << ans << nl;
+
 }
 
 // clang-format off
