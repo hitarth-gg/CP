@@ -105,19 +105,35 @@ ll first_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp fun
 
 void genPrefix(vll &v);
 /* ------------------------------------------------------ */
-
 /* ---------------------- snippets ---------------------- */
 // STRING: string_hashing | rabin_karp | kmp | z_function
 // ARRAY: apply_permutation
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    re(t1, t2, t3);
+    re(n);
+    reV(v, n);
+
+    ll k = n;
+
+
+    UNIQUE(v);
+
+    ll ans = 0;
+
+    n = v.size();
+
+    ll r = 0;
+    for (int l = 0; l < n; l++)
+    {
+        while (r < n && v[r] - v[l] <= k - 1)
+            r++;
+        
+        ans = max(r-l, ans);
+    }
+    cout << ans << nl;
 }
 
 // clang-format off
@@ -127,7 +143,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

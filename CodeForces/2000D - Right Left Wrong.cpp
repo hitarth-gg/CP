@@ -112,12 +112,35 @@ void genPrefix(vll &v);
 /* ------------------------------------------------------ */
 
 
-
-
 // clang-format on
 void solve()
 {
-    re(t1, t2, t3);
+    re(n);
+    reV(v, n);
+    reS(s);
+
+    vll p(n, 0);
+    p[0] = v[0];
+    for(int i = 1; i<n; i++)
+        p[i] = p[i-1] + v[i];
+
+    ll l = 0, r= n-1;
+    ll sum = 0;
+    while(l<r)
+    {
+        while(l<r && s[l] != 'L')
+            l++;
+        while(l<r && s[r] != 'R')
+            r--;
+        
+        if(l<r)
+        {
+            sum += p[r] - (l>0 ? p[l-1] : 0);
+            l++;
+            r--;
+        }
+    }
+    cout << sum << nl;
 }
 
 // clang-format off
@@ -127,7 +150,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();
@@ -362,3 +385,4 @@ void genPrefix(vll &v)
     for (int i = 1; i < v.size(); i++)
         v[i] = v[i - 1] + v[i];
 }
+

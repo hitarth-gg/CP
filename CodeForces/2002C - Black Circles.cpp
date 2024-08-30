@@ -117,7 +117,37 @@ void genPrefix(vll &v);
 // clang-format on
 void solve()
 {
-    re(t1, t2, t3);
+    re(n);
+    ll mini_time = INF;
+    
+    vp circles;
+    
+    for(int i = 0; i<n; i++)
+    {
+        re(t1, t2);
+        circles.pb({t1, t2});
+    }
+
+    reV(pos, 4);
+
+    ll x1 = pos[0];
+    ll y1 = pos[1];
+
+    ll x2 = pos[2];
+    ll y2 = pos[3];
+
+    ll dist_points = powl(x1 - x2, 2) + powl(y1 - y2, 2);
+
+    for(auto it : circles)
+    {
+        ll dist = powl(it.first - x2, 2) + powl(it.second - y2, 2);
+        if(dist_points >= dist)
+        {
+            cout << "NO" << nl;
+            return;
+        }
+    }
+    cout << "YES" << nl;
 }
 
 // clang-format off
@@ -127,7 +157,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

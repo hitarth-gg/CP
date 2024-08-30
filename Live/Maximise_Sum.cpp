@@ -111,13 +111,69 @@ void genPrefix(vll &v);
 // ARRAY: apply_permutation
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    re(t1, t2, t3);
+    re(n);
+    reV(v, n);
+
+    ll kd = kadane(v, n);
+
+    ll ps = 0;
+    ll pcnt = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (v[i] >= 0)
+        {
+            ps += v[i];
+            pcnt++;
+        }
+    }
+
+    bool zero = false;
+    for (int i = 0; i < n; i++)
+    {
+        if (v[i] == 0)
+        {
+            zero = true;
+            break;
+        }
+    }
+
+    ll negs = n - pcnt;
+
+    // if (ps > kd)
+    // {
+    ll sum = 0;
+    if (zero)
+    {
+        for (auto it : v)
+            sum += abs(it);
+    }
+    else
+    {
+        if (negs % 2 == 0)
+        {
+            for (auto it : v)
+                sum += abs(it);
+        }
+        else
+        {
+            ll min_neg = INF;
+            for (auto it : v)
+            {
+                min_neg = min(min_neg, abs(it));
+                sum += abs(it);
+            }
+            sum -= 2 * abs(min_neg);
+        }
+    }
+    cout << sum << nl;
+    // }
+    // else
+    // {
+    // cout << kd << nl;
+    // }
 }
 
 // clang-format off
@@ -127,7 +183,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

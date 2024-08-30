@@ -111,13 +111,61 @@ void genPrefix(vll &v);
 // ARRAY: apply_permutation
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    re(t1, t2, t3);
+    re(n, m, x);
+
+    set<ll> ans;
+    set<ll> plug;
+
+    x--;
+    ans.insert(x);
+
+    while (m--)
+    {
+        re(t1);
+        char t2;
+        cin >> t2;
+
+        if (t2 == '?')
+        {
+            for (auto it : ans)
+            {
+                ll a1 = (it + t1) % n;
+                ll a2 = (it + n - t1) % n;
+                plug.insert(a1);
+                plug.insert(a2);
+            }
+            ans = plug;
+            plug.clear();
+        }
+        else if (t2 == '0')
+        {
+            for (auto it : ans)
+            {
+                ll a1 = (it + t1) % n;
+                plug.insert(a1);
+            }
+            ans = plug;
+            plug.clear();
+        }
+        else if (t2 == '1')
+        {
+            for (auto it : ans)
+            {
+                ll a1 = (it + n - t1) % n;
+                plug.insert(a1);
+            }
+            ans = plug;
+            plug.clear();
+        }
+    }
+
+    cout << ans.size() << nl;
+    for (auto it : ans)
+        cout << it + 1 << " ";
+    cout << nl;
 }
 
 // clang-format off
@@ -127,7 +175,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();
@@ -362,3 +410,4 @@ void genPrefix(vll &v)
     for (int i = 1; i < v.size(); i++)
         v[i] = v[i - 1] + v[i];
 }
+

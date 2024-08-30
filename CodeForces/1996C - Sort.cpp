@@ -111,13 +111,50 @@ void genPrefix(vll &v);
 // ARRAY: apply_permutation
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    re(t1, t2, t3);
+    re(n, q);
+    reS(a);
+    reS(b);
+
+    vector<vector<ll>> p1(n, vector<ll>(26));
+    vector<vector<ll>> p2(n, vector<ll>(26));
+
+    for (int i = 0; i < n; i++)
+    {
+        if (i > 0)
+        {
+            for (int j = 0; j < 26; j++)
+            {
+                p1[i][j] = p1[i - 1][j];
+                p2[i][j] = p2[i - 1][j];
+            }
+        }
+
+        p1[i][a[i] - 'a']++;
+        p2[i][b[i] - 'a']++;
+    }
+
+    fr(query, 0, q)
+    {
+        re(l, r);
+
+        l--, r--;
+
+        ll ans = 0;
+        ll t1 = 0;
+        ll t2 = 0;
+
+        for (char c = 'a'; c <= 'z'; c++)
+        {
+            t1 = p1[r][c - 'a'] - (l > 0 ? p1[l - 1][c - 'a'] : 0);
+            t2 = p2[r][c - 'a'] - (l > 0 ? p2[l - 1][c - 'a'] : 0);
+
+            ans += abs(t1 - t2);
+        }
+        cout << ans / 2 << nl;
+    }
 }
 
 // clang-format off
@@ -127,7 +164,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

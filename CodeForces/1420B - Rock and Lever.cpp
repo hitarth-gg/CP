@@ -112,12 +112,34 @@ void genPrefix(vll &v);
 /* ------------------------------------------------------ */
 
 
-
+ll bitter(ll n)
+{
+    ll ix = 0;
+    for(int i = 0; i<64; i++)
+        if(bitCheck(n, i))
+            ix = i;
+        return ix;
+}
 
 // clang-format on
 void solve()
 {
-    re(t1, t2, t3);
+    re(n);
+    reV(v, n);
+    map<ll, ll> m;
+
+    for (auto it : v)
+    {
+        // debug(log2(it), bitter(it)); 
+        m[log2(it)]++;
+    }
+
+    ll ans = 0;
+    for (auto it : m)
+        if (it.second >= 2)
+            ans += it.second*(it.second-1)/2;
+
+    cout << ans << nl;
 }
 
 // clang-format off
@@ -127,7 +149,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();
@@ -362,3 +384,4 @@ void genPrefix(vll &v)
     for (int i = 1; i < v.size(); i++)
         v[i] = v[i - 1] + v[i];
 }
+
