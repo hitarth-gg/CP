@@ -111,13 +111,64 @@ void genPrefix(vll &v);
 // ARRAY: apply_permutation
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    
+    re(n);
+    vector<string> v(n);
+    loop(n)
+    {
+        string t;
+        cin >> v[i];
+    }
+
+    ll ans = 0;
+
+    for (int i = 0; i < n; i++)
+    {
+        ll u = i;
+        ll d = n - i - 1;
+        for (int j = i; j < d; j++)
+        {
+
+            ll l = j;
+            ll r = n - j - 1;
+            char c1 = v[u][l];
+            char c2 = v[l][d];
+            char c3 = v[d][r];
+            char c4 = v[r][u];
+
+            char c = max({c1, c2, c3, c4});
+            debug(c1, c2, c3, c4);
+            ans += (c - c1) + (c - c2) + (c - c3) + (c - c4);
+            debug(ans);
+        }
+    }
+    cerr << "---------\n";
+
+    cout << ans << nl;
+
+    // vector<string> v2(n);
+
+    // for (int i = 0; i < n; i++)
+    // {
+    //     string s;
+    //     for (int j = n - 1; j >= 0; j--)
+    //     {
+    //         s.push_back(v[j][i]);
+    //     }
+    //     v2[i] = s;
+    // }
+
+    // for (int i = 0; i < n; i++)
+    // {
+    //     for (int j = 0; j < n; j++)
+    //     {
+    //         ans += abs(v[i][j] - v2[i][j]);
+    //     }
+    // }
+    // debug(v, v2);
+    // cout << ans << nl;
 }
 
 // clang-format off
@@ -127,7 +178,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

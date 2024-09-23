@@ -8,9 +8,9 @@ using namespace chrono;
 using namespace __gnu_pbds;
 
 /* ----------------------- int128 ----------------------- */
-// typedef __int128 lll;
-// istream &operator>>(istream &cin, lll &x) { x=0; static string s; cin>>s; for (char c:s) x=x*10+(c-'0'); return cin; }
-// ostream &operator<<(ostream &cout, lll x) { static char s[60]; int tp=1; s[0]='0'+(x%10); while (x/=10) s[tp++]='0'+(x%10); while (tp--) cout<<s[tp]; return cout; }
+typedef __int128 lll;
+istream &operator>>(istream &cin, lll &x) { x=0; static string s; cin>>s; for (char c:s) x=x*10+(c-'0'); return cin; }
+ostream &operator<<(ostream &cout, lll x) { static char s[60]; int tp=1; s[0]='0'+(x%10); while (x/=10) s[tp++]='0'+(x%10); while (tp--) cout<<s[tp]; return cout; }
 /* ------------------------------------------------------ */
 /* ------------------------ INPUT ----------------------- */
 // 1
@@ -111,13 +111,60 @@ void genPrefix(vll &v);
 // ARRAY: apply_permutation
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    
+    re(n);
+
+    vector<vector<lll>> v(n, vector<lll>(n));
+
+    vll ans;
+
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+        {
+            re(t);
+            v[i][j] = t;
+        }
+
+    if (n == 1)
+    {
+        cout << "YES" << nl;
+        cout << v[0][0] << nl;
+        return;
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        lll nd = -1;
+        for (int j = 0; j < n; j++)
+        {
+            if (i != j)
+            {
+                if (nd == -1)
+                    nd = v[i][j];
+                else
+                    nd = v[i][j] & nd;
+            }
+        }
+        ans.pb(nd);
+    }
+
+    lll limit = binpow(2, 30);
+
+    bool poss = true;
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            if (i != j && v[i][j] != (ans[i] | ans[j]) || v[i][j] >= limit)
+                poss = false;
+
+    if (poss)
+    {
+        cout << "YES" << nl;
+        printVec(ans);
+    }
+    else
+        cout << "NO" << nl;
 }
 
 // clang-format off
@@ -127,7 +174,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();
@@ -362,3 +409,4 @@ void genPrefix(vll &v)
     for (int i = 1; i < v.size(); i++)
         v[i] = v[i - 1] + v[i];
 }
+

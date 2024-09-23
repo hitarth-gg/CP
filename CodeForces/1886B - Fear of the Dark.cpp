@@ -17,7 +17,7 @@ using namespace __gnu_pbds;
 #define G(x) ll x; cin >> x;
 #define reS(x) string x; cin >> x;
 // 2
-#define re(...) ll __VA_ARGS__; read(__VA_ARGS__)
+#define re(...) double __VA_ARGS__; read(__VA_ARGS__)
 void read() {}
 template <typename T, typename... Args>
 void read(T& first, Args&... args) {
@@ -112,12 +112,59 @@ void genPrefix(vll &v);
 /* ------------------------------------------------------ */
 
 
-
-
+#define ld double
 // clang-format on
+
+double dist(ld x1, ld y1, ld x2, ld y2)
+{
+    return sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+}
+
 void solve()
 {
-    
+    re(px, py);
+    re(x1, y1);
+    re(x2, y2);
+
+    ld a1 = max(dist(x1, y1, 0, 0), dist(x1, y1, px, py));
+    ld a2 = max(dist(x2, y2, 0, 0), dist(x2, y2, px, py));
+
+    ld t1 = dist(x1, y1, 0, 0);
+    ld t2 = dist(x2, y2, px, py);
+    ld c1 = t1;
+    ld c2 = t2;
+    if (c1 < c2)
+        swap(c1, c2);
+    ld rem = max((ld)0, dist(x1, y1, x2, y2) - (c1 + c2));
+    ld a3 = -1;
+    if ((c1 - c2) <= rem)
+    {
+        rem -= (c1 - c2);
+        c2 = c1;
+        a3 = c2 + rem / 2;
+    }
+    else
+        a3 = c1;
+
+    t1 = dist(x2, y2, 0, 0);
+    t2 = dist(x1, y1, px, py);
+    c1 = t1;
+    c2 = t2;
+    if (c1 < c2)
+        swap(c1, c2);
+    rem = max((ld)0, dist(x1, y1, x2, y2) - (c1 + c2));
+    ld a4 = -1;
+    if ((c1 - c2) <= rem)
+    {
+        rem -= (c1 - c2);
+        c2 = c1;
+        a4 = c2 + rem / 2;
+    }
+    else
+        a4 = c1;
+
+    cout << setprecision(3) << min({a1, a2, a3, a4}) << nl;
+
 }
 
 // clang-format off
@@ -127,7 +174,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

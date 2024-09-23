@@ -111,13 +111,41 @@ void genPrefix(vll &v);
 // ARRAY: apply_permutation
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    
+    re(n);
+    reV(v, n);
+    vll ans;
+    ll sum = 0;
+
+    ll odds = 0;
+
+    ans.pb(v[0]);
+    sum += v[0];
+    odds += v[0] & 1;
+
+    if (n >= 2)
+    {
+        sum += v[1];
+        odds += v[1] & 1;
+        ans.pb(((ll)((v[0] + v[1]) / 2)) * 2);
+    }
+
+    for (int i = 2; i < n; i++)
+    {
+        odds += v[i] & 1;
+        sum += v[i];
+        ll cnt = 0;
+
+        ll rem = odds % 3;
+        ll last = odds - rem;
+
+        cnt = last / 3;
+
+        ans.pb(sum - cnt - (rem == 1));
+    }
+    printVec(ans);
 }
 
 // clang-format off
@@ -127,7 +155,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();
