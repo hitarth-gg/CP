@@ -128,38 +128,51 @@ void genPrefix(vll &v);
 // clang-format on
 void solve()
 {
-    re(n);
-    reV(v, n);
-    vp d;
+    re(n, k);
 
-    for (int i = 1; i < n; i++)
+    ll z = n - 1;
+
+    ll max_p = 0;
+    if (z % 2 == 0)
+        max_p = 2 * (z / 2 + 1) * (z / 2);
+    else
+        max_p = 2 * ((z + 1) / 2) * (1 + z) / 2;
+
+    if (k % 2 != 0 || k > max_p)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
+        cout << "No" << nl;
+        return;
     }
 
-    vsort(d);
+    vll v(n, 0);
+    iota(v.begin(), v.end(), 1);
 
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
+    ll l = 0;
+    ll r = n - 1;
+    while (k != 0)
     {
-        ll k = d[i].first;
-        while (k > 0)
+        if (k % 2 != 0)
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            cout << "No" << nl;
+            return;
+        }
+
+        ll z = k / 2;
+        if (z >= v[r] - v[l])
+        {
+            k -= 2 * (v[r] - v[l]);
+            swap(v[l], v[r]);
+            l++, r--;
+        }
+        else
+        {
+            ll f = l + z;
+            k -= 2 * (v[f] - v[l]);
+            swap(v[f], v[l]);
         }
     }
-
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    cout << "Yes" << nl;
+    printVec(v);
 }
 
 // clang-format off

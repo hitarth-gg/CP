@@ -125,41 +125,88 @@ void genPrefix(vll &v);
 // OTHERS: custom_hash
 /* ------------------------------------------------------ */
 
+
+string flip(string s, ll ix)
+{
+    for(int i = 0; i<s.size(); i++)
+    {
+        if(i==ix)
+            continue;
+        s[i] = s[i] == '1' ? '0' : '1';
+    }
+    return s;
+}
+
 // clang-format on
 void solve()
 {
-    re(n);
-    reV(v, n);
-    vp d;
+    re(n, k);
+    reS(s);
+    vll f(n, 0);
 
-    for (int i = 1; i < n; i++)
+    bool flipped = false;
+
+    if (k % 2 == 1)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
-    }
 
-    vsort(d);
+        for (int i = 0; i < n; i++)
+            if (s[i] == '1')
+            {
+                s = flip(s, i);
+                f[i]++;
+                k--;
+                flipped = true;
+                break;
+            }
 
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
-    {
-        ll k = d[i].first;
-        while (k > 0)
+        if (!flipped)
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            s = flip(s, n - 1);
+            f[n - 1]++;
+            k--;
         }
     }
 
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    queue<ll> q;
+
+    for (int i = 0; i < n - 1; i++)
+    {
+        if (s[i] == '0')
+            q.push(i);
+    }
+
+    while (!q.empty() && k > 0)
+    {
+        if (q.size() >= 2)
+        {
+            ll ix1 = q.front();
+            q.pop();
+            ll ix2 = q.front();
+            q.pop();
+
+            s[ix1] = '1';
+            s[ix2] = '1';
+            f[ix1]++;
+            f[ix2]++;
+        }
+        else
+        {
+            ll ix = q.front();
+            q.pop();
+            s[ix] = '1';
+
+            s[n - 1] = s[n - 1] == '1' ? '0' : '1';
+            f[ix]++;
+            f[n - 1]++;
+        }
+        k -= 2;
+    }
+
+    for (int i = 0; i < k; i += 2)
+        f[n - 1] += 2;
+
+    cout << s << nl;
+    printVec(f);
 }
 
 // clang-format off

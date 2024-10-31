@@ -129,37 +129,71 @@ void genPrefix(vll &v);
 void solve()
 {
     re(n);
-    reV(v, n);
-    vp d;
 
-    for (int i = 1; i < n; i++)
+    vp v;
+    map<ll, ll> mp;
+    bool poss = true;
+    for (ll i = 0; i < n; i++)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
+        re(t);
+        v.pb({t, i});
+        mp[t]++;
+        if (mp[t] > 2)
+            poss = false;
     }
 
-    vsort(d);
+    sort(v.begin(), v.end());
 
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
+    vll p(n, -1);
+    vll q(n, -1);
+
+    if (v.back().first != n || poss == false)
     {
-        ll k = d[i].first;
-        while (k > 0)
+        cout << "NO" << nl;
+        return;
+    }
+
+    stack<ll> st;
+
+    ll k = 1;
+    debug(v);
+    for (int i = 0; i < n; i++)
+    {
+        while (v[i].first > k)
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            st.push(k);
+            k++;
+            debug(k);
         }
+
+        if (i + 1 < n && v[i].first == v[i + 1].first)
+        {
+            if (st.empty())
+            {
+                cout << "NO" << nl;
+                return;
+            }
+            ll t = st.top();
+            st.pop();
+
+            p[v[i].second] = v[i].first;
+            q[v[i].second] = t;
+            p[v[i + 1].second] = t;
+            q[v[i + 1].second] = v[i + 1].first;
+            i++;
+        }
+        else
+        {
+            p[v[i].second] = v[i].first;
+            q[v[i].second] = v[i].first;
+        }
+
+        k++;
     }
 
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    cout << "YES" << nl;
+    printVec(p);
+    printVec(q);
 }
 
 // clang-format off

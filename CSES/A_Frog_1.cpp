@@ -130,36 +130,12 @@ void solve()
 {
     re(n);
     reV(v, n);
-    vp d;
+    vll dp(n, 0);
+    dp[1] = abs(v[1] - v[0]);
 
-    for (int i = 1; i < n; i++)
-    {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
-    }
-
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
-    {
-        ll k = d[i].first;
-        while (k > 0)
-        {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
-        }
-    }
-
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    for (int i = 2; i < n; i++)
+        dp[i] = min(dp[i - 1] + abs(v[i] - v[i - 1]), dp[i - 2] + abs(v[i] - v[i - 2]));
+    cout << dp[n - 1] << nl;
 }
 
 // clang-format off
@@ -169,7 +145,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    cin >> t;
+    // cin >> t;
     while(t--)
     {
         solve();

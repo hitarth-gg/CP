@@ -129,37 +129,35 @@ void genPrefix(vll &v);
 void solve()
 {
     re(n);
-    reV(v, n);
-    vp d;
-
-    for (int i = 1; i < n; i++)
-    {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
-    }
-
-    vsort(d);
-
-    ll last = 1;
     vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
+
+    ll k = n;
+
+    ans.push_back(k);
+
+    ll l = 0;
+
+    for (ll i = 0; i < 64; i++)
+        if (bitCheck(k, i))
+            l = i;
+
+    for (int i = 0; i < l; i++)
     {
-        ll k = d[i].first;
-        while (k > 0)
+        if (bitCheck(k, i))
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            k = k - binpow(2, i);
+            ans.push_back(k);
         }
     }
-
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    while (k != 2)
+    {
+        ll t = k / 2;
+        k -= t;
+        ans.push_back(k);
+    }
+    ans.push_back(1);
+    cout << ans.size() << nl;
+    printVec(ans);
 }
 
 // clang-format off

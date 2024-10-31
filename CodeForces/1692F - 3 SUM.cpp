@@ -130,36 +130,39 @@ void solve()
 {
     re(n);
     reV(v, n);
-    vp d;
+    map<ll, ll> mp;
 
-    for (int i = 1; i < n; i++)
+    for (auto it : v)
+        mp[it % 10]++;
+
+    for (ll i = 0; i <= 9; i++)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
-    }
-
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
-    {
-        ll k = d[i].first;
-        while (k > 0)
+        if (mp[i] > 0)
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            mp[i]--;
+            for (ll j = 0; j <= 9; j++)
+            {
+                if (mp[j] > 0)
+                {
+                    mp[j]--;
+                    for (ll k = 0; k <= 9; k++)
+                    {
+                        if (mp[k] > 0)
+                        {
+                            if ((i + j + k) % 10 == 3)
+                            {
+                                cout << "YES" << nl;
+                                return;
+                            }
+                        }
+                    }
+                    mp[j]++;
+                }
+            }
+            mp[i]++;
         }
     }
-
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    cout << "NO" << nl;
 }
 
 // clang-format off
@@ -404,3 +407,4 @@ void genPrefix(vll &v)
     for (int i = 1; i < v.size(); i++)
         v[i] = v[i - 1] + v[i];
 }
+

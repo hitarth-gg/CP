@@ -129,37 +129,56 @@ void genPrefix(vll &v);
 void solve()
 {
     re(n);
-    reV(v, n);
-    vp d;
+    reS(s);
 
-    for (int i = 1; i < n; i++)
+    ll c0 = 0;
+    ll c1 = 0;
+
+    deque<char> d;
+    vector<ll> ans;
+
+    for (auto it : s)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
+        it == '0' ? c0++ : c1++;
+        d.push_back(it);
     }
 
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
+    if (c0 != c1)
     {
-        ll k = d[i].first;
-        while (k > 0)
+        cout << -1 << nl;
+        return;
+    }
+
+    ll f = 0;
+    while (!d.empty())
+    {
+        if (d.front() == d.back())
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            if (d.front() == '0')
+            {
+                d.push_back('0');
+                d.push_back('1');
+                ans.push_back(n - f);
+            }
+            else
+            {
+                d.push_front('1');
+                d.push_front('0');
+                ans.push_back(f);
+            }
+            n += 2;
+        }
+
+        while (!d.empty() && d.front() != d.back())
+        {
+            d.pop_front();
+            d.pop_back();
+            f++;
         }
     }
 
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    cout << ans.size() << nl;
+    printVec(ans);
 }
 
 // clang-format off

@@ -27,20 +27,6 @@ void read(T& first, Args&... args) {
 // 3
 #define reV(v, n) vll v(n); cinv(v);
 /* ------------------------------------------------------ */
-/* ----------------------- OUTPUT ----------------------- */
-// Base case: single variable
-template <typename T>
-void print(const T& t) {
-    std::cout << t;
-}
-
-// Recursive case: multiple variables
-template <typename T, typename... Args>
-void print(const T& first, const Args&... rest) {
-    std::cout << first << " ";
-    print(rest...);
-}
-/* ------------------------------------------------------ */
 /* ------------------------ debug ----------------------- */
 #ifndef ONLINE_JUDGE
 #include "D:\Compi\Headers\debug3.h"
@@ -52,7 +38,7 @@ void print(const T& first, const Args&... rest) {
 
 #define fastio() ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
 
-#define MOD 1000000007
+#define MOD 998244353
 #define INF 1e18+9
 #define nl '\n'
 #define precision(x) cout<<fixed<<setprecision(x)
@@ -118,48 +104,82 @@ ll last_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp func
 ll first_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp function should return true if v[mid] < target
 
 void genPrefix(vll &v);
+/* ------------------------------------------------------ */
 
 /* ---------------------- snippets ---------------------- */
-// STRING: string_hashing | string_double_hashing/no_mod | rabin_karp | kmp | z_function
+// STRING: string_hashing | rabin_karp | kmp | z_function
 // ARRAY: apply_permutation
-// OTHERS: custom_hash
 /* ------------------------------------------------------ */
+ll MAXN = 2*1e5 + 10;
+vll facts(MAXN);
+
+void pre()
+{
+    facts[0] = 1;
+    facts[1] = 1;
+    for (ll i = 2; i<MAXN ; i++)
+    {
+        facts[i] = mod_mul(facts[i-1], i, MOD);
+    }
+}
 
 // clang-format on
 void solve()
 {
-    re(n);
-    reV(v, n);
-    vp d;
-
-    for (int i = 1; i < n; i++)
+    reS(s);
+    ll n = s.size();
+    ll ans = 0;
+    ll times = 1;
+    vll v0;
+    vll v1;
+    ll c0 = 0;
+    ll c1 = 0;
+    char c;
+    for (ll i = 1; i < n; i++)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
-    }
-
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
-    {
-        ll k = d[i].first;
-        while (k > 0)
+        if (s[i] == s[i - 1])
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            c = s[i];
+            if (c == '1')
+                c1++;
+            else
+                c0++;
+        }
+        else
+        {
+            if (c == '1' && c1 > 0)
+            {
+                ans += c1;
+                v1.push_back(c1 + 1);
+            }
+            else if (c0 > 0)
+            {
+                ans += c0;
+                v0.push_back(c0 + 1);
+            }
+            c1 = 0;
+            c0 = 0;
         }
     }
+    if (c1 > 0)
+    {
+        v1.push_back(c1 + 1);
+        ans += c1;
+    }
+    else if (c0 > 0)
+    {
+        v0.push_back(c0 + 1);
+        ans += c0;
+    }
 
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    for (auto it : v0)
+        times = mod_mul(times, it, MOD);
+    for (auto it : v1)
+        times = mod_mul(times, it, MOD);
+
+    times = mod_mul(times, facts[ans], MOD);
+
+    cout << ans << " " << times << nl;
 }
 
 // clang-format off
@@ -170,6 +190,7 @@ int32_t main()
     clock_t begin = clock();
     int t=1; 
     cin >> t;
+    pre();
     while(t--)
     {
         solve();

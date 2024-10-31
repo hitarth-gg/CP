@@ -130,36 +130,32 @@ void solve()
 {
     re(n);
     reV(v, n);
-    vp d;
+    vsort(v);
 
-    for (int i = 1; i < n; i++)
+    ll gcdb = 0;
+    ll maxi = v[n - 1];
+    for (int i = 0; i < n; i++)
+        gcdb = gcd(gcdb, maxi - v[i]);
+
+    if (gcdb == 0)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
+        cout << 1 << nl;
+        return;
     }
 
-    vsort(d);
+    ll ans = 0;
+    ll cnt = 1;
 
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
+    while(cnt <= n)
     {
-        ll k = d[i].first;
-        while (k > 0)
-        {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
-        }
+        if(binary_search(v.begin(), v.end() ,maxi - cnt*gcdb) == false)
+            break;
+        cnt++;
     }
 
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    for (int i = 0; i < n; i++)
+        ans += (maxi - v[i]) / gcdb;
+    cout << ans + cnt << nl;
 }
 
 // clang-format off

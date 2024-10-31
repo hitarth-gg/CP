@@ -130,36 +130,41 @@ void solve()
 {
     re(n);
     reV(v, n);
-    vp d;
 
-    for (int i = 1; i < n; i++)
+    ll even = -1;
+    ll odd = -1;
+
+    for (int i = 0; i < n; i++)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
+        if (v[i] % 2 == 0)
+            even = i;
+        else
+            odd = i;
     }
 
-    vsort(d);
+    vp ans;
 
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
+    if (v[0] % 2 == 1)
     {
-        ll k = d[i].first;
-        while (k > 0)
-        {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
-        }
+        for (int i = odd - 1; i >= 0; i--)
+            if (v[i] % 2 == 1)
+                ans.push_back({i, odd});
+        for (int i = 1; i < n; i++)
+            if (v[i] % 2 == 0)
+                ans.push_back({0, i});
     }
-
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
+    else
+    {
+        for (int i = even - 1; i >= 0; i--)
+            if (v[i] % 2 == 0)
+                ans.push_back({i, even});
+        for (int i = 1; i < n; i++)
+            if (v[i] % 2 == 1)
+                ans.push_back({0, i});
+    }
+    cout << ans.size() << nl;
     for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+        cout << it.first + 1 << " " << it.second + 1 << nl;
 }
 
 // clang-format off

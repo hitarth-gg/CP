@@ -129,37 +129,41 @@ void genPrefix(vll &v);
 void solve()
 {
     re(n);
-    reV(v, n);
-    vp d;
-
-    for (int i = 1; i < n; i++)
+    vector<vll> v(n);
+    vll all;
+    for (int i = 0; i < n; i++)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
-    }
-
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
-    {
-        ll k = d[i].first;
-        while (k > 0)
+        ll n1;
+        cin >> n1;
+        for (int j = 0; j < n1; j++)
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            re(t);
+            v[i].push_back(t);
+            all.push_back(t);
         }
+        vsort(v[i]);
     }
 
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    UNIQUE(all);
+    ll ans = 0;
+
+    for (auto it : all)
+    {
+        set<ll> st;
+        for (int j = 0; j < n; j++)
+        {
+            if (!binary_search(v[j].begin(), v[j].end(), it))
+            {
+                for (int k = 0; k<v[j].size(); k++)
+                {
+                    st.insert(v[j][k]);
+                }
+
+            }
+        }
+        ans = max(ans, (ll)st.size());
+    }
+    cout << ans << nl;
 }
 
 // clang-format off

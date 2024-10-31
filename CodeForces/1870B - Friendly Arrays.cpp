@@ -27,20 +27,6 @@ void read(T& first, Args&... args) {
 // 3
 #define reV(v, n) vll v(n); cinv(v);
 /* ------------------------------------------------------ */
-/* ----------------------- OUTPUT ----------------------- */
-// Base case: single variable
-template <typename T>
-void print(const T& t) {
-    std::cout << t;
-}
-
-// Recursive case: multiple variables
-template <typename T, typename... Args>
-void print(const T& first, const Args&... rest) {
-    std::cout << first << " ";
-    print(rest...);
-}
-/* ------------------------------------------------------ */
 /* ------------------------ debug ----------------------- */
 #ifndef ONLINE_JUDGE
 #include "D:\Compi\Headers\debug3.h"
@@ -118,48 +104,56 @@ ll last_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp func
 ll first_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp function should return true if v[mid] < target
 
 void genPrefix(vll &v);
+/* ------------------------------------------------------ */
 
 /* ---------------------- snippets ---------------------- */
-// STRING: string_hashing | string_double_hashing/no_mod | rabin_karp | kmp | z_function
+// STRING: string_hashing | rabin_karp | kmp | z_function
 // ARRAY: apply_permutation
-// OTHERS: custom_hash
 /* ------------------------------------------------------ */
 
 // clang-format on
-void solve()
+
+ll set_bits(ll num, ll mapper, ll n)
 {
-    re(n);
-    reV(v, n);
-    vp d;
-
-    for (int i = 1; i < n; i++)
+    for (int i = 0; i < 64; i++)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
-    }
-
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
-    {
-        ll k = d[i].first;
-        while (k > 0)
+        if (bitCheck(mapper, i) == 1)
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            if (n == 1)
+                num = bitSet(num, i);
+            else
+                num = bitClear(num, i);
         }
     }
+    return num;
+}
 
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+void solve()
+{
+    re(n, m);
+    reV(a, n);
+    reV(b, m);
+
+    ll xor_a = 0;
+    ll or_b = 0;
+
+    for (int i = 0; i < n; i++)
+        xor_a ^= a[i];
+    for (int i = 0; i < m; i++)
+        or_b |= b[i];
+
+    ll maxi = xor_a;
+    ll mini = xor_a;
+
+    if (n % 2 == 0)
+        xor_a = set_bits(xor_a, or_b, 0);
+    else
+        xor_a = set_bits(xor_a, or_b, 1);
+
+    maxi = max(maxi, xor_a);
+    mini = min(mini, xor_a);
+    
+    cout << mini << " " << maxi << nl;
 }
 
 // clang-format off

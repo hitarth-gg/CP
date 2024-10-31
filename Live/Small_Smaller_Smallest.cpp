@@ -129,37 +129,27 @@ void genPrefix(vll &v);
 void solve()
 {
     re(n);
-    reV(v, n);
-    vp d;
+    reS(s);
 
-    for (int i = 1; i < n; i++)
+    ll one = 0, zero = 0;
+    for (auto it : s)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
+        if (it == '1')
+            one++;
+        else
+            zero++;
     }
 
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
+    if (one == 0)
     {
-        ll k = d[i].first;
-        while (k > 0)
-        {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
-        }
+        cout << n << nl;
+        return;
     }
 
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    if (one % 2 == 0)
+        cout << 0 << nl;
+    else
+        cout << 1 << nl;
 }
 
 // clang-format off

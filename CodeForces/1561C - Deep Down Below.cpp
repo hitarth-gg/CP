@@ -27,20 +27,6 @@ void read(T& first, Args&... args) {
 // 3
 #define reV(v, n) vll v(n); cinv(v);
 /* ------------------------------------------------------ */
-/* ----------------------- OUTPUT ----------------------- */
-// Base case: single variable
-template <typename T>
-void print(const T& t) {
-    std::cout << t;
-}
-
-// Recursive case: multiple variables
-template <typename T, typename... Args>
-void print(const T& first, const Args&... rest) {
-    std::cout << first << " ";
-    print(rest...);
-}
-/* ------------------------------------------------------ */
 /* ------------------------ debug ----------------------- */
 #ifndef ONLINE_JUDGE
 #include "D:\Compi\Headers\debug3.h"
@@ -118,48 +104,51 @@ ll last_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp func
 ll first_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp function should return true if v[mid] < target
 
 void genPrefix(vll &v);
+/* ------------------------------------------------------ */
 
 /* ---------------------- snippets ---------------------- */
-// STRING: string_hashing | string_double_hashing/no_mod | rabin_karp | kmp | z_function
+// STRING: string_hashing | rabin_karp | kmp | z_function
 // ARRAY: apply_permutation
-// OTHERS: custom_hash
 /* ------------------------------------------------------ */
 
 // clang-format on
 void solve()
 {
     re(n);
-    reV(v, n);
-    vp d;
-
-    for (int i = 1; i < n; i++)
+    vector<vector<ll>> v(n);
+    for (auto &it : v)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
-    }
-
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
-    {
-        ll k = d[i].first;
-        while (k > 0)
+        re(m);
+        for (int i = 0; i < m; i++)
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            re(t1);
+            it.push_back(t1);
         }
     }
-
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    vp p;
+    debug(v);
+    for (auto it : v)
+    {
+        ll maxi = -1;
+        for (int i = 0; i < it.size(); i++)
+            maxi = max(maxi, it[i] - i);
+        p.push_back({maxi, it.size()});
+    }
+    vsort(p);
+    ll ans = p[0].first + 1;
+    debug(p);
+    ll temp = ans + p[0].second;
+    for (int i = 1; i < p.size(); i++)
+    {
+        if (temp <= p[i].first)
+        {
+            ll rem = p[i].first - temp;
+            temp += rem + 1;
+            ans += rem + 1;
+        }
+        temp += p[i].second;
+    }
+    cout << ans << nl;
 }
 
 // clang-format off
@@ -404,3 +393,4 @@ void genPrefix(vll &v)
     for (int i = 1; i < v.size(); i++)
         v[i] = v[i - 1] + v[i];
 }
+

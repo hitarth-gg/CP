@@ -27,20 +27,6 @@ void read(T& first, Args&... args) {
 // 3
 #define reV(v, n) vll v(n); cinv(v);
 /* ------------------------------------------------------ */
-/* ----------------------- OUTPUT ----------------------- */
-// Base case: single variable
-template <typename T>
-void print(const T& t) {
-    std::cout << t;
-}
-
-// Recursive case: multiple variables
-template <typename T, typename... Args>
-void print(const T& first, const Args&... rest) {
-    std::cout << first << " ";
-    print(rest...);
-}
-/* ------------------------------------------------------ */
 /* ------------------------ debug ----------------------- */
 #ifndef ONLINE_JUDGE
 #include "D:\Compi\Headers\debug3.h"
@@ -118,11 +104,11 @@ ll last_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp func
 ll first_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp function should return true if v[mid] < target
 
 void genPrefix(vll &v);
+/* ------------------------------------------------------ */
 
 /* ---------------------- snippets ---------------------- */
-// STRING: string_hashing | string_double_hashing/no_mod | rabin_karp | kmp | z_function
+// STRING: string_hashing | rabin_karp | kmp | z_function
 // ARRAY: apply_permutation
-// OTHERS: custom_hash
 /* ------------------------------------------------------ */
 
 // clang-format on
@@ -130,36 +116,29 @@ void solve()
 {
     re(n);
     reV(v, n);
-    vp d;
+
+    vll p(n, 0);
+    p[0] = 1;
 
     for (int i = 1; i < n; i++)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
+        if (v[i] != v[i - 1])
+            p[i] = p[i - 1] + 1;
+        else
+            p[i] = p[i - 1];
     }
-
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
+    re(q);
+    for (int i = 0; i < q; i++)
     {
-        ll k = d[i].first;
-        while (k > 0)
-        {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
-        }
+        re(l, r);
+        l--, r--;
+        ll x = distance(p.begin(), upper_bound(p.begin() + l, p.begin() + r + 1, p[l]));
+        if (x < r + 1)
+            cout << l + 1 << " " << x + 1 << nl;
+        else
+            cout << -1 << " " << -1 << nl;
     }
-
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    cout << " " << nl;
 }
 
 // clang-format off

@@ -130,36 +130,26 @@ void solve()
 {
     re(n);
     reV(v, n);
-    vp d;
+    re(last);
+    ll k = last;
 
-    for (int i = 1; i < n; i++)
+    ll maxi = 0;
+    ll sum = 0;
+    vsort(v);
+    debug(v);
+    for (int i = 0; i < n; i++)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
-    }
-
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
-    {
-        ll k = d[i].first;
-        while (k > 0)
+        sum += v[i];
+        if (v[i] <= (2 * last))
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            maxi = max(maxi, v[i]);
+            last = max(maxi, last);
         }
     }
-
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    debug(maxi, k);
+    if (maxi > k)
+        sum = sum - maxi + k;
+    cout << sum << nl;
 }
 
 // clang-format off

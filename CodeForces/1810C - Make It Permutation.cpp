@@ -128,38 +128,66 @@ void genPrefix(vll &v);
 // clang-format on
 void solve()
 {
-    re(n);
+    re(n, c, d);
     reV(v, n);
-    vp d;
 
-    for (int i = 1; i < n; i++)
+    ll ans = INF;
+    ll z = 0;
+
+    vsort(v);
+    UNIQUE(v);
+    z += (n - v.size()) * c;
+
+    if (v[0] != 1)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
+        v.push_back(1);
+        z += d;
+        vsort(v);
     }
+    debug(z);
+    n = v.size();
 
-    vsort(d);
+    bool flag = false;
 
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
+    for (int i = 0; i < n; i++)
     {
-        ll k = d[i].first;
-        while (k > 0)
+        if (v[i] != i + 1)
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            flag = true;
+            break;
         }
     }
 
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    if (!flag)
+    {
+        cout << z << nl;
+        return;
+    }
+
+    ll l = 0, r = 0;
+
+    while (l < n && r < n)
+    {
+        while (l + 1 < n && v[l + 1] == v[l] + 1)
+            l++;
+
+        r = l + 1;
+        while (r + 1 < n && v[r + 1] == v[r] + 1)
+            r++;
+
+        if (l >= n - 1)
+            break;
+
+        ll k1 = z + c * (n - l - 1);
+        z += (v[l + 1] - v[l] - 1) * d;
+        ll k2 = z + c * (n - r - 1);
+        debug(k1, k2);
+        ans = min({ans, k1, k2});
+        l = r;
+        r = l + 1;
+    }
+    debug("----------");
+    cout << ans << nl;
 }
 
 // clang-format off

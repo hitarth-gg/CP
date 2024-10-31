@@ -130,36 +130,27 @@ void solve()
 {
     re(n);
     reV(v, n);
-    vp d;
 
-    for (int i = 1; i < n; i++)
+    ll o = 0;
+    ll e = 0;
+    ll maxi = -INF;
+
+    bool allneg = true;
+
+    for (int i = 0; i < n; i++)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
+        if (v[i] > 0)
+            allneg = false;
+        if (i % 2 == 1 && v[i] > 0)
+            o += v[i];
+        else if (v[i] > 0)
+            e += v[i];
+        maxi = max(maxi, v[i]);
     }
-
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
-    {
-        ll k = d[i].first;
-        while (k > 0)
-        {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
-        }
-    }
-
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    if (allneg)
+        cout << maxi << nl;
+    else
+        cout << max(o, e) << nl;
 }
 
 // clang-format off

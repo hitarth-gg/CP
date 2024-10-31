@@ -128,38 +128,31 @@ void genPrefix(vll &v);
 // clang-format on
 void solve()
 {
-    re(n);
-    reV(v, n);
-    vp d;
+    reS(s);
+    ll n = s.size();
 
+    vll pf(n, 0);
+    ll cnt = 0;
     for (int i = 1; i < n; i++)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
+        if (s[i] == 'v' && s[i - 1] == 'v')
+            cnt++;
+        pf[i] = cnt;
     }
 
-    vsort(d);
+    ll ans = 0;
 
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
+    for (int i = 0; i < n; i++)
     {
-        ll k = d[i].first;
-        while (k > 0)
+        if (s[i] == 'o' && i > 0 && i < n - 1)
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            ll a = pf[i - 1];
+            ll b = pf[n - 1] - pf[i - 1];
+            if (a * b > 0)
+                ans += (a * b);
         }
     }
-
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    cout << ans << nl;
 }
 
 // clang-format off
@@ -169,7 +162,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    cin >> t;
+    // cin >> t;
     while(t--)
     {
         solve();

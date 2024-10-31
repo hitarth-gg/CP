@@ -128,38 +128,30 @@ void genPrefix(vll &v);
 // clang-format on
 void solve()
 {
-    re(n);
-    reV(v, n);
-    vp d;
+    re(n, m);
 
-    for (int i = 1; i < n; i++)
+    vector<vector<ll>> v(n, vector<ll>(m, 0));
+
+    if (m == 1)
+        cout << 0 << nl;
+    else if (n < m)
+        cout << n + 1 << nl;
+    else
+        cout << m << nl;
+
+    for (int i = 0; i < min(n, m-1); i++)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
+        ll z = 0;
+        for (int j = i; j < i + m; j++)
+            v[i][j % m] = z++;
     }
+    for (int i = min(n, m-1); i < n; i++)
+        v[i] = v[0];
 
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
+    for (int i = 0; i < n; i++)
     {
-        ll k = d[i].first;
-        while (k > 0)
-        {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
-        }
+        printVec(v[i]);
     }
-
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
 }
 
 // clang-format off

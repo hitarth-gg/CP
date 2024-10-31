@@ -34,6 +34,7 @@ void print(const T& t) {
     std::cout << t;
 }
 
+
 // Recursive case: multiple variables
 template <typename T, typename... Args>
 void print(const T& first, const Args&... rest) {
@@ -43,7 +44,7 @@ void print(const T& first, const Args&... rest) {
 /* ------------------------------------------------------ */
 /* ------------------------ debug ----------------------- */
 #ifndef ONLINE_JUDGE
-#include "D:\Compi\Headers\debug3.h"
+#include "D:\Compi\Headers\debug1.h"
 #else
 #define debug(...)
 #define debugArr(...)
@@ -130,36 +131,35 @@ void solve()
 {
     re(n);
     reV(v, n);
-    vp d;
 
-    for (int i = 1; i < n; i++)
+    map<ll, ll> mp;
+    map<ll, ll> same;
+    ll sum = v_sum(v);
+
+    for (int i = 0; i < n; i++)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
-    }
-
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
-    {
-        ll k = d[i].first;
-        while (k > 0)
+        ll rem = sum - v[i];
+        ll diff = rem - v[i];
+        if (diff > 0)
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            if (diff == v[i])
+                same[diff]++;
+            else
+                mp[diff]++;
         }
     }
+    vll ans;
+    debug(same, v);
 
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    for (int i = 0; i < n; i++)
+    {
+        if (mp.find(v[i]) != mp.end())
+            ans.push_back(i + 1);
+        else if (same[v[i]] > 1)
+            ans.push_back(i + 1);
+    }
+    cout << ans.size() << nl;
+    printVec(ans);
 }
 
 // clang-format off
@@ -169,7 +169,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    cin >> t;
+    // cin >> t;
     while(t--)
     {
         solve();

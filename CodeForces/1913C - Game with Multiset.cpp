@@ -125,41 +125,43 @@ void genPrefix(vll &v);
 // OTHERS: custom_hash
 /* ------------------------------------------------------ */
 
+
+vll p;
+void pre() 
+{
+    p.push_back(1);
+    for(int i = 1; i <= 29; i++)
+        p.push_back(p.back() * 2);
+}
+
 // clang-format on
 void solve()
 {
     re(n);
-    reV(v, n);
-    vp d;
+    map<ll, ll> mp;
 
-    for (int i = 1; i < n; i++)
+    while (n--)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
-    }
+        re(q, t);
 
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
-    {
-        ll k = d[i].first;
-        while (k > 0)
+        if (q == 1)
+            mp[t]++;
+        else
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            for (int i = 29; i >= 0; i--)
+            {
+                if (mp[i] > 0 && t >= p[i])
+                {
+                    ll x = mp[i];
+                    t -= min(t / p[i], x) * p[i];
+                }
+            }
+            if (t == 0)
+                cout << "YES" << nl;
+            else
+                cout << "NO" << nl;
         }
     }
-
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
 }
 
 // clang-format off
@@ -169,7 +171,8 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    cin >> t;
+    // cin >> t;
+    pre();
     while(t--)
     {
         solve();

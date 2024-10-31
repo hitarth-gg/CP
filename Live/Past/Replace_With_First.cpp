@@ -128,38 +128,104 @@ void genPrefix(vll &v);
 // clang-format on
 void solve()
 {
-    re(n);
-    reV(v, n);
-    vp d;
-
-    for (int i = 1; i < n; i++)
+    re(n, m);
+    reS(s1);
+    reS(s2);
+    if (s1 == s2)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
+        cout << 0 << nl;
+        return;
     }
 
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
+    bool same = true;
+    bool backshots = true;
+    if (s1[0] != s2[0])
     {
-        ll k = d[i].first;
-        while (k > 0)
+        cout << -1 << nl;
+        return;
+    }
+
+    for (int i = 0; i < min(n, m); i++)
+    {
+        if (s1[i] != s2[i])
+            same = false;
+    }
+
+    if (s1[0] == s2[0])
+    {
+
+        reverse(s1.begin(), s1.end());
+        reverse(s2.begin(), s2.end());
+
+        for (int i = 0; i < min(n, m); i++)
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            if (s1[i] != s2[i])
+                backshots = false;
+        }
+
+        if (backshots)
+        {
+            cout << 1 << nl;
+            return;
+        }
+    }
+    for (int i = 0; i < min(n, m); i++)
+    {
+        if (s1[i] == s2[i])
+        {
+            s1[i] = '#';
+            s2[i] = '#';
+        }
+        else
+            break;
+    }
+
+    reverse(s1.begin(), s1.end());
+    reverse(s2.begin(), s2.end());
+
+    bool flag = true;
+
+    for (int i = 0; i < min(n, m); i++)
+    {
+        if (s1[i] == s2[i])
+        {
+            s1[i] = '#';
+            s2[i] = '#';
+        }
+        else
+            break;
+    }
+
+    // check if smaller string contains all #
+    if (n < m)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            if (s1[i] != '#')
+            {
+                flag = false;
+                break;
+            }
+        }
+    }
+    else
+    {
+        for (int i = 0; i < m; i++)
+        {
+            if (s2[i] != '#')
+            {
+                flag = false;
+                break;
+            }
         }
     }
 
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    debug(s1, s2);
+
+    if (same || flag)
+        cout << 1 << nl;
+    else
+        cout << 2 << nl;
 }
 
 // clang-format off

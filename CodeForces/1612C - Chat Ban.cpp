@@ -27,20 +27,6 @@ void read(T& first, Args&... args) {
 // 3
 #define reV(v, n) vll v(n); cinv(v);
 /* ------------------------------------------------------ */
-/* ----------------------- OUTPUT ----------------------- */
-// Base case: single variable
-template <typename T>
-void print(const T& t) {
-    std::cout << t;
-}
-
-// Recursive case: multiple variables
-template <typename T, typename... Args>
-void print(const T& first, const Args&... rest) {
-    std::cout << first << " ";
-    print(rest...);
-}
-/* ------------------------------------------------------ */
 /* ------------------------ debug ----------------------- */
 #ifndef ONLINE_JUDGE
 #include "D:\Compi\Headers\debug3.h"
@@ -118,48 +104,64 @@ ll last_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp func
 ll first_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target); // comp function should return true if v[mid] < target
 
 void genPrefix(vll &v);
+/* ------------------------------------------------------ */
 
 /* ---------------------- snippets ---------------------- */
-// STRING: string_hashing | string_double_hashing/no_mod | rabin_karp | kmp | z_function
+// STRING: string_hashing | rabin_karp | kmp | z_function
 // ARRAY: apply_permutation
-// OTHERS: custom_hash
 /* ------------------------------------------------------ */
+
+ll last_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target)
+{
+    while (l < r)
+    {
+        ll mid = (l + r + 1) / 2; // ceil
+        if (comp(v[mid], target)) // if v[mid] <= target
+            l = mid;
+        else                      // if v[mid] > target
+            r = mid - 1;
+    }
+    return (comp(l, target)) ? l : -1;
+}
 
 // clang-format on
 void solve()
 {
-    re(n);
-    reV(v, n);
-    vp d;
 
-    for (int i = 1; i < n; i++)
+    re(k, x);
+    ll l = 0, r = 2 * k - 1;
+
+    auto comp = [&](ll mid)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
-    }
-
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
-    {
-        ll k = d[i].first;
-        while (k > 0)
+        if (mid <= k)
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            ll t = mid * (mid + 1) / 2 - mid + 1;
+            if (t <= x)
+                return true;
+            else
+                return false;
         }
-    }
+        else if (mid > k)
+        {
+            ll fa = (k - (mid - k));
+            ll t = k * (k + 1) / 2 + (mid - k) * k - (mid - k) * (mid - k + 1) / 2 - fa + 1;
+            if (t <= x)
+                return true;
+            else
+                return false;
+        }
+    };
 
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    while (l < r)
+    {
+        ll mid = (l + r + 1) / 2; // ceil
+        if (comp(mid))            // if v[mid] <= target
+            l = mid;
+        else // if v[mid] > target
+            r = mid - 1;
+    }
+    // (comp(l)) ? l : -1;
+    cout << l << nl;
 }
 
 // clang-format off
@@ -372,18 +374,7 @@ vll get_factors(ll num, ll upper_limit, bool reset)
 // }
 // Calling : cout << first_index(l, r, v, find, target) << nl;
 
-ll last_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target)
-{
-    while (l < r)
-    {
-        ll mid = (l + r + 1) / 2; // ceil
-        if (comp(v[mid], target)) // if v[mid] <= target
-            l = mid;
-        else                      // if v[mid] > target
-            r = mid - 1;
-    }
-    return (comp(l, target)) ? l : -1;
-}
+
 ll first_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target)
 {
     while (l < r)

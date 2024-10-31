@@ -128,38 +128,46 @@ void genPrefix(vll &v);
 // clang-format on
 void solve()
 {
-    re(n);
+    re(n, k);
     reV(v, n);
-    vp d;
+    map<ll, ll> mp;
 
-    for (int i = 1; i < n; i++)
+    for (auto it : v)
+        mp[it]++;
+
+    vp s;
+    for (auto it : mp)
+        s.push_back({it.first, it.second});
+
+    ll ans = 0;
+
+    ll l = 0, r = 0;
+    while (l < s.size() && r < s.size())
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
-    }
+        while (r + 1 < s.size() && (s[r + 1].first - s[r].first) == 1)
+            r++;
 
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
-    {
-        ll k = d[i].first;
-        while (k > 0)
+        if (r > l)
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            ll sum = 0;
+            for (int i = l; i <= min(l + k - 1, r); i++)
+                sum += s[i].second;
+
+            ans = max(ans, sum);
+
+            for (int i = l + k; i <= r; i++)
+            {
+                sum = sum - s[i - k].second + s[i].second;
+                ans = max(ans, sum);
+            }
         }
+        else
+            ans = max(ans, s[r].second);
+        l = r + 1;
+        r = l;
     }
 
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    cout << ans << nl;
 }
 
 // clang-format off

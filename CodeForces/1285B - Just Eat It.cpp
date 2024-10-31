@@ -130,36 +130,37 @@ void solve()
 {
     re(n);
     reV(v, n);
-    vp d;
 
-    for (int i = 1; i < n; i++)
+    ll max_end = 0;
+    ll mx = 0;
+    for (ll i = 1; i < n; i++)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
+        max_end += v[i];
+        if (mx < max_end)
+            mx = max_end;
+        if (max_end <= 0)
+            max_end = 0;
     }
+    ll a = mx;
 
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
+    max_end = 0;
+    mx = 0;
+    for (ll i = 0; i < n - 1; i++)
     {
-        ll k = d[i].first;
-        while (k > 0)
-        {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
-        }
+        max_end += v[i];
+        if (mx < max_end)
+            mx = max_end;
+        if (max_end <= 0)
+            max_end = 0;
     }
+    a = max(mx, a);
 
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    ll y = v_sum(v);
+
+    if (y > a)
+        cout << "YES" << nl;
+    else
+        cout << "NO" << nl;
 }
 
 // clang-format off
@@ -239,7 +240,7 @@ ll binpow(ll a, ll b, ll m) {
 ll kadane( vector<ll> arr,ll n) {
     ll max_end = 0;
     ll mx =0;
-    for(ll i =0;i<n;i++){
+    for(ll i = 0;i<n;i++){
         max_end+=arr[i];
         if(mx<max_end)
             mx = max_end;

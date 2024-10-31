@@ -130,36 +130,18 @@ void solve()
 {
     re(n);
     reV(v, n);
-    vp d;
 
-    for (int i = 1; i < n; i++)
+    auto it = min_element(v.begin(), v.end());
+    ll dist = distance(v.begin(), it);
+    for (auto i = it + 1; i != v.end(); i++)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
-    }
-
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
-    {
-        ll k = d[i].first;
-        while (k > 0)
+        if (*i < *(i - 1))
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            cout << -1 << nl;
+            return;
         }
     }
-
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    cout << dist << nl;
 }
 
 // clang-format off

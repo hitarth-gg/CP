@@ -125,41 +125,31 @@ void genPrefix(vll &v);
 // OTHERS: custom_hash
 /* ------------------------------------------------------ */
 
+ll MAXN = 1e6+10;
+vll spf(MAXN, -1);
+void pre() {
+    for (ll i = 2; i < MAXN; i++)
+            if (spf[i] == -1)
+                for (ll j = i; j < MAXN; j += i)
+                    if (spf[j] == -1)
+                        spf[j] = i;
+    // debug(spf[1000000]);
+}
+
 // clang-format on
 void solve()
 {
-    re(n);
-    reV(v, n);
-    vp d;
-
-    for (int i = 1; i < n; i++)
+    re(p, c);
+    ll sf = spf[p];
+    debug(sf);
+    if (sf <= c && sf != -1)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
+        cout << "NO" << nl;
     }
-
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
+    else
     {
-        ll k = d[i].first;
-        while (k > 0)
-        {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
-        }
+        cout << "YES" << nl;
     }
-
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
 }
 
 // clang-format off
@@ -170,6 +160,7 @@ int32_t main()
     clock_t begin = clock();
     int t=1; 
     cin >> t;
+    pre();
     while(t--)
     {
         solve();

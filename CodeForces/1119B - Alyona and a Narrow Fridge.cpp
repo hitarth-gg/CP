@@ -126,40 +126,71 @@ void genPrefix(vll &v);
 /* ------------------------------------------------------ */
 
 // clang-format on
+
+ll calcmax(vll v)
+{
+    ll n = v.size();
+    ll mx = 0;
+    for (int i = 0; i < n; i += 2)
+        mx += v[i];
+    n--;
+    debug(mx);
+    return mx;
+}
+
 void solve()
 {
-    re(n);
+    re(n, k);
     reV(v, n);
-    vp d;
 
-    for (int i = 1; i < n; i++)
+    vll x = v;
+    vsortrev(x);
+
+    ll ans = 0;
+    ll t = calcmax(x);
+
+    if (t <= k)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
+        ans = n;
+        cout << ans << nl;
+        return;
     }
 
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
+    for (int i = n - 1; i > 0; i--)
     {
-        ll k = d[i].first;
-        while (k > 0)
+        auto it = lower_bound(x.begin(), x.end(), v[i], greater<ll>());
+        x.erase(it);
+        ll t = calcmax(x);
+        if (t <= k)
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            cout << i << nl;
+            return;
         }
     }
 
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    // for (int i = n - 1; i >= 0; i--)
+    // {
+    //     if (!st.contains(v[i]))
+    //     {
+
+    //         ll a = v[i];
+    //         ll ix = -1;
+    //         ll val = -1;
+    //         for (int j = 0; j < i; i++)
+    //         {
+    //             if (v[j] > val)
+    //             {
+    //                 val = v[j];
+    //                 ix = i;
+    //             }
+    //         }
+    //         if (ix != -1)
+    //         {
+    //             st.insert(ix);
+    //             mx += v[i];
+    //         }
+    //     }
+    // }
 }
 
 // clang-format off
@@ -169,7 +200,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    cin >> t;
+    // cin >> t;
     while(t--)
     {
         solve();

@@ -128,38 +128,39 @@ void genPrefix(vll &v);
 // clang-format on
 void solve()
 {
-    re(n);
-    reV(v, n);
-    vp d;
+    re(n, k);
+    reV(v1, n);
+    reV(v2, n);
 
-    for (int i = 1; i < n; i++)
+    ll maxi = 0;
+    ll l = n - 1;
+    ll cnt = 0;
+    cnt += v1[l];
+
+    bool one = false;
+    if (v1[0] <= k)
+        one = true;
+    for (ll i = n - 1; i > 0; i--)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
-    }
-
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
-    {
-        ll k = d[i].first;
-        while (k > 0)
+        if (v1[i] <= k)
+            one = true;
+        l = min(i, l);
+        if (cnt == 0)
+            cnt += v1[i];
+        while (l > 0 && (v2[l - 1] % v2[l]) == 0 && (cnt + v1[l - 1] <= k))
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            l--;
+            cnt += v1[l];
+            maxi = max(maxi, i - l + 1);
         }
+        cnt -= v1[i];
     }
-
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    if (maxi == 0 && one)
+    {
+        cout << 1 << nl;
+        return;
+    }
+    cout << maxi << nl;
 }
 
 // clang-format off

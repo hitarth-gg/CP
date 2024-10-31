@@ -124,42 +124,86 @@ void genPrefix(vll &v);
 // ARRAY: apply_permutation
 // OTHERS: custom_hash
 /* ------------------------------------------------------ */
+vector<bool> c;
 
 // clang-format on
 void solve()
 {
     re(n);
-    reV(v, n);
-    vp d;
+    reV(v, n - 1);
 
-    for (int i = 1; i < n; i++)
+    if (v[n - 2] < n * (n + 1) / 2)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
+        v.push_back(n * (n + 1) / 2);
+        c.assign(n + 1, false);
+
+        c[v[0]] = true;
+        for (ll i = 1; i < n; i++)
+        {
+            ll tc = v[i] - v[i - 1];
+            if (tc <= n)
+                c[tc] = true;
+        }
+        debug(c);
+        for (ll i = 1; i <= n; i++)
+            if (!c[i])
+            {
+                cout << "NO" << nl;
+                return;
+            }
+        cout << "YES" << nl;
+        return;
     }
 
-    vsort(d);
+    c.assign(n + 1, false); // using global array to avoid runtime error (stack overflow)
 
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
+    vll f;
+
+    vsort(v);
+
+    for (ll i = 1; i < n - 1; i++)
     {
-        ll k = d[i].first;
-        while (k > 0)
+        ll tc = v[i] - v[i - 1];
+        if (tc > n || c[tc])
+            f.push_back(tc);
+        else
+            c[tc] = true;
+    }
+    ll count = 0, missing = 0;
+
+    for (int i = 1; i <= n; i++)
+    {
+        if (c[i] == false)
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            count++;
+            missing += i;
         }
     }
 
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    if (count == 3 && v[0] <= n && c[v[0]] == false)
+    {
+        count--;
+        missing -= v[0];
+    }
+
+    debug(f, v, c, count);
+
+    if (f.size() == 1)
+    {
+        if (f[0] == missing && count == 2)
+            cout << "YES" << nl;
+        else
+            cout << "NO" << nl;
+    }
+    else if (f.size() == 0)
+    {
+        if (v[0] == missing && count == 2)
+            cout << "YES" << nl;
+        else
+            cout << "NO" << nl;
+    }
+    else
+        cout << "NO" << nl;
 }
 
 // clang-format off
@@ -404,3 +448,4 @@ void genPrefix(vll &v)
     for (int i = 1; i < v.size(); i++)
         v[i] = v[i - 1] + v[i];
 }
+

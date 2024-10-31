@@ -124,42 +124,37 @@ void genPrefix(vll &v);
 // ARRAY: apply_permutation
 // OTHERS: custom_hash
 /* ------------------------------------------------------ */
+ll MAXN = 1e5 + 10;
+
+vll po(MAXN, 0);
+void pre()
+{
+    po[0] = 1;
+    for(int i = 1; i<MAXN; i++)
+        po[i] = (mod_mul(po[i-1], 2LL, MOD));
+}
 
 // clang-format on
 void solve()
 {
     re(n);
-    reV(v, n);
-    vp d;
-
-    for (int i = 1; i < n; i++)
+    reV(vn, n);
+    reV(vk, n);
+    for (int i = 0; i < n; i++)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
-    }
-
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
-    {
-        ll k = d[i].first;
-        while (k > 0)
+        if (vn[i] == 1 || (vk[i] == 0))
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            cout << 1 << nl;
+            continue;
         }
-    }
 
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+        ll n1 = vn[i];
+        ll k1 = vk[i];
+        if(k1 == 0 || k1 == n1)
+            cout << 1 << nl;
+        else
+            cout << po[k1] << nl;
+    }
 }
 
 // clang-format off
@@ -169,7 +164,8 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    cin >> t;
+    // cin >> t;
+    pre();
     while(t--)
     {
         solve();

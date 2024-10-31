@@ -125,41 +125,34 @@ void genPrefix(vll &v);
 // OTHERS: custom_hash
 /* ------------------------------------------------------ */
 
+
+
+
 // clang-format on
 void solve()
 {
-    re(n);
-    reV(v, n);
-    vp d;
+    re(n, m);
+    reS(s1);
+    reS(s2);
 
-    for (int i = 1; i < n; i++)
+    map<char, ll> mp1;
+    map<char, ll> mp2;
+
+    for(auto it : s1)
+        mp1[it]++;
+    for(auto it : s2)
+        mp2[it]++;
+
+    for(char c = 'a'; c<='z'; c++)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
-    }
-
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
-    {
-        ll k = d[i].first;
-        while (k > 0)
+        if(mp1[c] == 0 && mp2[c] == 0)
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            cout << "Yes" << nl;
+            return;
         }
     }
-
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    cout << "No" << nl;
+    
 }
 
 // clang-format off

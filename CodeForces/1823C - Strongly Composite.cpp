@@ -125,41 +125,50 @@ void genPrefix(vll &v);
 // OTHERS: custom_hash
 /* ------------------------------------------------------ */
 
+// ll MAXN = 1e7+5;
+// vll spf(MAXN, -1);
+
+void pre () {
+    // for (ll i = 2; i < MAXN; i++)
+    //         if (spf[i] == -1)
+    //             for (ll j = i; j < MAXN; j += i)
+    //                 if (spf[j] == -1)
+    //                     spf[j] = i;
+}
+
 // clang-format on
 void solve()
 {
     re(n);
     reV(v, n);
-    vp d;
 
-    for (int i = 1; i < n; i++)
+    map<ll, ll> mp;
+
+    for (auto it : v)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
-    }
-
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
-    {
-        ll k = d[i].first;
-        while (k > 0)
+        for (long long d = 2; d * d <= it; d++)
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            while (it % d == 0)
+            {
+                mp[d]++;
+                it /= d;
+            }
         }
+        if (it > 1)
+            mp[it]++;
     }
 
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    ll ans = 0;
+    ll tri = 0;
+    debug(mp);
+    for (auto it : mp)
+    {
+        ll k = (it.second - it.second % 2) / 2;
+        ans += k;
+        tri += it.second % 2;
+    }
+    ans += tri / 3;
+    cout << ans << nl;
 }
 
 // clang-format off
@@ -170,6 +179,7 @@ int32_t main()
     clock_t begin = clock();
     int t=1; 
     cin >> t;
+    pre();
     while(t--)
     {
         solve();

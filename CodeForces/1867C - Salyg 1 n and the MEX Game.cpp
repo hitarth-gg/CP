@@ -130,42 +130,51 @@ void solve()
 {
     re(n);
     reV(v, n);
-    vp d;
 
-    for (int i = 1; i < n; i++)
+    set<ll> st;
+
+    for (auto it : v)
+        st.insert(it);
+
+    ll mex = 0;
+
+    while (st.contains(mex))
+        mex++;
+
+    cout << mex << nl;
+
+    st.insert(mex);
+
+    while (st.contains(mex))
+        mex++;
+
+    while (true)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
-    }
+        ll k;
+        cin >> k;
 
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
-    {
-        ll k = d[i].first;
-        while (k > 0)
+        if (k == -1)
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            cout << nl;
+            return;
+        }
+
+        if (k < mex)
+            cout << k << nl;
+        else
+        {
+            st.erase(k);
+            cout << mex << nl;
+            while (st.contains(mex))
+                mex++;
         }
     }
-
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
 }
 
 // clang-format off
 int32_t main()
 {
-    fastio();
+    // fastio();
 
     clock_t begin = clock();
     int t=1; 

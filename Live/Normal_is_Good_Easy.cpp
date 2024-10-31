@@ -130,36 +130,65 @@ void solve()
 {
     re(n);
     reV(v, n);
-    vp d;
 
+    ll ans = n;
+
+    ll l = 0, r = 0;
+
+    ll cnt = 0;
+    // 1
     for (int i = 1; i < n; i++)
     {
-        ll t = v[i] - v[i - 1];
-        if (t < 0)
-            d.push_back({-t, i});
-    }
-
-    vsort(d);
-
-    ll last = 1;
-    vll ans;
-    debug(d);
-    for (int i = 0; i < d.size(); i++)
-    {
-        ll k = d[i].first;
-        while (k > 0)
+        if (v[i] == 1 && v[i - 1] == 1)
         {
-            ans.push_back(d[i].second);
-            k -= last;
-            last++;
+            cnt++;
+        }
+        else
+        {
+            if (cnt)
+            {
+                cnt++;
+                ans += cnt * (cnt + 1) / 2 - cnt;
+                cnt = 0;
+            }
         }
     }
 
-    for (int i = last; i <= n; i++)
-        ans.push_back(1);
-    for (auto it : ans)
-        cout << it + 1 << " ";
-    cout << nl;
+    if(cnt)
+    {
+        cnt++;
+        ans += cnt * (cnt + 1) / 2 - cnt;
+        cnt = 0;
+    }
+
+    // 2
+    cnt = 0;
+    for (int i = 1; i < n; i++)
+    {
+        if (v[i] == 2 && v[i - 1] == 2)
+        {
+            cnt++;
+            debug(cnt);
+        }
+        else
+        {
+            if (cnt)
+            {
+                cnt++;
+                ans += cnt * (cnt + 1) / 2 - cnt;
+                cnt = 0;
+            }
+        }
+    }
+
+    if(cnt)
+    {
+        cnt++;
+        ans += cnt * (cnt + 1) / 2 - cnt;
+        cnt = 0;
+    }
+
+    cout << ans << nl;
 }
 
 // clang-format off
