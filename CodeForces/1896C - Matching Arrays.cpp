@@ -1,4 +1,6 @@
 // clang-format off
+#pragma GCC optimize("Ofast,inline,unroll-loops,fast-math")
+
 #include <bits/stdc++.h>
 #include <ext/pb_ds/tree_policy.hpp>
 #include <ext/pb_ds/assoc_container.hpp>
@@ -86,7 +88,7 @@ void print(const T& first, const Args&... rest) {
 
 #define bitcount __builtin_popcountll
 #define bitCheck(n,k) ((n>>k)&1)
-#define bitSet(n,k) (n|(1LL<<k))
+#define bitSet(n,k) (n|(1<<k))
 #define bitClear(n,k) (n&(~(1<<k)))
 #define bitFlip(n,k) (n^(1<<k))
 
@@ -125,17 +127,46 @@ void genPrefix(vll &v);
 // OTHERS: custom_hash
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    // [i = 56 || bitSet(x, i) = 16777216]
-    // 2^56 = 72057594037927900
-    ll x = 0;
-    ll a = bitSet(x, 56);
-    debug(a);
+    re(n, x);
+    reV(a2, n);
+    reV(b, n);
+    vp a;
+    for (int i = 0; i < n; i++)
+        a.pb({a2[i], i});
+
+    vsort(a);
+    vsort(b);
+    vll ans(n, 0);
+
+    for(int i = n-x; i<n; i++)
+        ans[i] = b[i-(n-x)];
+
+    for(int i = 0; i<n-x; i++)
+        ans[i] = b[i+x];
+
+    ll bty = 0;
+    debug(ans);
+    for(int i = 0; i<n; i++)
+        bty += int(a[i].first > ans[i]);
+    vll ans2(n, 0);
+    if(bty == x)
+    {
+        cout << "YES" << nl;
+        for(int i = 0; i<n;i++)
+        {
+            ans2[a[i].second] = ans[i];
+        }
+
+        printVec(ans2);
+    }
+    else
+        cout << "NO" << nl;
+
+    
+ 
 }
 
 // clang-format off
@@ -145,7 +176,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

@@ -42,7 +42,8 @@ void print(const T& first, const Args&... rest) {
 }
 /* ------------------------------------------------------ */
 /* ------------------------ debug ----------------------- */
-#ifndef ONLINE_JUDGE
+// #ifndef ONLINE_JUDGE
+#ifdef hitarth
 #include "D:\Compi\Headers\debug3.h"
 #else
 #define debug(...)
@@ -85,10 +86,10 @@ void print(const T& first, const Args&... rest) {
 #define UNIQUE(v) vsort(v), v.erase(unique(v.begin(), v.end()), v.end());
 
 #define bitcount __builtin_popcountll
-#define bitCheck(n,k) ((n>>k)&1)
+#define bitCheck(n,k) ((n>>k)&1LL)
 #define bitSet(n,k) (n|(1LL<<k))
-#define bitClear(n,k) (n&(~(1<<k)))
-#define bitFlip(n,k) (n^(1<<k))
+#define bitClear(n,k) (n&(~(1LL<<k)))
+#define bitFlip(n,k) (n^(1LL<<k))
 
 typedef tree<pair<ll, ll>, null_type, less<pair<ll, ll>>, rb_tree_tag,tree_order_statistics_node_update> ordered_set; // find_by_order, order_of_key
 /* ------------------------------------------------------ */
@@ -125,17 +126,40 @@ void genPrefix(vll &v);
 // OTHERS: custom_hash
 /* ------------------------------------------------------ */
 
+vp expand(vll &v, ll m)
+{
+    vp res;
 
-
+    for(auto it : v)
+    {
+        ll x = it;
+        ll cnt = 1;
+        while(x%m==0)
+        {
+            x=x/m;
+            cnt*=m;
+        }
+        if(res.size() > 0 && res.back().first == x)
+            res.back().second+=cnt;
+        else
+            res.push_back({x, cnt});
+    }
+    return res;
+}
 
 // clang-format on
 void solve()
 {
-    // [i = 56 || bitSet(x, i) = 16777216]
-    // 2^56 = 72057594037927900
-    ll x = 0;
-    ll a = bitSet(x, 56);
-    debug(a);
+    re(n, k);
+    reV(a, n);
+    re(m);
+    reV(b, m);
+    vp x = expand(a, k);
+    vp y = expand(b, k);
+    if(x==y)
+        cout << "Yes" << nl;
+    else
+        cout << "No" << nl;
 }
 
 // clang-format off
@@ -145,7 +169,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

@@ -42,7 +42,8 @@ void print(const T& first, const Args&... rest) {
 }
 /* ------------------------------------------------------ */
 /* ------------------------ debug ----------------------- */
-#ifndef ONLINE_JUDGE
+// #ifndef ONLINE_JUDGE
+#ifdef hitarth
 #include "D:\Compi\Headers\debug3.h"
 #else
 #define debug(...)
@@ -85,10 +86,10 @@ void print(const T& first, const Args&... rest) {
 #define UNIQUE(v) vsort(v), v.erase(unique(v.begin(), v.end()), v.end());
 
 #define bitcount __builtin_popcountll
-#define bitCheck(n,k) ((n>>k)&1)
+#define bitCheck(n,k) ((n>>k)&1LL)
 #define bitSet(n,k) (n|(1LL<<k))
-#define bitClear(n,k) (n&(~(1<<k)))
-#define bitFlip(n,k) (n^(1<<k))
+#define bitClear(n,k) (n&(~(1LL<<k)))
+#define bitFlip(n,k) (n^(1LL<<k))
 
 typedef tree<pair<ll, ll>, null_type, less<pair<ll, ll>>, rb_tree_tag,tree_order_statistics_node_update> ordered_set; // find_by_order, order_of_key
 /* ------------------------------------------------------ */
@@ -125,17 +126,62 @@ void genPrefix(vll &v);
 // OTHERS: custom_hash
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    // [i = 56 || bitSet(x, i) = 16777216]
-    // 2^56 = 72057594037927900
-    ll x = 0;
-    ll a = bitSet(x, 56);
-    debug(a);
+    re(n);
+    reS(a);
+    reS(b);
+
+    ll same = 0;
+
+    loop(n)
+        same += a[i] == b[i];
+
+    vp ans;
+
+    if (same != n && same != 0)
+    {
+        cout << "NO" << nl;
+        return;
+    }
+
+    ll l = 0, r = 0;
+    while (l < n && r < n)
+    {
+        if (a[l] != '1')
+        {
+            l++;
+            continue;
+        }
+        else
+        {
+            r = l;
+            while (a[r] == '1')
+                r++;
+            ans.push_back({l + 1, r});
+            l = r;
+        }
+    }
+
+    if (same == n && (ans.size() & 1) == 1)
+    {
+        ans.push_back({1, n});
+        ans.push_back({1, 1});
+        ans.push_back({2, n});
+    }
+    else if (same == 0 && (ans.size() & 1) == 0)
+    {
+        ans.push_back({1, n});
+        ans.push_back({1, 1});
+        ans.push_back({2, n});
+    }
+    cout << "YES" << nl;
+    cout << ans.size() << nl;
+    for(auto it : ans)
+        cout << it.first << " " << it.second << nl;
+
+
 }
 
 // clang-format off
@@ -145,7 +191,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

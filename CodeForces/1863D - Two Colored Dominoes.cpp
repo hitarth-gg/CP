@@ -86,7 +86,7 @@ void print(const T& first, const Args&... rest) {
 
 #define bitcount __builtin_popcountll
 #define bitCheck(n,k) ((n>>k)&1)
-#define bitSet(n,k) (n|(1LL<<k))
+#define bitSet(n,k) (n|(1<<k))
 #define bitClear(n,k) (n&(~(1<<k)))
 #define bitFlip(n,k) (n^(1<<k))
 
@@ -125,17 +125,63 @@ void genPrefix(vll &v);
 // OTHERS: custom_hash
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    // [i = 56 || bitSet(x, i) = 16777216]
-    // 2^56 = 72057594037927900
+    re(n, m);
+
+    vector<string> v(n);
+    loop(n)
+            cin >>
+        v[i];
+
     ll x = 0;
-    ll a = bitSet(x, 56);
-    debug(a);
+
+    for (int i = 0; i < m; i++)
+    {
+        ll cnt = 0;
+        for (int j = 0; j < n; j++)
+        {
+            if (v[j][i] != '.')
+                cnt++;
+            if (v[j][i] == 'L')
+            {
+                v[j][i] = x ? 'W' : 'B';
+                v[j][i + 1] = x ? 'B' : 'W';
+                x ^= 1;
+            }
+        }
+        if (cnt % 2 == 1)
+        {
+            cout << "-1" << nl;
+            return;
+        }
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        ll cnt = 0;
+        for (int j = 0; j < m; j++)
+        {
+            if (v[i][j] != '.')
+                cnt++;
+
+            if (v[i][j] == 'U')
+            {
+                v[i][j] = x ? 'W' : 'B';
+                v[i+1][j] = x ? 'B' : 'W';
+                x ^= 1;
+            }
+        }
+        if (cnt % 2 == 1)
+        {
+            cout << "-1" << nl;
+            return;
+        }
+    }
+
+    for (int i = 0; i < n; i++)
+        cout << v[i] << nl;
 }
 
 // clang-format off
@@ -145,7 +191,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

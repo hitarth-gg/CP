@@ -86,7 +86,7 @@ void print(const T& first, const Args&... rest) {
 
 #define bitcount __builtin_popcountll
 #define bitCheck(n,k) ((n>>k)&1)
-#define bitSet(n,k) (n|(1LL<<k))
+#define bitSet(n,k) (n|(1<<k))
 #define bitClear(n,k) (n&(~(1<<k)))
 #define bitFlip(n,k) (n^(1<<k))
 
@@ -125,17 +125,30 @@ void genPrefix(vll &v);
 // OTHERS: custom_hash
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    // [i = 56 || bitSet(x, i) = 16777216]
-    // 2^56 = 72057594037927900
-    ll x = 0;
-    ll a = bitSet(x, 56);
-    debug(a);
+    re(n);
+    reV(v, n);
+    vsort(v);
+    ll a = v[0], b = v[n - 1];
+
+    vll ans;
+    while (a != b)
+    {
+        if (a % 2 == 1)
+            ans.push_back(1);
+        else
+            ans.push_back(0);
+        
+        a = (a+ans.back())/2;
+        b = (b+ans.back())/2;
+    }
+    cout << ans.size() << nl;
+    if(ans.size() <=n && ans.size() > 0)
+    {
+        printVec(ans);
+    }
 }
 
 // clang-format off
@@ -145,7 +158,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

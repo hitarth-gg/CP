@@ -86,7 +86,7 @@ void print(const T& first, const Args&... rest) {
 
 #define bitcount __builtin_popcountll
 #define bitCheck(n,k) ((n>>k)&1)
-#define bitSet(n,k) (n|(1LL<<k))
+#define bitSet(n,k) (n|(1<<k))
 #define bitClear(n,k) (n&(~(1<<k)))
 #define bitFlip(n,k) (n^(1<<k))
 
@@ -125,17 +125,67 @@ void genPrefix(vll &v);
 // OTHERS: custom_hash
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
+string genNum(vll &v, ll l, ll r)
+{
+    string s = "";
+    for (ll i = l; i <= r; i++)
+        s += to_string(v[i]);
+    return s;
+}
 void solve()
 {
-    // [i = 56 || bitSet(x, i) = 16777216]
-    // 2^56 = 72057594037927900
-    ll x = 0;
-    ll a = bitSet(x, 56);
-    debug(a);
+    re(n);
+    reV(v, n);
+
+    ll mx = 0, mx_ix = -1;
+    fr(i, 1, n)
+    {
+        if (v[i] > mx)
+            mx = v[i], mx_ix = i;
+    }
+    vll ans;
+
+    for (int i = mx_ix; i < n && mx_ix != -1; i++)
+        ans.push_back(v[i]);
+
+    if (mx_ix != -1)
+        ans.push_back(v[mx_ix - 1]);
+    ll r = mx_ix - 2;
+    while (r > 0 && r < n && v[r] >= v[0])
+    {
+        ans.push_back(v[r]);
+        r--;
+    }
+
+    if (mx_ix == -1)
+        r = 0;
+    for (int i = 0; i <= r; i++)
+        ans.push_back(v[i]);
+    debug(ans);
+    if (mx_ix == n - 1)
+    {
+        vll ans2;
+        ans2.push_back(v[n - 1]);
+        for (int i = 0; i < n - 1; i++)
+            ans2.push_back(v[i]);
+
+        for (int i = 0; i < n; i++)
+        {
+            if (ans2[i] > ans[i])
+            {
+                ans = ans2;
+                break;
+            }
+            else
+            {
+                if (ans2[i] < ans[i])
+                    break;
+            }
+        }
+    }
+
+    printVec(ans);
 }
 
 // clang-format off
@@ -145,7 +195,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

@@ -1,4 +1,5 @@
 // clang-format off
+#pragma GCC optimize("O3,unroll-loops")
 #include <bits/stdc++.h>
 #include <ext/pb_ds/tree_policy.hpp>
 #include <ext/pb_ds/assoc_container.hpp>
@@ -86,7 +87,7 @@ void print(const T& first, const Args&... rest) {
 
 #define bitcount __builtin_popcountll
 #define bitCheck(n,k) ((n>>k)&1)
-#define bitSet(n,k) (n|(1LL<<k))
+#define bitSet(n,k) (n|(1<<k))
 #define bitClear(n,k) (n&(~(1<<k)))
 #define bitFlip(n,k) (n^(1<<k))
 
@@ -131,11 +132,22 @@ void genPrefix(vll &v);
 // clang-format on
 void solve()
 {
-    // [i = 56 || bitSet(x, i) = 16777216]
-    // 2^56 = 72057594037927900
-    ll x = 0;
-    ll a = bitSet(x, 56);
-    debug(a);
+    re(n);
+    reV(v, n);
+    vll s(n, 0);
+    s[n-1] = v[n-1];
+    for(int i = n-2; i>=0; i--)
+        s[i] = s[i+1] + v[i];
+    
+    ll ans = s[0];
+
+    for(int i = 0; i<n; i++)
+    {
+        ll k = s[i] - v[i];
+        if(k > 0)
+            ans+=k;
+    }
+    cout << ans << nl;
 }
 
 // clang-format off
@@ -145,7 +157,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

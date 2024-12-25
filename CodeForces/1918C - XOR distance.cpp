@@ -42,7 +42,8 @@ void print(const T& first, const Args&... rest) {
 }
 /* ------------------------------------------------------ */
 /* ------------------------ debug ----------------------- */
-#ifndef ONLINE_JUDGE
+// #ifndef ONLINE_JUDGE
+#ifdef hitarth
 #include "D:\Compi\Headers\debug3.h"
 #else
 #define debug(...)
@@ -85,10 +86,10 @@ void print(const T& first, const Args&... rest) {
 #define UNIQUE(v) vsort(v), v.erase(unique(v.begin(), v.end()), v.end());
 
 #define bitcount __builtin_popcountll
-#define bitCheck(n,k) ((n>>k)&1)
+#define bitCheck(n,k) ((n>>k)&1LL)
 #define bitSet(n,k) (n|(1LL<<k))
-#define bitClear(n,k) (n&(~(1<<k)))
-#define bitFlip(n,k) (n^(1<<k))
+#define bitClear(n,k) (n&(~(1LL<<k)))
+#define bitFlip(n,k) (n^(1LL<<k))
 
 typedef tree<pair<ll, ll>, null_type, less<pair<ll, ll>>, rb_tree_tag,tree_order_statistics_node_update> ordered_set; // find_by_order, order_of_key
 /* ------------------------------------------------------ */
@@ -131,11 +132,49 @@ void genPrefix(vll &v);
 // clang-format on
 void solve()
 {
-    // [i = 56 || bitSet(x, i) = 16777216]
-    // 2^56 = 72057594037927900
+    re(a, b, r);
+    bool num;
+    ll ix = -1;
+    for (int i = 63; i >= 0; i--)
+    {
+        if (bitCheck(a, i) == 1 && bitCheck(b, i) == 0)
+        {
+            ix = i;
+            num = 1;
+            break;
+        }
+        else if (bitCheck(a, i) == 0 && bitCheck(b, i) == 1)
+        {
+            ix = i;
+            num = 0;
+            break;
+        }
+    }
     ll x = 0;
-    ll a = bitSet(x, 56);
-    debug(a);
+    if (num == 0)
+    {
+        for (int i = ix - 1; i >= 0; i--)
+        {
+            if (bitCheck(a, i) == 0 && bitCheck(b, i) == 1)
+            {
+                if (bitSet(x, i) <= r)
+                    x = bitSet(x, i);
+            }
+        }
+    }
+    else
+    {
+        for (int i = ix - 1; i >= 0; i--)
+        {
+            if (bitCheck(a, i) == 1 && bitCheck(b, i) == 0)
+            {
+                if (bitSet(x, i) <= r)
+                    x = bitSet(x, i);
+            }
+        }
+    }
+    ll ans = abs((a ^ x) - (b ^ x));
+    cout << ans << nl;
 }
 
 // clang-format off
@@ -145,7 +184,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

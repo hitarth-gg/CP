@@ -86,7 +86,7 @@ void print(const T& first, const Args&... rest) {
 
 #define bitcount __builtin_popcountll
 #define bitCheck(n,k) ((n>>k)&1)
-#define bitSet(n,k) (n|(1LL<<k))
+#define bitSet(n,k) (n|(1<<k))
 #define bitClear(n,k) (n&(~(1<<k)))
 #define bitFlip(n,k) (n^(1<<k))
 
@@ -125,17 +125,52 @@ void genPrefix(vll &v);
 // OTHERS: custom_hash
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    // [i = 56 || bitSet(x, i) = 16777216]
-    // 2^56 = 72057594037927900
-    ll x = 0;
-    ll a = bitSet(x, 56);
-    debug(a);
+    re(n, k);
+    reV(v, n);
+
+    vll same;
+    vector<ll> f(n+1, 0);
+    for (int i = 1; i <= n; i++)
+    {
+        if (v[i-1] == 1)
+            f[i] = f[i - 1] + 1;
+        else
+            f[i] = f[i - 1];
+    }
+
+    vll p(n + 1, 0);
+
+    for (ll i = 1; i <= n; i++)
+        p[i] = p[i - 1] + v[i - 1];
+
+    while (k--)
+    {
+        re(a, b);
+        if (a == b)
+        {
+            cout << "NO" << nl;
+            continue;
+        }
+        ll k = (b - a + 1) / 2;
+        ll ones = f[b] - f[a - 1];
+        if (ones > k)
+        {
+            ll extra = ones - k;
+            ll rem_non_1s = b - a + 1 - ones;
+            ll rem_non_1s_sum = p[b] - p[a - 1] - ones;
+            ll plugs = rem_non_1s_sum - rem_non_1s;
+            debug(extra, rem_non_1s, rem_non_1s_sum, plugs);
+            if (plugs < ones)
+            {
+                cout << "NO" << nl;
+                continue;
+            }
+        }
+        cout << "YES" << nl;
+    }
 }
 
 // clang-format off
@@ -145,7 +180,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

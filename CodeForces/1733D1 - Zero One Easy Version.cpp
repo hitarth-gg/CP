@@ -42,7 +42,8 @@ void print(const T& first, const Args&... rest) {
 }
 /* ------------------------------------------------------ */
 /* ------------------------ debug ----------------------- */
-#ifndef ONLINE_JUDGE
+// #ifndef ONLINE_JUDGE
+#ifdef hitarth
 #include "D:\Compi\Headers\debug3.h"
 #else
 #define debug(...)
@@ -85,10 +86,10 @@ void print(const T& first, const Args&... rest) {
 #define UNIQUE(v) vsort(v), v.erase(unique(v.begin(), v.end()), v.end());
 
 #define bitcount __builtin_popcountll
-#define bitCheck(n,k) ((n>>k)&1)
+#define bitCheck(n,k) ((n>>k)&1LL)
 #define bitSet(n,k) (n|(1LL<<k))
-#define bitClear(n,k) (n&(~(1<<k)))
-#define bitFlip(n,k) (n^(1<<k))
+#define bitClear(n,k) (n&(~(1LL<<k)))
+#define bitFlip(n,k) (n^(1LL<<k))
 
 typedef tree<pair<ll, ll>, null_type, less<pair<ll, ll>>, rb_tree_tag,tree_order_statistics_node_update> ordered_set; // find_by_order, order_of_key
 /* ------------------------------------------------------ */
@@ -131,11 +132,33 @@ void genPrefix(vll &v);
 // clang-format on
 void solve()
 {
-    // [i = 56 || bitSet(x, i) = 16777216]
-    // 2^56 = 72057594037927900
-    ll x = 0;
-    ll a = bitSet(x, 56);
-    debug(a);
+    re(n, x, y);
+    reS(a);
+    reS(b);
+
+    ll l = 0, r=n-1;
+    ll diff = 0;
+    ll ans = 0;
+    bool consecutive = false;
+    fr(i,0,n)
+    {
+        if(a[i]!=b[i])
+            diff++;
+        if(i+1<n && a[i]!=b[i] && a[i+1] != b[i+1])
+            consecutive = true;
+    }
+
+    if(diff&1)
+    {
+        cout << -1 << nl;
+        return;
+    }
+    ans = diff*y/2;
+    if(diff==2 && consecutive)
+    {
+        ans = min(x, 2*y);
+    }
+    cout << ans << nl;
 }
 
 // clang-format off
@@ -145,7 +168,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

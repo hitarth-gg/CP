@@ -42,7 +42,8 @@ void print(const T& first, const Args&... rest) {
 }
 /* ------------------------------------------------------ */
 /* ------------------------ debug ----------------------- */
-#ifndef ONLINE_JUDGE
+// #ifndef ONLINE_JUDGE
+#ifdef hitarth
 #include "D:\Compi\Headers\debug3.h"
 #else
 #define debug(...)
@@ -85,10 +86,10 @@ void print(const T& first, const Args&... rest) {
 #define UNIQUE(v) vsort(v), v.erase(unique(v.begin(), v.end()), v.end());
 
 #define bitcount __builtin_popcountll
-#define bitCheck(n,k) ((n>>k)&1)
+#define bitCheck(n,k) ((n>>k)&1LL)
 #define bitSet(n,k) (n|(1LL<<k))
-#define bitClear(n,k) (n&(~(1<<k)))
-#define bitFlip(n,k) (n^(1<<k))
+#define bitClear(n,k) (n&(~(1LL<<k)))
+#define bitFlip(n,k) (n^(1LL<<k))
 
 typedef tree<pair<ll, ll>, null_type, less<pair<ll, ll>>, rb_tree_tag,tree_order_statistics_node_update> ordered_set; // find_by_order, order_of_key
 /* ------------------------------------------------------ */
@@ -125,17 +126,57 @@ void genPrefix(vll &v);
 // OTHERS: custom_hash
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    // [i = 56 || bitSet(x, i) = 16777216]
-    // 2^56 = 72057594037927900
-    ll x = 0;
-    ll a = bitSet(x, 56);
-    debug(a);
+    re(n);
+    reS(a);
+    reS(b);
+
+    string aa;
+    string bb;
+    vll ai, bi;
+    vector<vll> p(n + 1, vll(3, 0));
+
+    loop(n)
+    {
+        if (a[i] != 'b')
+            aa.push_back(a[i]);
+        else
+            ai.push_back(i);
+        if (b[i] != 'b')
+            bb.push_back(b[i]);
+        else
+            bi.push_back(i);
+    }
+
+    if (aa != bb)
+    {
+        cout << "NO" << nl;
+        return;
+    }
+
+    for (int i = 1; i <= n; i++)
+        p[i] = p[i - 1], p[i][a[i - 1] - 'a']++;
+
+    for (int i = 0; i < ai.size(); i++)
+    {
+        ll ixa = ai[i];
+        ll ixb = bi[i];
+
+        if (ixa < ixb && p[ixb + 1]['a' - 'a'] - p[ixa]['a' - 'a'] != 0)
+        {
+            cout << "NO" << nl;
+            return;
+        }
+        else if (ixa > ixb && p[ixa + 1]['c' - 'a'] - p[ixb]['c' - 'a'] != 0)
+        {
+            cout << "NO" << nl;
+            return;
+        }
+    }
+
+    cout << "YES" << nl;
 }
 
 // clang-format off
@@ -145,7 +186,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

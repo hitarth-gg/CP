@@ -86,7 +86,7 @@ void print(const T& first, const Args&... rest) {
 
 #define bitcount __builtin_popcountll
 #define bitCheck(n,k) ((n>>k)&1)
-#define bitSet(n,k) (n|(1LL<<k))
+#define bitSet(n,k) (n|(1<<k))
 #define bitClear(n,k) (n&(~(1<<k)))
 #define bitFlip(n,k) (n^(1<<k))
 
@@ -125,17 +125,80 @@ void genPrefix(vll &v);
 // OTHERS: custom_hash
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    // [i = 56 || bitSet(x, i) = 16777216]
-    // 2^56 = 72057594037927900
-    ll x = 0;
-    ll a = bitSet(x, 56);
-    debug(a);
+    re(n);
+    reS(s);
+
+    map<char, queue<ll>> m;
+
+    for (int i = 0; i < n; i++)
+        m[s[i]].push(i);
+
+    bool poss = false;
+
+    debug(m);
+
+    if (m['N'].size() && m['S'].size() && m['W'].size() && m['E'].size())
+    {
+        poss = true;
+        s[m['N'].front()] = 'R';
+        m['N'].pop();
+
+        s[m['S'].front()] = 'R';
+        m['S'].pop();
+
+        s[m['W'].front()] = 'H';
+        m['W'].pop();
+
+        s[m['E'].front()] = 'H';
+        m['E'].pop();
+    }
+    else
+    {
+        debug(s);
+        for (auto it : "NSWE")
+        {
+            if (m[it].size() >= 2)
+            {
+                poss = true;
+
+                s[m[it].front()] = 'R';
+                m[it].pop();
+
+                s[m[it].front()] = 'H';
+                m[it].pop();
+            }
+        }
+    }
+
+    if (abs((ll)m['N'].size() - (ll)m['S'].size()) % 2 == 0 && abs((ll)m['W'].size() - (ll)m['E'].size()) % 2 == 0 && poss)
+    {
+        for (auto it : "NSWE")
+        {
+            bool pl = 0;
+            while (!m[it].empty())
+            {
+                if (pl)
+                    s[m[it].front()] = 'R';
+                else
+                    s[m[it].front()] = 'H';
+
+                m[it].pop();
+                pl = !pl;
+            }
+        }
+    }
+    else
+        poss = false;
+
+    if (poss)
+    {
+        cout << s << nl;
+    }
+    else
+        cout << "NO\n";
 }
 
 // clang-format off
@@ -145,7 +208,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

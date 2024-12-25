@@ -86,7 +86,7 @@ void print(const T& first, const Args&... rest) {
 
 #define bitcount __builtin_popcountll
 #define bitCheck(n,k) ((n>>k)&1)
-#define bitSet(n,k) (n|(1LL<<k))
+#define bitSet(n,k) (n|(1<<k))
 #define bitClear(n,k) (n&(~(1<<k)))
 #define bitFlip(n,k) (n^(1<<k))
 
@@ -124,18 +124,62 @@ void genPrefix(vll &v);
 // ARRAY: apply_permutation
 // OTHERS: custom_hash
 /* ------------------------------------------------------ */
-
-
-
+ll MAXN = 2*1e5 + 10;
+vector<bool> dp(MAXN, false);
+void pre()
+{
+    // dp[0] = 1;
+    // for(int i=3; i<=4; i++)
+    // {
+    //     for(int j = 0; j<MAXN; j++)
+    //     {
+    //         if(i<=j)
+    //             dp[j] = dp[j] | dp[j-i];
+    //     }
+    // }
+    // debug(dp);
+}
 
 // clang-format on
 void solve()
 {
-    // [i = 56 || bitSet(x, i) = 16777216]
-    // 2^56 = 72057594037927900
-    ll x = 0;
-    ll a = bitSet(x, 56);
-    debug(a);
+    re(n, k);
+    reS(s);
+    reS(t);
+
+    map<char, ll> ms;
+    map<char, ll> mt;
+    for (auto c : s)
+        ms[c]++;
+    for (auto c : t)
+        mt[c]++;
+
+    for (auto it : ms)
+    {
+        if (it.second != mt[it.first])
+        {
+            cout << "NO" << nl;
+            return;
+        }
+    }
+
+    if (s == t || s.size() > 5)
+    {
+        cout << "YES" << nl;
+        return;
+    }
+    bool f = true;
+    if (s.size() == 5 && s[2] != t[2])
+        f = false;
+    if (s.size() == 4 && (s[1] != t[1] || s[2] != t[2]))
+        f = false;
+    if (s.size() <= 3)
+        f = false;
+
+    if (f)
+        cout << "YES" << nl;
+    else
+        cout << "NO" << nl;
 }
 
 // clang-format off
@@ -145,7 +189,8 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
+    pre();
     while(t--)
     {
         solve();

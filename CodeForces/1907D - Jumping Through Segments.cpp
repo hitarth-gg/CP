@@ -86,7 +86,7 @@ void print(const T& first, const Args&... rest) {
 
 #define bitcount __builtin_popcountll
 #define bitCheck(n,k) ((n>>k)&1)
-#define bitSet(n,k) (n|(1LL<<k))
+#define bitSet(n,k) (n|(1<<k))
 #define bitClear(n,k) (n&(~(1<<k)))
 #define bitFlip(n,k) (n^(1<<k))
 
@@ -126,16 +126,74 @@ void genPrefix(vll &v);
 /* ------------------------------------------------------ */
 
 
-
+// ll first_index(ll l, ll r, vll &v, bool (&comp)(ll, ll), ll target)
+// {
+//     while (l < r)
+//     {
+//         ll mid = (l + r) / 2;      // floor
+//         if (comp(v[mid], target))  // if v[mid] < target
+//             l = mid + 1;
+//         else                       // if v[mid] >= target
+//             r = mid;
+//     }
+//     return (comp(l, target)) ? l : -1;
+// }
 
 // clang-format on
 void solve()
 {
-    // [i = 56 || bitSet(x, i) = 16777216]
-    // 2^56 = 72057594037927900
-    ll x = 0;
-    ll a = bitSet(x, 56);
-    debug(a);
+    re(n);
+    vp v(n);
+    loop(n)
+            cin >>
+        v[i].first >> v[i].second;
+
+    ll l = 0, r = 1e9 + 1;
+
+    auto check = [&](ll mid)
+    {
+        ll a = 0, b = mid;
+        debug(a, b);
+        for (auto it : v)
+        {
+            if (a <= it.first && it.first <= b)
+            {
+                a = it.first - mid;
+                b = min(it.second, b) + mid;
+            }
+            else if (a <= it.second && it.second <= b)
+            {
+                b = it.second + mid;
+                a = max(it.first, a) - mid;
+            }
+            else if(it.first<=a && it.second>=b)
+            {
+                a=a-mid;
+                b=b+mid;
+            }
+            else
+                return false;
+            debug(a, b);
+
+        }
+        return true;
+    };
+
+    while (l < r)
+    {
+        ll mid = (l + r) / 2;
+        if (check(mid))
+            r = mid;
+        else
+            l = mid + 1;
+    }
+
+    debug(check(5));
+
+    if (check(l))
+        cout << l << nl;
+    else
+        cout << 0 << nl;
 }
 
 // clang-format off
@@ -145,7 +203,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

@@ -86,7 +86,7 @@ void print(const T& first, const Args&... rest) {
 
 #define bitcount __builtin_popcountll
 #define bitCheck(n,k) ((n>>k)&1)
-#define bitSet(n,k) (n|(1LL<<k))
+#define bitSet(n,k) (n|(1<<k))
 #define bitClear(n,k) (n&(~(1<<k)))
 #define bitFlip(n,k) (n^(1<<k))
 
@@ -125,17 +125,139 @@ void genPrefix(vll &v);
 // OTHERS: custom_hash
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    // [i = 56 || bitSet(x, i) = 16777216]
-    // 2^56 = 72057594037927900
-    ll x = 0;
-    ll a = bitSet(x, 56);
-    debug(a);
+    re(n);
+    ll bs = 0;
+
+    vll v(n, 0);
+
+    if (n % 2 == 0)
+    {
+        if (__builtin_popcountll(n) == 1)
+        {
+            /*  Last 5 nums :
+                | : 1 0 0 0 0 0
+                & : 0 1 1 1 1 1     => k
+                | : 0 1 1 1 1 0
+                & : 0 0 0 0 0 1
+                | : 0 0 0 0 1 1
+             */
+
+            ll k = n;
+            for (int i = 0; i < 64; i++)
+            {
+                if (bitCheck(k, i))
+                {
+                    k = bitClear(k, i);
+                    break;
+                }
+                else
+                {
+                    k = bitSet(k, i);
+                }
+            }
+
+            v[n - 1] = n;
+            v[n - 2] = k;
+            v[n - 3] = bitClear(k, 0);
+            v[n - 4] = 1;
+            v[n - 5] = 3;
+
+            ll fill_with = 2;
+            for (int i = 0; i < n - 5; i++)
+            {
+                if (fill_with != k && fill_with != bitClear(k, 0) && fill_with != 3)
+                    v[i] = fill_with++;
+                else
+                {
+                    fill_with++;
+                    i--;
+                }
+            }
+        }
+        else
+        {
+            /* Last 3 nums :
+                | : 1 0 0 1 0 0     = n
+                & : 0 1 1 0 1 1
+                | : 0 1 1 1 1 1
+             */
+            ll k = n;
+            ll ix_of_1 = -1;
+            bool hit = false;
+            for (int i = 63; i >= 0; i--)
+            {
+                if (bitCheck(k, i))
+                    hit = true;
+
+                if (hit)
+                {
+                    if (bitCheck(k, i))
+                    {
+                        k = bitClear(k, i);
+                        ix_of_1 = i;
+                    }
+                    else
+                        k = bitSet(k, i);
+                }
+            }
+
+            v[n - 1] = n;
+            v[n - 2] = k;
+            v[n - 3] = bitSet(k, ix_of_1);
+
+            ll fill_with = 1;
+            for (int i = 0; i < n - 3; i++)
+            {
+                if (fill_with != k && fill_with != bitSet(k, ix_of_1))
+                    v[i] = fill_with++;
+                else
+                {
+                    fill_with++;
+                    i--;
+                }
+            }
+        }
+    }
+    else
+    {
+        /* Last 4 nums :
+            & : 1 0 0 0 1   = n
+            | : 1 0 0 0 0
+            & : 0 0 0 0 1
+
+         */
+        v[n - 1] = n;
+        v[n - 2] = bitClear(n, 0);
+        v[n - 3] = 1;
+        v[n - 4] = 3;
+
+        ll fill_with = 2;
+        for (int i = 0; i < n - 4; i++)
+        {
+            if (fill_with != bitClear(n, 0) && fill_with != 3)
+                v[i] = fill_with++;
+            else
+            {
+                fill_with++;
+                i--;
+            }
+        }
+    }
+
+    ll ans = 0;
+
+    for (int i = 0; i < n; i++)
+    {
+        if (i % 2 == 0)
+            ans = ans & v[i];
+        else
+            ans = ans | v[i];
+    }
+    cout << ans << nl;
+    printVec(v);
 }
 
 // clang-format off
@@ -145,7 +267,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

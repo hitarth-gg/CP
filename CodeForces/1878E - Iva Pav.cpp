@@ -86,7 +86,7 @@ void print(const T& first, const Args&... rest) {
 
 #define bitcount __builtin_popcountll
 #define bitCheck(n,k) ((n>>k)&1)
-#define bitSet(n,k) (n|(1LL<<k))
+#define bitSet(n,k) (n|(1<<k))
 #define bitClear(n,k) (n&(~(1<<k)))
 #define bitFlip(n,k) (n^(1<<k))
 
@@ -125,17 +125,62 @@ void genPrefix(vll &v);
 // OTHERS: custom_hash
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    // [i = 56 || bitSet(x, i) = 16777216]
-    // 2^56 = 72057594037927900
-    ll x = 0;
-    ll a = bitSet(x, 56);
-    debug(a);
+    re(n);
+    reV(v, n);
+    re(q);
+
+    vector<vector<ll>> p(n, vll(32));
+    vll ans;
+
+    for (int i = 0; i < n; i++)
+    {
+        fr(j, 0, 32)
+        {
+            p[i][j] = bitCheck(v[i], j) + (i > 0 ? p[i - 1][j] : 0);
+        }
+    }
+
+    debug(p);
+
+    while (q--)
+    {
+        re(lt, k);
+        lt--;
+        ll l = lt, r = n - 1;
+
+        while (l < r)
+        {
+            ll mid = (l + r + 1) / 2;
+            ll z = 0;
+            fr(i, 0, 32)
+            {
+                ll t = p[mid][i] - (lt > 0 ? p[lt - 1][i] : 0);
+                if (t == (mid - lt + 1))
+                    z = bitSet(z, i);
+            }
+
+            if (z >= k)
+                l = mid;
+            else
+                r = mid - 1;
+        }
+        ll z = 0;
+        fr(i, 0, 32)
+        {
+            ll t = p[l][i] - (lt > 0 ? p[lt - 1][i] : 0);
+            if (t == (l - lt + 1))
+                z = bitSet(z, i);
+        }
+
+        if (z >= k)
+            ans.pb(l + 1);
+        else
+            ans.pb(-1);
+    }
+    printVec(ans);
 }
 
 // clang-format off
@@ -145,7 +190,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

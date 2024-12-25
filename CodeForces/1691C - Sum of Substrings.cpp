@@ -42,7 +42,8 @@ void print(const T& first, const Args&... rest) {
 }
 /* ------------------------------------------------------ */
 /* ------------------------ debug ----------------------- */
-#ifndef ONLINE_JUDGE
+// #ifndef ONLINE_JUDGE
+#ifdef hitarth
 #include "D:\Compi\Headers\debug3.h"
 #else
 #define debug(...)
@@ -85,10 +86,10 @@ void print(const T& first, const Args&... rest) {
 #define UNIQUE(v) vsort(v), v.erase(unique(v.begin(), v.end()), v.end());
 
 #define bitcount __builtin_popcountll
-#define bitCheck(n,k) ((n>>k)&1)
+#define bitCheck(n,k) ((n>>k)&1LL)
 #define bitSet(n,k) (n|(1LL<<k))
-#define bitClear(n,k) (n&(~(1<<k)))
-#define bitFlip(n,k) (n^(1<<k))
+#define bitClear(n,k) (n&(~(1LL<<k)))
+#define bitFlip(n,k) (n^(1LL<<k))
 
 typedef tree<pair<ll, ll>, null_type, less<pair<ll, ll>>, rb_tree_tag,tree_order_statistics_node_update> ordered_set; // find_by_order, order_of_key
 /* ------------------------------------------------------ */
@@ -125,17 +126,66 @@ void genPrefix(vll &v);
 // OTHERS: custom_hash
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    // [i = 56 || bitSet(x, i) = 16777216]
-    // 2^56 = 72057594037927900
-    ll x = 0;
-    ll a = bitSet(x, 56);
-    debug(a);
+    re(n, k);
+    reS(s);
+
+    ll i = n - 1;
+    ll r = 0;
+    ll l = 0;
+    while (l < n && s[l] == '0')
+        l++;
+    while (i >= 0 && s[i] == '0')
+        i--, r++;
+
+    ll c1 = 0;
+    ll sum = 0;
+    for (auto it : s)
+        c1 += (it == '1');
+
+    if (c1 == 0)
+    {
+        cout << 0 << nl;
+        return;
+    }
+
+    if (c1 == 1)
+    {
+        if(r==0)
+            sum=1;
+        else if(l>0 && r>0)
+        {
+            if(r<=k)
+                sum=1;
+            else if(l<=k)
+                sum=10;
+            else
+                sum=11;
+        }
+        else if(l==0)
+        {
+            if(r<=k)
+                sum=1;
+            else
+                sum=10;
+        }
+    }
+    else
+    {
+
+        c1--;
+        sum = c1 * 11;
+
+        if (r > k)
+            sum += 10;
+        else
+            k -= r;
+        if (l > k)
+            sum += 1;
+    }
+    cout << sum << nl;
 }
 
 // clang-format off
@@ -145,7 +195,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();
@@ -380,3 +430,4 @@ void genPrefix(vll &v)
     for (int i = 1; i < v.size(); i++)
         v[i] = v[i - 1] + v[i];
 }
+

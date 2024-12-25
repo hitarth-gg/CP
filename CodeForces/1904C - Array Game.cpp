@@ -8,9 +8,9 @@ using namespace chrono;
 using namespace __gnu_pbds;
 
 /* ----------------------- int128 ----------------------- */
-// typedef __int128 lll;
-// istream &operator>>(istream &cin, lll &x) { x=0; static string s; cin>>s; for (char c:s) x=x*10+(c-'0'); return cin; }
-// ostream &operator<<(ostream &cout, lll x) { static char s[60]; int tp=1; s[0]='0'+(x%10); while (x/=10) s[tp++]='0'+(x%10); while (tp--) cout<<s[tp]; return cout; }
+typedef __int128 lll;
+istream &operator>>(istream &cin, lll &x) { x=0; static string s; cin>>s; for (char c:s) x=x*10+(c-'0'); return cin; }
+ostream &operator<<(ostream &cout, lll x) { static char s[60]; int tp=1; s[0]='0'+(x%10); while (x/=10) s[tp++]='0'+(x%10); while (tp--) cout<<s[tp]; return cout; }
 /* ------------------------------------------------------ */
 /* ------------------------ INPUT ----------------------- */
 // 1
@@ -86,7 +86,7 @@ void print(const T& first, const Args&... rest) {
 
 #define bitcount __builtin_popcountll
 #define bitCheck(n,k) ((n>>k)&1)
-#define bitSet(n,k) (n|(1LL<<k))
+#define bitSet(n,k) (n|(1<<k))
 #define bitClear(n,k) (n&(~(1<<k)))
 #define bitFlip(n,k) (n^(1<<k))
 
@@ -125,17 +125,51 @@ void genPrefix(vll &v);
 // OTHERS: custom_hash
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    // [i = 56 || bitSet(x, i) = 16777216]
-    // 2^56 = 72057594037927900
-    ll x = 0;
-    ll a = bitSet(x, 56);
-    debug(a);
+    re(n, k);
+    reV(v, n);
+
+    if (k == 0)
+    {
+        cout << 0 << nl;
+        return;
+    }
+
+    if (k >= 3)
+    {
+        cout << 0 << nl;
+        return;
+    }
+
+    vsort(v);
+    ll mini = v[0];
+    for (int i = 0; i + 1 < n; i++)
+    {
+        mini = min(abs(v[i] - v[i + 1]), mini);
+    }
+    if (k == 1)
+        cout << mini << nl;
+    else
+    {
+        ll t = LLONG_MAX;
+        ll mini2 = INF;
+
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = i + 1; j < n; j++)
+            {
+                ll z = abs(v[j] - v[i]);
+                auto ub = upper_bound(v.begin(), v.end(), z);
+                if (ub != v.end())
+                    mini2 = min(mini2, abs(z - *ub));
+                if (ub != v.begin())
+                    mini2 = min(mini2, abs(z - *(ub - 1)));
+            }
+        }
+        cout << min(mini, mini2) << nl;
+    }
 }
 
 // clang-format off
@@ -145,7 +179,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();
@@ -380,3 +414,4 @@ void genPrefix(vll &v)
     for (int i = 1; i < v.size(); i++)
         v[i] = v[i - 1] + v[i];
 }
+

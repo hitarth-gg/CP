@@ -1,4 +1,5 @@
 // clang-format off
+#pragma GCC optimize("O3,unroll-loops")
 #include <bits/stdc++.h>
 #include <ext/pb_ds/tree_policy.hpp>
 #include <ext/pb_ds/assoc_container.hpp>
@@ -86,7 +87,7 @@ void print(const T& first, const Args&... rest) {
 
 #define bitcount __builtin_popcountll
 #define bitCheck(n,k) ((n>>k)&1)
-#define bitSet(n,k) (n|(1LL<<k))
+#define bitSet(n,k) (n|(1<<k))
 #define bitClear(n,k) (n&(~(1<<k)))
 #define bitFlip(n,k) (n^(1<<k))
 
@@ -125,17 +126,56 @@ void genPrefix(vll &v);
 // OTHERS: custom_hash
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    // [i = 56 || bitSet(x, i) = 16777216]
-    // 2^56 = 72057594037927900
-    ll x = 0;
-    ll a = bitSet(x, 56);
-    debug(a);
+    re(n);
+    reV(v, n);
+    vsort(v);
+    debug(v);
+
+    auto comp = [&](ll mid)
+    {
+        ll ans = 0;
+        ll mx = -INF;
+        ll mn = -INF;
+
+        for (int i = 0; i < n; i++)
+        {
+            ll up = v[i] + mid;
+            ll down = v[i] - mid;
+            down = down < 1 ? 1 : down;
+
+            if ((up > mx && down > mx) || (up < mn && down < mn))
+            {
+                ans++;
+                mx = up;
+                mn = down;
+            }
+            else
+            {
+                mn = down;
+            }
+        }
+
+        if(ans <= 3)
+            return true;
+        else
+            return false;
+    };
+
+    ll l = 0, r = 1e9+2;
+
+    while(r>l)
+    {
+        ll mid = (r+l)/2;
+
+        if(comp(mid) == true)
+            r=mid;
+        else
+            l=mid+1;
+    }
+    cout << l << nl;
 }
 
 // clang-format off
@@ -145,7 +185,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

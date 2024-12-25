@@ -86,7 +86,7 @@ void print(const T& first, const Args&... rest) {
 
 #define bitcount __builtin_popcountll
 #define bitCheck(n,k) ((n>>k)&1)
-#define bitSet(n,k) (n|(1LL<<k))
+#define bitSet(n,k) (n|(1<<k))
 #define bitClear(n,k) (n&(~(1<<k)))
 #define bitFlip(n,k) (n^(1<<k))
 
@@ -125,17 +125,110 @@ void genPrefix(vll &v);
 // OTHERS: custom_hash
 /* ------------------------------------------------------ */
 
-
-
-
 // clang-format on
 void solve()
 {
-    // [i = 56 || bitSet(x, i) = 16777216]
-    // 2^56 = 72057594037927900
-    ll x = 0;
-    ll a = bitSet(x, 56);
-    debug(a);
+    re(n);
+    reS(s);
+
+    ll retard = 0;
+
+    for (auto it : s)
+    {
+        if (it == '(')
+            retard++;
+        else
+            retard--;
+    }
+
+    if (retard != 0)
+    {
+        cout << -1 << nl;
+        return;
+    }
+
+    vll col1;
+    vll col2;
+    vll ans(n, 1);
+    stack<pair<char, ll>> st;
+    for (int i = 0; i < n; i++)
+    {
+        if (st.empty() && s[i] == '(')
+            st.push({s[i], i});
+        else if (st.empty() && s[i] == ')')
+        {
+            col2.push_back(i);
+            continue;
+        }
+        else if (st.top().first == s[i])
+            st.push({s[i], i});
+        else if (s[i] == ')')
+        {
+            col1.push_back(st.top().second);
+            col1.push_back(i);
+            st.pop();
+        }
+    }
+
+    while (!st.empty())
+    {
+        col2.push_back(st.top().second);
+        st.pop();
+    }
+    for (auto it : col1)
+        ans[it] = 1;
+    if (col1.size() != 0)
+        for (auto it : col2)
+            ans[it] = 2;
+
+    pair<ll, vll> ans1 = {(col1.size() > 0) + (col2.size() > 0), ans};
+
+    ans.resize(n, 1);
+    col1.clear();
+    col2.clear();
+
+    for (int i = 0; i < n; i++)
+    {
+        if (st.empty() && s[i] == ')')
+            st.push({s[i], i});
+        else if (st.empty() && s[i] == '(')
+        {
+            col2.push_back(i);
+            continue;
+        }
+        else if (st.top().first == s[i])
+            st.push({s[i], i});
+        else if (s[i] == '(')
+        {
+            col1.push_back(st.top().second);
+            col1.push_back(i);
+            st.pop();
+        }
+    }
+
+    while (!st.empty())
+    {
+        col2.push_back(st.top().second);
+        st.pop();
+    }
+    for (auto it : col1)
+        ans[it] = 1;
+    if (col1.size() != 0)
+        for (auto it : col2)
+            ans[it] = 2;
+
+    pair<ll, vll> ans2 = {(col1.size() > 0) + (col2.size() > 0), ans};
+
+    if (ans1.first < ans2.first)
+    {
+        cout << ans1.first << nl;
+        printVec(ans1.second);
+    }
+    else
+    {
+        cout << ans2.first << nl;
+        printVec(ans2.second);
+    }
 }
 
 // clang-format off
@@ -145,7 +238,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();
@@ -380,3 +473,4 @@ void genPrefix(vll &v)
     for (int i = 1; i < v.size(); i++)
         v[i] = v[i - 1] + v[i];
 }
+

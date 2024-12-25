@@ -42,7 +42,8 @@ void print(const T& first, const Args&... rest) {
 }
 /* ------------------------------------------------------ */
 /* ------------------------ debug ----------------------- */
-#ifndef ONLINE_JUDGE
+// #ifndef ONLINE_JUDGE
+#ifdef hitarth
 #include "D:\Compi\Headers\debug3.h"
 #else
 #define debug(...)
@@ -85,10 +86,10 @@ void print(const T& first, const Args&... rest) {
 #define UNIQUE(v) vsort(v), v.erase(unique(v.begin(), v.end()), v.end());
 
 #define bitcount __builtin_popcountll
-#define bitCheck(n,k) ((n>>k)&1)
+#define bitCheck(n,k) ((n>>k)&1LL)
 #define bitSet(n,k) (n|(1LL<<k))
-#define bitClear(n,k) (n&(~(1<<k)))
-#define bitFlip(n,k) (n^(1<<k))
+#define bitClear(n,k) (n&(~(1LL<<k)))
+#define bitFlip(n,k) (n^(1LL<<k))
 
 typedef tree<pair<ll, ll>, null_type, less<pair<ll, ll>>, rb_tree_tag,tree_order_statistics_node_update> ordered_set; // find_by_order, order_of_key
 /* ------------------------------------------------------ */
@@ -126,16 +127,53 @@ void genPrefix(vll &v);
 /* ------------------------------------------------------ */
 
 
-
+ll countDigits(ll n)
+{
+    ll digits = 0;
+    while (n)
+    {
+        n /= 10;
+        digits++;
+    }
+    return digits;
+}
 
 // clang-format on
 void solve()
 {
-    // [i = 56 || bitSet(x, i) = 16777216]
-    // 2^56 = 72057594037927900
-    ll x = 0;
-    ll a = bitSet(x, 56);
-    debug(a);
+    re(n, m);
+    reV(v, n);
+
+    ll digits = 0;
+    vll zeroes;
+    for (auto it : v)
+    {
+        if (it % 10 != 0)
+            digits += countDigits(it);
+        else
+        {
+            ll t = 0;
+            ll x = it;
+            while (x % 10 == 0)
+            {
+                t++;
+                x /= 10;
+            }
+            digits += countDigits(x);
+            zeroes.push_back(t);
+        }
+    }
+    vsortrev(zeroes);
+    ll nz = zeroes.size();
+    for (int i = 1; i < nz; i += 2)
+        digits += zeroes[i];
+    m++;
+    debug(digits);
+
+    if (digits >= m)
+        cout << "Sasha" << nl;
+    else
+        cout << "Anna" << nl;
 }
 
 // clang-format off
@@ -145,7 +183,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();

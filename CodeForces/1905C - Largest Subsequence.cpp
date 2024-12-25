@@ -86,7 +86,7 @@ void print(const T& first, const Args&... rest) {
 
 #define bitcount __builtin_popcountll
 #define bitCheck(n,k) ((n>>k)&1)
-#define bitSet(n,k) (n|(1LL<<k))
+#define bitSet(n,k) (n|(1<<k))
 #define bitClear(n,k) (n&(~(1<<k)))
 #define bitFlip(n,k) (n^(1<<k))
 
@@ -131,11 +131,57 @@ void genPrefix(vll &v);
 // clang-format on
 void solve()
 {
-    // [i = 56 || bitSet(x, i) = 16777216]
-    // 2^56 = 72057594037927900
-    ll x = 0;
-    ll a = bitSet(x, 56);
-    debug(a);
+    re(n);
+    reS(s);
+    string z = s;
+    vsort(z);
+    if(z==s)
+    {
+        cout << 0 << nl;
+        return;
+    }
+    vector<pair<char, ll>> v;
+    for(int i = 0; i<n; i++)
+        v.push_back({s[i], i});
+
+    sort(v.begin(), v.end(), [&](pair<char, ll> a, pair<char, ll> b) {
+        if(a.first == b.first)
+            return a.second < b.second;
+        else
+            return a.first > b.first;
+    });
+    vector<pair<char, ll>> lss;
+    ll mn = -1;
+    for(auto it : v)
+    {
+        if(it.second > mn)
+        {
+            mn = it.second;
+            lss.push_back(it);
+        }
+    }
+
+    ll ix = lss.size()-1;
+
+    for(auto it : lss)
+    {
+        s[it.second] = lss[ix].first;
+        ix--;
+    }
+    debug(lss);
+    // string x = s;
+    vsort(z);
+    debug(s);
+    ll ans = 0;
+    while(lss[ans].first == lss[0].first)
+        ans++;
+
+    ans = lss.size() - ans;
+    
+    if(s!=z)
+        cout << -1 << nl;
+    else
+        cout << ans << nl;
 }
 
 // clang-format off
@@ -145,7 +191,7 @@ int32_t main()
 
     clock_t begin = clock();
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--)
     {
         solve();
