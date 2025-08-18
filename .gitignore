@@ -9,3 +9,5 @@ extras
 test*
 trash*
 temp*
+
+!Templates/
