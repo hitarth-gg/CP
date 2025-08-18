@@ -323,7 +323,7 @@ int last_index(vector<int> v, int target)
 
 ---
 
-### 2. DSU - Disjoint Set Union (by Rank and Path Compression)
+## 2. DSU - Disjoint Set Union (by Rank and Path Compression)
 
 ```cpp
 class DisjointSet
