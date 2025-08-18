@@ -1,6 +1,11 @@
-/temp
-/extras
-/.vscode
-/.cph
-/*.bin
-/*.exe
+temp
+extras
+.vscode
+.cph
+*.bin
+*.exe
+
+# Ignore files with prefix "test", "trash", or "temp"
+test*
+trash*
+temp*

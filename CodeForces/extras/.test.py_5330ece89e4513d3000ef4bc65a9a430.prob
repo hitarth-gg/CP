@@ -1,0 +1,1 @@
+{"name":"Local: test","url":"d:\\Compi\\CodeForces\\test.py","tests":[{"id":1752317144394,"input":"5 3 5\n1 6 5 4 1","output":"6"},{"id":1752317171631,"input":"5 1 5\n1 6 5 4 1","output":"8"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\Compi\\CodeForces\\test.py","group":"local","local":true}

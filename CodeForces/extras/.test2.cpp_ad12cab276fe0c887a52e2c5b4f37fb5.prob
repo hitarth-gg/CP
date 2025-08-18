@@ -1,0 +1,1 @@
+{"name":"Local: test2","url":"d:\\Compi\\CodeForces\\test2.cpp","tests":[{"id":1728211137147,"input":"4\n5 1 4 2","output":"4"},{"id":1752314265385,"input":"3\n7 1 2","output":"2"},{"id":1752504368044,"input":"2\n7 12","output":"0"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\Compi\\CodeForces\\test2.cpp","group":"local","local":true}
