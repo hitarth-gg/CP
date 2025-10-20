@@ -1,5 +1,15 @@
 # Personal Archive of Competitive Programming Problems and Notes
 
+## STL (* ￣︿￣)
+
+## 1. Strings
+```cpp
+// 1. string.find()
+    string s1 = "abcde";
+    string s2 = "bcd";
+    bool ans = s1.find(s2) != string::npos; // checks if s2 is present in s1. 
+```
+
 ## DEFINEs ////// q(≧▽≦q)
 
 ```cpp
