@@ -7,7 +7,23 @@
 // 1. string.find()
     string s1 = "abcde";
     string s2 = "bcd";
-    bool ans = s1.find(s2) != string::npos; // checks if s2 is present in s1. 
+    bool ans = s1.find(s2) != string::npos; // checks if s2 is present in s1.
+    
+    string s1 = "0123456789";
+    string s2 = "23";
+
+    int c1 = s1.find(s2);
+    cout << c1 << nl; // 2
+    
+    int c2 = s1.rfind("abc");
+    cout << c2 << nl; // -1
+
+//2. string.substr()
+    string s1 = "0123456789";
+    string s2 = "23";
+
+    string s3 = s1.substr(1, 3); // "123"
+    string s4 = s1.substr(1, 1); // "1"
 ```
 
 ## DEFINEs ////// q(≧▽≦q)
