@@ -18,12 +18,16 @@
     int c2 = s1.rfind("abc");
     cout << c2 << nl; // -1
 
-//2. string.substr()
+// 2. string.substr()
     string s1 = "0123456789";
     string s2 = "23";
 
     string s3 = s1.substr(1, 3); // "123"
     string s4 = s1.substr(1, 1); // "1"
+
+// 3. string(n, char)
+    int n = 10;
+    string s(n, 'x');  // s = "xxxxxxxxxx"
 ```
 
 ## DEFINEs ////// q(≧▽≦q)
