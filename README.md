@@ -18,6 +18,11 @@
     int c2 = s1.rfind("abc");
     cout << c2 << nl; // -1
 
+/// 1.1 string.rfind()
+    string s = "abacadaba";
+    size_t k = s.rfind("aba"); // 5 (finds the LAST occurrence)
+
+
 // 2. string.substr()
     string s1 = "0123456789";
     string s2 = "23";
