@@ -422,3 +422,20 @@ else
     cout << "NO" << nl;
 /* YES */
 ```
+
+## Priority Queue + Custom Comparator
+
+```cpp
+/**
+ * In Priority queue, the comparator function should return true if a should come after b in the priority queue. Unlike sort, it should not return true if a and b are in correct order. It should return true if a should come after b.
+ *
+ * As a Queue fills from left to right, so it makes sense.
+ */
+auto comp = [](pair<char, ll> &a, pair<char, ll> &b)
+{
+    if (a.first == b.first)
+        return a.second > b.second;
+    return a.first < b.first;
+};
+priority_queue<pair<char, ll>, vector<pair<char, ll>>, decltype(comp)> pq(comp);
+```
