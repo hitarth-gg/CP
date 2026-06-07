@@ -439,3 +439,37 @@ auto comp = [](pair<char, ll> &a, pair<char, ll> &b)
 };
 priority_queue<pair<char, ll>, vector<pair<char, ll>>, decltype(comp)> pq(comp);
 ```
+
+## Monotonic Stack - Finding PLE and NLE
+Finding Previous Less Element and Next Less Element of each element in an array using a Monotonic Stack in O(n).
+
+Seen in [this](https://leetcode.com/problems/sum-of-subarray-minimums/solutions/178876/stack-solution-with-very-detailed-explan-s2cd/) Leetcode solution.
+
+**Finding PLE**
+```cpp
+// previous_less[i] = j means A[j] is the previous less element of A[i].
+// previous_less[i] = -1 means there is no previous less element of A[i].
+vector<int> previous_less(A.size(), -1);
+for(int i = 0; i < A.size(); i++){
+  while(!in_stk.empty() && A[in_stk.top()] > A[i]){
+    in_stk.pop();
+  }
+  previous_less[i] = in_stk.empty()? -1: in_stk.top();
+  in_stk.push(i);
+}
+```
+
+**Finding NLE**
+```cpp
+// next_less[i] = j means A[j] is the next less element of A[i].
+// next_less[i] = -1 means there is no next less element of A[i].
+vector<int> previous_less(A.size(), -1);
+for(int i = 0; i < A.size(); i++){
+  while(!in_stk.empty() && A[in_stk.top()] > A[i]){
+    auto x = in_stk.top(); in_stk.pop();
+    next_less[x] = i;
+  }
+  in_stk.push(i);
+}
+```
+
