@@ -473,3 +473,32 @@ for(int i = 0; i < A.size(); i++){
 }
 ```
 
+For **NLE** and **PLE** we use **Ascending** Monotonic Stack.
+Similarly we can find **PGE** and **NGE** using **Descending** Monotonic Stack.
+
+**Finding number of subarrays with i th element as the minimum element in the subarray**
+
+- Both PLE and NLE here can be combined together like this. It also handles the case of subarrays being counted twice if 2 same elements are close together by taking PLE as strictly-less and NLE as equal-to-or-less-than.
+
+```cpp
+vector<int> ple(n, -1), nle(n, n);
+
+for (int i = 0; i < n; i++)
+{
+    while (!st.empty() && v[i] < v[st.top()])
+    {
+        nle[st.top()] = i;
+        st.pop();
+    }
+    ple[i] = st.empty() ? -1 : st.top();
+    st.push(i);
+}
+
+for (int i = 0; i < n; i++)  {
+    int pls = i - ple[i];
+    int nls = nle[i] - i;
+
+    minSum += 1LL * v[i] * pls * nls;
+}
+```
+
